@@ -1,0 +1,23 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:id="@+id/card_player_house_deck_table_layout"
+        style="@style/List"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:gravity="left"
+        android:stretchColumns="0" >
+
+        <TableRow
+            android:id="@+id/TableRow01"
+            style="@style/List"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left" >
+        </TableRow>
+    </TableLayout>
+    
+</ScrollView>

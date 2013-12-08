@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/text_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="88dp"
+        android:text="@string/id" />
+
+    <TextView
+        android:id="@+id/text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="21dp"
+        android:text="@string/name"
+        tools:context=".PlayerActivity" />
+
+    <EditText
+        android:id="@+id/edit_player_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text_name"
+        android:layout_alignBottom="@+id/text_name"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/text_name"
+        android:editable="false"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/edit_player_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text_id"
+        android:layout_alignBottom="@+id/text_id"
+        android:layout_alignLeft="@+id/edit_player_name"
+        android:editable="false"
+        android:ems="10" />
+
+    <ImageView
+        android:id="@+id/image_view_reading_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/edit_player_id"
+        android:layout_below="@+id/edit_player_id"
+        android:layout_marginTop="33dp"/>
+
+    <TextView
+        android:id="@+id/text_for_waiting_reading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_view_reading_game"
+        android:layout_marginTop="40dp"
+        android:layout_toRightOf="@+id/text_id"
+        android:text="@string/waiting_reading_words_" />
+
+    <TextView
+        android:id="@+id/value_for_waiting_reading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text_for_waiting_reading"
+        android:layout_alignBottom="@+id/text_for_waiting_reading"
+        android:layout_alignRight="@+id/image_view_reading_game"
+        android:layout_marginRight="30dp"
+        android:text="____" />
+
+    <TextView
+        android:id="@+id/text_for_waiting_writing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text_for_waiting_reading"
+        android:layout_below="@+id/text_for_waiting_reading"
+        android:layout_marginTop="20dp"
+        android:text="@string/waiting_writing_words" />
+
+    <TextView
+        android:id="@+id/value_for_waiting_writing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text_for_waiting_writing"
+        android:layout_alignBottom="@+id/text_for_waiting_writing"
+        android:layout_alignLeft="@+id/value_for_waiting_reading"
+        android:text="____" />
+
+</RelativeLayout>

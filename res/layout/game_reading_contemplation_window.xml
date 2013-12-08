@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contemplation_linear_layoutB"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:stretchColumns="2">
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textA"
+            style="@style/Contemplation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:text="@string/text"
+            android:textColor="@color/white" 
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/defA"
+            style="@style/Contemplation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:text="@string/definition"
+            android:textColor="@color/white" 
+            android:layout_gravity="right"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textB"
+            style="@style/Contemplation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:text="@string/definition"
+            android:textColor="@color/white" 
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/defB"
+            style="@style/Contemplation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/definition"
+            android:textColor="@color/white" 
+            android:layout_gravity="right"/>
+    </TableRow>
+
+</LinearLayout>

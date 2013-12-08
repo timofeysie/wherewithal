@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/load_house_decks"
+        android:orderInCategory="100"
+        android:title="@string/load_decks"/>
+    <item android:id="@+id/save_house_decks" android:title="@string/save_decks"></item>
+
+</menu>

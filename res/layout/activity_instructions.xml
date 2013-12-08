@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    
+    <TextView
+        android:id="@+id/instruction_text_view01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="2"
+        android:ems="12"
+        android:text="@string/if_you_haven_t_yet_" />
+
+    <TextView
+        android:id="@+id/instruction_text_view02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/instruction_text_view01"
+        android:autoLink="web"
+        android:ems="12"
+        android:lines="2"
+        android:linksClickable="true"
+        android:text="@string/register_with_indoct" />
+
+</RelativeLayout>

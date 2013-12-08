@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent" >
+
+    <ImageButton
+        android:id="@+id/image_button_reading_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp"
+        android:src="@drawable/ic_drawing_game" />
+
+    <TextView
+        android:id="@+id/game_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/imageButton1"
+        android:layout_marginTop="16dp"
+        android:ems="12"
+        android:lines="1"
+        android:text="@string/games_reading_stones" />
+    
+    <ImageView
+        android:id="@+id/image_view_reading_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/reading_game_228" />
+
+    <Button
+        android:id="@+id/snazzy_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/image_view_reading_game"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp"
+        android:text="Snazzy Footwork" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/image_view_reading_game"
+        android:layout_alignParentRight="true"
+        android:ems="12"
+        android:lines="1"
+        android:text="@string/title_activity_game_writing_stones" />
+
+</RelativeLayout>
