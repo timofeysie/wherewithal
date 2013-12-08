@@ -195,7 +195,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_writing_stones);
 		String method = "onCreate";
-		String build = "build 50c";
+		String build = "build 51";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
