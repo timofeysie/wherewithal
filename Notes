@@ -1,0 +1,39 @@
+Activity Descriptions
+
+CardsActivity
+When a user clicks on a test, the name and id are sent to getSavedClassTestsAndSaveGame  which then calls saveGameFile(selected_test_name, selected_test_id); which then calls remoteCall(text);
+In this method we capture the student_is¡¯s in remote_student_ids Vector, and then call saveGameFile.
+To setup for the next activity, when a user chooses a test, we retrieve the list of saved tests for players who are part of that test.
+The parse depends on knowing the last sub-element
+
+CardPlayersListActivity
+Retrieve a list of players that are part of a saved test chosen in the previous CardAction and create a list of them for selection.  
+When the user selects a player, the words for that players saved test are loaded and set in the intent for the next activity.
+If a player has chosen a house deck to associate their cards to previously in CardPlayerWordsActivity, then the CardPlayerHouseDeckActivity will be started acter clicking on that player and the words with their deck card associations will be shown there. 
+
+CardPlayerWordsActivity
+Retrieve a list of words loaded in the previous activity from the intent and put them in a list.  
+The text-definition pairs are shown unconnected in a flat list.  
+When the user clicks on an item they will hold an nfc tag connected to that word up to thier phone to write the word, definition and category onto the tag.
+The highlighting is done in a few places.
+In itemSelected, we add a word like this: FINISHED_WORDS[selected] = "set";
+Then, in the onCreate method, the setListAdapter inner class, we check if (FINISHED_WORDS[position].equals("set"))
+This will happen for every item in the list.
+If the item has been selected no or previously, we call:
+renderer.setBackgroundResource(android.R.color.darker_gray);
+We also have to load the cards.xml file to see what words have already been highlighted, as set the FINISHED_WORDS array accordingly.
+We fill a Vector with either the text or definition of the word depending on the word_type element stored in the file.
+Then, in the setUpPlayerNamesAndExtras(), we check if the word we are looking at is contained in that Vector.
+If so, that position is set in the FINISHED_WORDS array.
+If the player chooses the menu item for "Use House Deck", then they are shown a dialog of house decks to choose from.  After this choice, the game cards will be associated with the deck cards.  If the game is a WritingStones type, the writing type cards from the previous game is used so that the player doesn't have to take out the writing cards from that game.
+
+GamesActivity
+This activity provides a list of games for the user to choose from.
+Once a user has chosen a game, the game file is loaded, including also possibly the players and the cards files, and needed information is sent to the approp[riate next activity.
+For example, if the user chooses the Reading Stones game, they are sent to GameReadingStonesActity.
+
+GameReadingStonesActivity
+This game lets players scan sets of cards for matches.  There is no limit as to how many sets they can scan, so this game can also be used for a solitary matching exercise.  Each match adds 1 point to the score, and successive matches adds an extra point, compunding the score.  If two cards don't match, the contemplation window is shown that will give the player the correct match for each card for about 15 seconds.
+
+The keystore for testing:
+C:\Documents and Settings\user\.android\debug.keystore
