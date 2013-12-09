@@ -153,6 +153,7 @@ public class GameReadingStonesActivity extends Activity
     private int number_of_matches;
     private long last_turn_time;
     private Game game_file;
+    private boolean final_round;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -160,7 +161,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 150";
+		String build = "build 151c";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -323,6 +324,7 @@ public class GameReadingStonesActivity extends Activity
         previously_played_word_type = "";	
         previously_played_card_id = "";
         mock_word_counter = 0;
+        final_round = false;
 	}
 	
 	/**
@@ -626,12 +628,22 @@ public class GameReadingStonesActivity extends Activity
             i_want_to.saveTheGameFile(game_file, class_id);
             if (end_game)
             {
-            	Toast.makeText(this, "Player 1 wins!  Last chance round for player 2", Toast.LENGTH_LONG ).show();
+            	winner();
             }
     	} else
     	{
     		Log.i(DEBUG_TAG, method+" list_adapter is null");
     	}
+	}
+	
+	/**
+	 * To do: this is the place to send info about the win to the learning record store.
+	 */
+	private void winner()
+	{
+		String player_name = id_player_names.get(current_player_id);
+    	Toast.makeText(this, player_name+" wins!  Final round.", Toast.LENGTH_LONG ).show();
+    	final_round = true;
 	}
 	
 	private void addScoreToPlayerInfo(int new_score, String scoring_player_id)
@@ -784,9 +796,8 @@ public class GameReadingStonesActivity extends Activity
     	PlayerInfo player_info = players.get(player_id);
     	int score = player_info.getScore();
     	Log.i(DEBUG_TAG, method+" score before update "+score);
-    	number_of_matches++;
     	previously_played_word_id = "";
-    	score = score + number_of_matches;
+    	score = incrementScore(score);
     	player_info.setScore(score);
     	Hashtable <String,PlayerInfo> temp_players = new Hashtable<String,PlayerInfo>();
     	Enumeration<String> e = players.keys();
@@ -812,6 +823,28 @@ public class GameReadingStonesActivity extends Activity
     	table.removeAllViews();
     	createScoreboard();
     	return score;
+    }
+    
+    /**
+     * During the final round, each matched pair only increments the score by 1.
+     * Otherwise, new_score = score + number_of_matches.
+     * @param score
+     * @return
+     */
+    private int incrementScore(int score)
+    {
+    	int new_score = 0;
+    	if (final_round)
+    	{
+    		number_of_matches++;
+        	new_score = score + 1;
+    		
+    	} else
+    	{
+    		number_of_matches++;
+        	new_score = score + number_of_matches;
+    	}
+    	return new_score;
     }
     
     /**
