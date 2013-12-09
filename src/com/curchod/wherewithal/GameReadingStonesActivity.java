@@ -874,6 +874,7 @@ public class GameReadingStonesActivity extends Activity
 	    previously_played_card_player_id = "";
 	    previous_card = new Card();
 	    number_of_matches = 0;
+	    final_round = false;
     }
     
     private void resetAndSavePlayers()

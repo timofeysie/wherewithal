@@ -155,7 +155,7 @@ public class CardPlayerWordsActivity extends ListActivity
     {
         super.onCreate(savedInstanceState);
         String method = "onCreate";
-        String build = "build 171b";
+        String build = "build 172";
         nfc_adapter = NfcAdapter.getDefaultAdapter(context);
         Log.i(DEBUG_TAG, method+": "+build);
         setUpPlayerNamesAndExtras();
@@ -1507,6 +1507,7 @@ public class CardPlayerWordsActivity extends ListActivity
     			word_deck_card_associations.put(deck_card.getCardId(), deck_card.getCardName()); 
     			Log.i(DEBUG_TAG, i+" E: "+deck_card.getCardId()+" "+deck_card.getCardName()+" "+game_two_writing_card.getDefinition());
     			deck_card_id_word_ids.put(deck_card.getCardId(), game_two_writing_card.getWordId());
+    			deck_cards_id_names.put(deck_card.getCardId(), deck_card.getCardName());
     			file_cards.add(game_two_writing_card);
     		} catch (java.lang.NullPointerException npe)
     		{
