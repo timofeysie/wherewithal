@@ -98,6 +98,9 @@ import com.curchod.domartin.UtilityTo;
  * then the third match in a turn goes up three.  The score is kept in the global game_file object.
  * When the onCreate method is called, which will also happen if the device is rotated, the game file is
  * loaded again using an inner asynchronous task that then updates the score board when it completes.
+ * 
+ * After a player has matched all their cards, the game enters the final round.  Remaining players can
+ * match their left over cards for 1 point each per match.  
  * @author Administrator
  *
  */
@@ -153,7 +156,10 @@ public class GameReadingStonesActivity extends Activity
     private int number_of_matches;
     private long last_turn_time;
     private Game game_file;
+    /** After a player has one, the remaining players have a chance to match their remaining cards and get 1 point for each match when this has been set.*/
     private boolean final_round;
+    /** Used to change the game status from ready to underway to final_round.*/
+    private TextView game_status;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -161,7 +167,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 151c";
+		String build = "build 152a";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -304,6 +310,31 @@ public class GameReadingStonesActivity extends Activity
 	        row.addView(s);
 	        table.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		}
+		updateGameStatus();
+	}
+	
+	/**
+	 *     <string name="game_ready">Game Ready</string>
+     *     <string name="playing">Playing</string>
+     *     <string name="final_round">Final Round</string>
+     *     <string name="game_over">Game Over</string>
+	 */
+	private void updateGameStatus()
+	{
+		String status_string = game_file.getTestStatus();
+		if (status_string.equals("setup"))
+		{
+			game_status.setText(R.string.game_ready);
+		} else if (status_string.equals("game_over"))
+		{
+			game_status.setText(R.string.game_over);
+		} else if (status_string.equals("final_round"))
+		{
+			game_status.setText(R.string.final_round);
+		} else if (status_string.equals("playing"))
+		{
+			game_status.setText(R.string.playing);
+		}
 	}
 	
 	/**
@@ -311,6 +342,7 @@ public class GameReadingStonesActivity extends Activity
 	 */
 	private void setup()
 	{
+		game_status = (TextView)findViewById(R.id.text_view_game_status);
 		turn_cards = new Vector<Card>();
 		turn_card_ids = new Vector <String>();
         card_pairs = new Vector<Card>();
@@ -644,6 +676,7 @@ public class GameReadingStonesActivity extends Activity
 		String player_name = id_player_names.get(current_player_id);
     	Toast.makeText(this, player_name+" wins!  Final round.", Toast.LENGTH_LONG ).show();
     	final_round = true;
+    	game_status.setText(R.string.final_round);
 	}
 	
 	private void addScoreToPlayerInfo(int new_score, String scoring_player_id)
@@ -875,6 +908,7 @@ public class GameReadingStonesActivity extends Activity
 	    previous_card = new Card();
 	    number_of_matches = 0;
 	    final_round = false;
+	    game_status.setText(R.string.game_ready);
     }
     
     private void resetAndSavePlayers()
