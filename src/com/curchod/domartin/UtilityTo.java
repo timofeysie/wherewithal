@@ -29,6 +29,10 @@ public class UtilityTo
 	public static final String SET = "set";
 	public static final String YET_TO_BE_PLAYED = "yet_to_be_played";
 	public static final String PLAYED = "played";
+	public static final String GAME_READY = "game_ready";
+	public static final String PLAYING = "playing";
+	public static final String FINAL_ROUND = "final_round";
+	public static final String GAME_OVER = "game_over";
 
 	/**
 	 * Create a path which would work out to:
