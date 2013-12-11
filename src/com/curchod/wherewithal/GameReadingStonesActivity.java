@@ -167,7 +167,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 152a";
+		String build = "build 154a";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -677,7 +677,8 @@ public class GameReadingStonesActivity extends Activity
     	Toast.makeText(this, player_name+" wins!  Final round.", Toast.LENGTH_LONG ).show();
     	final_round = true;
     	game_status.setText(R.string.final_round);
-    	game_file.setTestStatus("final_round");
+    	game_file.setTestStatus(UtilityTo.FINAL_ROUND);
+    	//saveGameFile();
 	}
 	
 	private void addScoreToPlayerInfo(int new_score, String scoring_player_id)
@@ -952,12 +953,13 @@ public class GameReadingStonesActivity extends Activity
     private void setupGameObject()
     {
     	String method = "setupGameObject";
-    	Game game = new Game();
-    	game.setTestFormat("reading_stones");
-    	game.setTestId(test_id);
-    	game.setTestName(test_name);
-    	game.setTestStatus("playing");
-    	game.setTestType(UtilityTo.READING);
+    	printGame(game_file, method+" game_file before setup");
+    	game_file = new Game();
+    	game_file.setTestFormat("reading_stones");
+    	game_file.setTestId(test_id);
+    	game_file.setTestName(test_name);
+    	game_file.setTestStatus("playing");
+    	game_file.setTestType(UtilityTo.READING);
     	Hashtable <String,String> player_id_status = new Hashtable<String,String>();
     	Enumeration<String> e = players.keys();
     	Log.i(DEBUG_TAG, method+" players size "+players.size());
@@ -968,9 +970,7 @@ public class GameReadingStonesActivity extends Activity
 			player_id_status.put(player_info.getId(), player_info.getScore()+"");
 			Log.i(DEBUG_TAG, method+" setting up "+player_info.getId()+" player status "+player_info.getScore());
 		}
-		game.setPlayerStatus(player_id_status);
-		printGame(game_file, method+" game_file before setup");
-		game_file = game;
+		game_file.setPlayerStatus(player_id_status);
 		printGame(game_file, method+" game_file after setup");
     }
     
@@ -1261,6 +1261,7 @@ public class GameReadingStonesActivity extends Activity
     
     private void cardsVectorToHash(Vector <Card> cards_vector)
     {
+    	boolean game_over = true;
     	for (int i = 0; i < cards_vector.size(); i++)
     	{
     		Card card = cards_vector.get(i);
@@ -1268,7 +1269,15 @@ public class GameReadingStonesActivity extends Activity
     		if (card.getCardStatus().equals(UtilityTo.PLAYED))
     		{
     			game_file.setTestStatus(UtilityTo.PLAYING);
+    		} if (card.getCardStatus().equals(UtilityTo.YET_TO_BE_PLAYED))
+    		{
+    			game_over = false;
     		}
+    	}
+    	if (game_over)
+    	{
+    		game_status.setText(R.string.game_over);
+        	game_file.setTestStatus(UtilityTo.GAME_OVER);
     	}
     }
     
@@ -1655,13 +1664,7 @@ public class GameReadingStonesActivity extends Activity
     	getIntent();
     	if (item.getItemId() == right_card_id)
     	{
-    		NdefRecord record = getCardRecord("right");
-    		TagDescription description = null;
-    		description = new TagDescription("Correct Word", record.getPayload());
-    		final Intent intent = new Intent(NfcAdapter.ACTION_TAG_DISCOVERED);
-            intent.putExtra(NfcAdapter.EXTRA_NDEF_MESSAGES, description.msgs);
-            intent.putExtra("test_card", "right");
-            onNewIntent(intent);
+    		testCard("next");
     	    return true;
     	} else if (item.getItemId() == wrong_card_id)
     	{
@@ -1678,10 +1681,40 @@ public class GameReadingStonesActivity extends Activity
     		startActivity(intent);
     	} else if (item.getItemId() == reset_game_menu_item_id)
     	{
-    		resetGame();
-    	}
+    		testCard("");
+    		//resetGame();
+    	} else if (item.toString().equals("Next Card"))
+    	{
+    		testCard("");
+    	} 
+    	
     	return super.onOptionsItemSelected(item);
     }
+    
+    /**
+	 * Pcik the first card from the enumeration and send that id to the foundGameCard method. 
+	 * @param tag_id
+	 */
+	private void testCard(String next_card)
+	{
+		String method = "testCards";
+		Log.i(DEBUG_TAG, method+" cards "+cards.size());
+		Enumeration<String> e = cards.keys();
+		while (e.hasMoreElements())
+		{
+			String this_card_id = e.nextElement();
+			Card matching_card = cards.get(this_card_id);
+			String card_status = matching_card.getCardStatus();
+			Log.i(DEBUG_TAG, method+" card "+matching_card.getDefinition()+" status "+card_status);
+			if (!played_card_ids.contains(this_card_id)&&!card_status.equals(UtilityTo.PLAYED))
+			{				
+				Log.i(DEBUG_TAG, method+" using "+matching_card.getDefinition());
+				matching_card.setCardStatus(UtilityTo.PLAYED);
+				foundGameCard(matching_card);
+				break;
+			}
+		}
+	}
     
     
     private int mock_word_counter;

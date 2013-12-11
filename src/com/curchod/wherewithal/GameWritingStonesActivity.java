@@ -195,7 +195,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_writing_stones);
 		String method = "onCreate";
-		String build = "build 52c";
+		String build = "build 53f";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -1999,7 +1999,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     }
     
     /**
-	 * Pcike the first card from the enumeration and send that id to the foundGameCard method. 
+	 * Pcik the first card from the enumeration and send that id to the foundGameCard method. 
 	 * @param tag_id
 	 */
 	private void testCard()
