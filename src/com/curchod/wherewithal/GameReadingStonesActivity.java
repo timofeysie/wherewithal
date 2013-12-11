@@ -325,13 +325,13 @@ public class GameReadingStonesActivity extends Activity
 		if (status_string.equals("setup"))
 		{
 			game_status.setText(R.string.game_ready);
-		} else if (status_string.equals("game_over"))
+		} else if (status_string.equals(UtilityTo.GAME_OVER))
 		{
 			game_status.setText(R.string.game_over);
-		} else if (status_string.equals("final_round"))
+		} else if (status_string.equals(UtilityTo.FINAL_ROUND))
 		{
 			game_status.setText(R.string.final_round);
-		} else if (status_string.equals("playing"))
+		} else if (status_string.equals(UtilityTo.PLAYING))
 		{
 			game_status.setText(R.string.playing);
 		}
@@ -677,6 +677,7 @@ public class GameReadingStonesActivity extends Activity
     	Toast.makeText(this, player_name+" wins!  Final round.", Toast.LENGTH_LONG ).show();
     	final_round = true;
     	game_status.setText(R.string.final_round);
+    	game_file.setTestStatus("final_round");
 	}
 	
 	private void addScoreToPlayerInfo(int new_score, String scoring_player_id)
@@ -1264,6 +1265,10 @@ public class GameReadingStonesActivity extends Activity
     	{
     		Card card = cards_vector.get(i);
     		cards.put(card.getCardId(), card);
+    		if (card.getCardStatus().equals(UtilityTo.PLAYED))
+    		{
+    			game_file.setTestStatus(UtilityTo.PLAYING);
+    		}
     	}
     }
     
