@@ -160,6 +160,7 @@ public class GameReadingStonesActivity extends Activity
     private boolean final_round;
     /** Used to change the game status from ready to underway to final_round.*/
     private TextView game_status;
+    boolean end_game;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -167,7 +168,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 154a";
+		String build = "build 157b";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -478,7 +479,13 @@ public class GameReadingStonesActivity extends Activity
 	{
 		String method = "foundGameCard";
 		Log.i(DEBUG_TAG, method+": found");
+		try
+		{
 		printCard(game_card);
+		} catch (java.lang.NullPointerException npe)
+		{
+			Log.i(DEBUG_TAG, method+" can't print card");
+		}
 		current_player_id = game_card.getPlayerId();
 		Log.i(DEBUG_TAG, method+" previously_played_card_player_id "+previously_played_card_player_id);
 		Log.i(DEBUG_TAG, method+" current_player_id "+current_player_id);
@@ -612,11 +619,12 @@ public class GameReadingStonesActivity extends Activity
 			
 	}
 	
-	// update card status
-	// reset set previous_player_id and previous_card_id
-	// increment matches.
 	/**
+	 * update card status
+	 * reset set previous_player_id and previous_card_id
+	 * increment matches.
 	 * Save the the game.xml file using the status element as the score.
+	 * If any card has status yet-to-be-played then end_game is set to false.
 	 * @param game_card
 	 */
 	private void updateAndSavePlayerAndGameInfo(Card game_card, int new_score)
@@ -631,7 +639,7 @@ public class GameReadingStonesActivity extends Activity
         	played_card_ids.add(game_card.getCardId());
         	played_card_ids.add(previously_played_card_id);
         	Hashtable <String,Card> new_cards = new Hashtable <String,Card> ();
-        	boolean end_game = true;  // if any cards are unplayed, we will set this to false again.
+        	end_game = true;  // if any cards are unplayed, we will set this to false again.
         	Enumeration<String> e = cards.keys();
     		while (e.hasMoreElements())
     		{
@@ -950,6 +958,9 @@ public class GameReadingStonesActivity extends Activity
 		saveCardsFile();
     }
     
+    /**
+     * This happens every time a match is made. 
+     */
     private void setupGameObject()
     {
     	String method = "setupGameObject";
@@ -958,8 +969,8 @@ public class GameReadingStonesActivity extends Activity
     	game_file.setTestFormat("reading_stones");
     	game_file.setTestId(test_id);
     	game_file.setTestName(test_name);
-    	game_file.setTestStatus("playing");
     	game_file.setTestType(UtilityTo.READING);
+    	setGameStatus();
     	Hashtable <String,String> player_id_status = new Hashtable<String,String>();
     	Enumeration<String> e = players.keys();
     	Log.i(DEBUG_TAG, method+" players size "+players.size());
@@ -972,6 +983,24 @@ public class GameReadingStonesActivity extends Activity
 		}
 		game_file.setPlayerStatus(player_id_status);
 		printGame(game_file, method+" game_file after setup");
+    }
+    
+    /**
+     * As soon as a match is made the status is changed to playing, 
+     * unless the final_round or end_game flag is set.
+     */
+    private void setGameStatus()
+    {
+    	if (final_round)
+    	{
+    		game_file.setTestStatus(UtilityTo.FINAL_ROUND);
+    	} else if (end_game)
+    	{
+    		game_file.setTestStatus(UtilityTo.GAME_OVER);
+    	}
+    	{
+    		game_file.setTestStatus(UtilityTo.READING);
+    	}
     }
     
     /**
@@ -1664,7 +1693,7 @@ public class GameReadingStonesActivity extends Activity
     	getIntent();
     	if (item.getItemId() == right_card_id)
     	{
-    		testCard("next");
+    		testCard();
     	    return true;
     	} else if (item.getItemId() == wrong_card_id)
     	{
@@ -1681,21 +1710,20 @@ public class GameReadingStonesActivity extends Activity
     		startActivity(intent);
     	} else if (item.getItemId() == reset_game_menu_item_id)
     	{
-    		testCard("");
-    		//resetGame();
+    		resetGame();
     	} else if (item.toString().equals("Next Card"))
     	{
-    		testCard("");
+    		testCard();
     	} 
     	
     	return super.onOptionsItemSelected(item);
     }
     
     /**
-	 * Pcik the first card from the enumeration and send that id to the foundGameCard method. 
+	 * Pick the first card from the enumeration and send that id to the foundGameCard method. 
 	 * @param tag_id
 	 */
-	private void testCard(String next_card)
+	private void testCard()
 	{
 		String method = "testCards";
 		Log.i(DEBUG_TAG, method+" cards "+cards.size());
@@ -1703,17 +1731,47 @@ public class GameReadingStonesActivity extends Activity
 		while (e.hasMoreElements())
 		{
 			String this_card_id = e.nextElement();
-			Card matching_card = cards.get(this_card_id);
-			String card_status = matching_card.getCardStatus();
-			Log.i(DEBUG_TAG, method+" card "+matching_card.getDefinition()+" status "+card_status);
+			Card card = cards.get(this_card_id);
+			String card_status = card.getCardStatus();
+			Log.i(DEBUG_TAG, method+" card "+card.getDefinition()+" status "+card_status);
 			if (!played_card_ids.contains(this_card_id)&&!card_status.equals(UtilityTo.PLAYED))
 			{				
-				Log.i(DEBUG_TAG, method+" using "+matching_card.getDefinition());
-				matching_card.setCardStatus(UtilityTo.PLAYED);
+				Log.i(DEBUG_TAG, method+" using "+card.getDefinition());
+				card.setCardStatus(UtilityTo.PLAYED);
+				foundGameCard(card);
+				Card matching_card = findMatchingCard(card);
 				foundGameCard(matching_card);
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * Find the matching card by checking the word id.  If it's the same, return the card.
+	 * If the card is not found, something is really wrong, and we return null.
+	 * @param card_to_match
+	 * @return
+	 */
+	private Card findMatchingCard(Card card_to_match)
+	{
+		String method = "findMatchingCard";
+		Enumeration<String> e = cards.keys();
+		while (e.hasMoreElements())
+		{
+			String this_card_id = e.nextElement();
+			Card this_card = cards.get(this_card_id);
+			Log.i(DEBUG_TAG, method+" card "+UtilityTo.getWord(this_card));
+			if (this_card.getWordId() == card_to_match.getWordId())
+			{
+				// make sure it's not the exact same card.
+				if (this_card.getWordType()!=card_to_match.getWordType())
+				{
+					return this_card;
+				}
+			}
+					
+		}
+		return null;
 	}
     
     
