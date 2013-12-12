@@ -161,6 +161,10 @@ public class GameReadingStonesActivity extends Activity
     /** Used to change the game status from ready to underway to final_round.*/
     private TextView game_status;
     boolean end_game;
+    /** We count the cards each time to calculate this.  If you have a better idea let us know.*/
+    int number_of_words = 0;
+    /** This will hold the number of matches a player has to find the winner*/
+    private Hashtable <String, Integer> id_player_matches;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -168,7 +172,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 157b";
+		String build = "build 167";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -191,9 +195,11 @@ public class GameReadingStonesActivity extends Activity
         printGame(game_file, ": game file after setup.");
         loadCardsFile();
         loadPlayers();
+        number_of_words = cards.size()/players.size();
+        Log.i(DEBUG_TAG, method+": number_of_words "+number_of_words);
         try
         {
-        	printGame(game_file, ": game file before setup.");
+        	//printGame(game_file, ": game file before setup.");
         } catch (java.lang.NullPointerException npe)
         {
         	Log.i(DEBUG_TAG, method+": game file npe");
@@ -221,10 +227,10 @@ public class GameReadingStonesActivity extends Activity
         protected Game doInBackground(String ... String) 
         {
         	String method = "doInBackground";
-        	Log.i(DEBUG_TAG, method+" start");
+        	//Log.i(DEBUG_TAG, method+" start");
         	IWantTo i_want_to = new IWantTo(context);
             Game result_game = i_want_to.loadTheGameFile();
-            Log.i(DEBUG_TAG, method+" we got game "+result_game.getTestName());
+            //Log.i(DEBUG_TAG, method+" we got game "+result_game.getTestName());
 			return result_game;  
         } 
 
@@ -232,7 +238,7 @@ public class GameReadingStonesActivity extends Activity
         protected void onPostExecute(Game result_game) 
         {  
         	String method = "onPostExecute";
-        	Log.i(DEBUG_TAG, method+" finished");
+        	//Log.i(DEBUG_TAG, method+" finished");
         	updateScoreFromGame(result_game);
         }  
 	}
@@ -303,12 +309,12 @@ public class GameReadingStonesActivity extends Activity
 			String name = id_player_names.get(key);
 			PlayerInfo info = players.get(key);
 			int score = info.getScore();
-			TextView t = new TextView(this);
-	        TextView s = new TextView(this);   
-	        t.setText(name);
-	        s.setText(score+"");
-	        row.addView(t);
-	        row.addView(s);
+			TextView player_name_view = new TextView(this);
+	        TextView player_score_view = new TextView(this);   
+	        player_name_view.setText(name);
+	        player_score_view.setText(score+"");
+	        row.addView(player_name_view);
+	        row.addView(player_score_view);
 	        table.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		}
 		updateGameStatus();
@@ -322,19 +328,24 @@ public class GameReadingStonesActivity extends Activity
 	 */
 	private void updateGameStatus()
 	{
+		String method = "updateGameStatus";
 		String status_string = game_file.getTestStatus();
 		if (status_string.equals("setup"))
 		{
 			game_status.setText(R.string.game_ready);
+			Log.i(DEBUG_TAG, method+" game ready");
 		} else if (status_string.equals(UtilityTo.GAME_OVER))
 		{
 			game_status.setText(R.string.game_over);
+			Log.i(DEBUG_TAG, method+" game over");
 		} else if (status_string.equals(UtilityTo.FINAL_ROUND))
 		{
 			game_status.setText(R.string.final_round);
+			Log.i(DEBUG_TAG, method+" final round");
 		} else if (status_string.equals(UtilityTo.PLAYING))
 		{
 			game_status.setText(R.string.playing);
+			Log.i(DEBUG_TAG, method+" playing");
 		}
 	}
 	
@@ -358,6 +369,7 @@ public class GameReadingStonesActivity extends Activity
         previously_played_card_id = "";
         mock_word_counter = 0;
         final_round = false;
+        id_player_matches = new Hashtable <String, Integer> ();
 	}
 	
 	/**
@@ -374,7 +386,6 @@ public class GameReadingStonesActivity extends Activity
 	private void resolveIntent(Intent intent)
 	{
 		String method = "resolveIntent3";
-		Log.i(DEBUG_TAG, method+": called.");
 		Parcelable[] raw_messages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
 		NdefMessage[] ndef_messages = null;
 		if (raw_messages != null) 
@@ -384,12 +395,12 @@ public class GameReadingStonesActivity extends Activity
 		    for (int i = 0; i < raw_messages.length; i++) 
 		    {
 		    	NdefMessage ndef_message = (NdefMessage)raw_messages[i];
-		        Log.i(DEBUG_TAG, "i "+i+" ndef_message = "+ndef_message.toString());
+		        //Log.i(DEBUG_TAG, "i "+i+" ndef_message = "+ndef_message.toString());
 		        ndef_messages[i] = (NdefMessage) raw_messages[i];
 		    }
 		} else
 		{
-			Log.i(DEBUG_TAG, method+" raw_messages == null, or it's a virtual device");
+			//Log.i(DEBUG_TAG, method+" raw_messages == null, or it's a virtual device");
 			String test_card_type = (String)intent.getExtras().getString("test_card");
 			getTestCard(test_card_type);
 		}
@@ -401,7 +412,7 @@ public class GameReadingStonesActivity extends Activity
 			{
 				NdefRecord record = records[i];
 				String message = new String(record.getPayload());
-				Log.i(DEBUG_TAG, method+" "+i+" message "+message);
+				//Log.i(DEBUG_TAG, method+" "+i+" message "+message);
 				if (i==0)
 				{
 					associateWithCardsFile(message);
@@ -451,7 +462,7 @@ public class GameReadingStonesActivity extends Activity
 	private void associateWithCardsFile(String tag_id)
 	{
 		String method = "associateWithCardsFile";
-		Log.i(DEBUG_TAG, method+" tag_id to match "+tag_id+" from "+cards.size()+" cards.");
+		//Log.i(DEBUG_TAG, method+" tag_id to match "+tag_id+" from "+cards.size()+" cards.");
 		tag_id.trim();
 		Enumeration<String> e = cards.keys();
 		while (e.hasMoreElements())
@@ -460,7 +471,7 @@ public class GameReadingStonesActivity extends Activity
 			this_card_id.trim();
 			String card_id_str = UtilityTo.encodeThisString(this_card_id, "UTF-8");
 			String tag_id_str = removeHiddenCharacters(tag_id);
-            Log.i(DEBUG_TAG, method+" to card_id_str "+card_id_str);
+            //Log.i(DEBUG_TAG, method+" to card_id_str "+card_id_str);
 			if (card_id_str.equals(tag_id_str))
 			{
 				Card matching_card = cards.get(this_card_id);
@@ -478,7 +489,7 @@ public class GameReadingStonesActivity extends Activity
 	private void foundGameCard(Card game_card)
 	{
 		String method = "foundGameCard";
-		Log.i(DEBUG_TAG, method+": found");
+		//Log.i(DEBUG_TAG, method+": found");
 		try
 		{
 		printCard(game_card);
@@ -646,21 +657,13 @@ public class GameReadingStonesActivity extends Activity
     			String key = e.nextElement();
     			Card card = cards.get(key);
     			String this_id = card.getCardId();
-    			if (card.getCardStatus().equals(UtilityTo.YET_TO_BE_PLAYED))
-    			{
-    				end_game = false;
-    			}
-    			if (this_id.equals(game_card.getCardId()) || this_id.equals(previously_played_card_id))
-    			{
-    				card.setCardStatus(UtilityTo.PLAYED);
-    				Log.i(DEBUG_TAG, method+" card "+this_id+" new status "+card.getCardStatus()+" end_game "+end_game);
-    			} else
-    			{
-    				Log.i(DEBUG_TAG, method+" card "+this_id+" status "+card.getCardStatus()+" end_game "+end_game);
-    			}
+    			updatePlayerMatchesStatus(card);
+    			card = setCardStatus(this_id, game_card, card);
     			new_cards.put(this_id, card);
     		}
+    		Log.i(DEBUG_TAG, method+" number_of_words");
     		cards = new_cards;
+    		checkForChangeOfStatus();
     		showCards();
     		saveCardsFile();
     		IWantTo i_want_to = new IWantTo(context);
@@ -677,16 +680,95 @@ public class GameReadingStonesActivity extends Activity
 	}
 	
 	/**
+	 * Compare the total number of matches for the current player with the
+	 * collected matches held in id_player_matches.
+	 * @param current_player_matches
+	 */
+	private void checkForChangeOfStatus()
+	{
+		String method = "checkForChangeOfStatus";
+		int player_matches = id_player_matches.get(current_player_id);
+		if (player_matches>=(number_of_words/2))
+		{
+			String player_name = id_player_names.get(current_player_id);
+			Toast.makeText(this, player_name+" finished. Final round.", Toast.LENGTH_LONG ).show();
+			final_round = true;
+			game_status.setText(R.string.final_round);
+			game_file.setTestStatus(UtilityTo.FINAL_ROUND);
+			Log.i(DEBUG_TAG, method+" start final_round.");
+		} else
+		{
+			Log.i(DEBUG_TAG, method+" number_of_words "+number_of_words+" player_matches "+player_matches);
+		}
+	}
+	
+	/**
+	 * If any card is yet to be played end_game is set to false.
+	 * We count the cards for the current player to determine how many cards it takes
+	 * to finish.
+	 * @param card
+	 */
+	private void updatePlayerMatchesStatus(Card card)
+	{
+		String method = "updatePlayerMatchesStatus";
+		int current_player_matches = id_player_matches.get(current_player_id);
+		current_player_matches++;
+		id_player_matches.put(current_player_id, current_player_matches);
+		if (card.getCardStatus().equals(UtilityTo.YET_TO_BE_PLAYED))
+		{
+			end_game = false;
+			if (card.getPlayerId() == current_player_id)
+			{
+				number_of_words++;
+			}
+		} else
+		{
+			if (card.getPlayerId() == current_player_id)
+			{
+				number_of_words++;
+			}
+		}
+	}
+	
+	private Card setCardStatus(String this_id, Card game_card, Card card)
+	{
+		String method = "setCardStatus";
+		if (this_id.equals(game_card.getCardId()) || this_id.equals(previously_played_card_id))
+		{
+			card.setCardStatus(UtilityTo.PLAYED);
+			Log.i(DEBUG_TAG, method+" card "+this_id+" played "+card.getCardStatus()+" end_game "+end_game);
+		} else
+		{
+			//Log.i(DEBUG_TAG, method+" card "+this_id+" status "+card.getCardStatus()+" end_game "+end_game);
+		}
+		return card;
+	}
+	
+	/**
 	 * To do: this is the place to send info about the win to the learning record store.
 	 */
 	private void winner()
 	{
-		String player_name = id_player_names.get(current_player_id);
-    	Toast.makeText(this, player_name+" wins!  Final round.", Toast.LENGTH_LONG ).show();
-    	final_round = true;
-    	game_status.setText(R.string.final_round);
-    	game_file.setTestStatus(UtilityTo.FINAL_ROUND);
-    	//saveGameFile();
+		String method = "winner";
+		int highest_score = 0;
+		String winner_name = null;
+		Enumeration<String> e = id_player_names.keys();
+		while (e.hasMoreElements())
+		{
+			String key = e.nextElement();
+			String name = id_player_names.get(key);
+			PlayerInfo info = players.get(key);
+			int score = info.getScore();
+			if (score > highest_score)
+			{
+				highest_score = score;
+				winner_name = name;
+			}
+			Log.i(DEBUG_TAG, method+" score "+highest_score+" for "+winner_name);
+		}
+	    Toast.makeText(this, winner_name+" won!  Final round over.", Toast.LENGTH_LONG ).show();
+	    game_status.setText(R.string.game_over);
+	    game_file.setTestStatus(UtilityTo.GAME_OVER);
 	}
 	
 	private void addScoreToPlayerInfo(int new_score, String scoring_player_id)
@@ -718,7 +800,7 @@ public class GameReadingStonesActivity extends Activity
 		String method = "replacePlayerInfoForPlayer";
 		Hashtable <String,PlayerInfo> temp_players = new Hashtable<String,PlayerInfo>();
     	Enumeration<String> e = players.keys();
-    	Log.i(DEBUG_TAG, method+" players size "+players.size());
+    	//Log.i(DEBUG_TAG, method+" players size "+players.size());
 		while (e.hasMoreElements())
 		{
 			String key = e.nextElement();
@@ -726,11 +808,11 @@ public class GameReadingStonesActivity extends Activity
 			String this_player_id = this_player_info.getId();
 			if (this_player_id.equals(player_info.getId()))
 			{
-				Log.i(DEBUG_TAG, method+" update player "+this_player_id+" with new score "+player_info.getScore());
+				//Log.i(DEBUG_TAG, method+" update player "+this_player_id+" with new score "+player_info.getScore());
 				temp_players.put(this_player_id, player_info);
 			} else
 			{
-				Log.i(DEBUG_TAG, method+" copying player "+this_player_id+" with old score "+this_player_info.getScore());
+				//Log.i(DEBUG_TAG, method+" copying player "+this_player_id+" with old score "+this_player_info.getScore());
 				temp_players.put(this_player_id, this_player_info);
 			}		}
 		players = temp_players;
@@ -779,7 +861,7 @@ public class GameReadingStonesActivity extends Activity
     	String def1 = previous_card.getDefinition();
     	String text2 = card2.getText();
     	String def2 = card2.getDefinition();
-    	Log.i(DEBUG_TAG, method+" display "+def1+" and "+def1);
+    	//Log.i(DEBUG_TAG, method+" display "+def1+" and "+def1);
     	LayoutInflater layout_inflater = LayoutInflater.from(context);
     	ViewGroup group = (ViewGroup)findViewById(R.id.contemplation_linear_layoutB);
     	final View popup_view = layout_inflater.inflate(R.layout.game_reading_contemplation_window, group);
@@ -902,7 +984,7 @@ public class GameReadingStonesActivity extends Activity
     	createScoreboard();
     	resetAndSaveCards();
 		IWantTo i_want_to = new IWantTo(context);
-		printGame(game_file, "");
+		//printGame(game_file, "");
         setupGameObject();
         game_file.setTestStatus(UtilityTo.READY);
         i_want_to.saveTheGameFile(game_file, class_id);
@@ -924,13 +1006,15 @@ public class GameReadingStonesActivity extends Activity
     private void resetAndSavePlayers()
     {
     	String method = "resetPlayers";
+    	id_player_matches = new Hashtable <String, Integer> ();
     	Hashtable <String,PlayerInfo> temp_players = new Hashtable<String,PlayerInfo>();
     	Enumeration<String> e = players.keys();
-    	Log.i(DEBUG_TAG, method+" players size "+players.size());
+    	//Log.i(DEBUG_TAG, method+" players size "+players.size());
 		while (e.hasMoreElements())
 		{
 			String key = e.nextElement();
 			PlayerInfo this_player_info = players.get(key);
+			id_player_matches.put(key, 0);
 			this_player_info.setScore(0);
 			temp_players.put(this_player_info.getId(), this_player_info);
 		}
@@ -950,7 +1034,7 @@ public class GameReadingStonesActivity extends Activity
 		{
 			String this_card_id = e.nextElement();
 			Card this_card = cards.get(this_card_id);
-			Log.i(DEBUG_TAG, method+" set card "+this_card.getDefinition()+" from "+this_card.getCardStatus()+" to yet to be played");
+			//Log.i(DEBUG_TAG, method+" set card "+this_card.getDefinition()+" from "+this_card.getCardStatus()+" to yet to be played");
 			this_card.setCardStatus(UtilityTo.YET_TO_BE_PLAYED);
 			cards_copy.put(this_card_id, this_card);
 		}
@@ -973,7 +1057,7 @@ public class GameReadingStonesActivity extends Activity
     	setGameStatus();
     	Hashtable <String,String> player_id_status = new Hashtable<String,String>();
     	Enumeration<String> e = players.keys();
-    	Log.i(DEBUG_TAG, method+" players size "+players.size());
+    	//Log.i(DEBUG_TAG, method+" players size "+players.size());
 		while (e.hasMoreElements())
 		{
 			String key = e.nextElement();
@@ -1030,7 +1114,7 @@ public class GameReadingStonesActivity extends Activity
         		//resetTurn();
             }
         });
-        Log.i(DEBUG_TAG, method+" turn_cards "+turn_cards.size());
+        //Log.i(DEBUG_TAG, method+" turn_cards "+turn_cards.size());
         String[] val = new String [turn_cards.size()];
         for (int i = 0; i < turn_cards.size(); i++)
         {
@@ -1199,7 +1283,7 @@ public class GameReadingStonesActivity extends Activity
                         			{
                         				card.setDefinition(value);
                         				cards.put(card.getCardId(),card);
-                        				Log.i(DEBUG_TAG, method+" put "+card.getCardId()+" "+UtilityTo.getWord(card));
+                        				//Log.i(DEBUG_TAG, method+" put "+card.getCardId()+" "+UtilityTo.getWord(card));
                         				card = new Card();
                         			}
                         		}
@@ -1243,11 +1327,11 @@ public class GameReadingStonesActivity extends Activity
 			{
 				String player_id =  sender.getExtras().getString(i+"player_id");
 				String player_name =  sender.getExtras().getString(i+"player_name");
-				Log.i(DEBUG_TAG, method+" retrieved player id "+player_id+", player name "+player_name);
+				//Log.i(DEBUG_TAG, method+" retrieved player id "+player_id+", player name "+player_name);
 				id_player_names.put(player_id, player_name);
 				player_ids.add(player_id);
 			}
-			Log.i(DEBUG_TAG, method+" got test_name "+test_name+" test_status "+test_status+" test_id "+test_id);
+			//Log.i(DEBUG_TAG, method+" got test_name "+test_name+" test_status "+test_status+" test_id "+test_id);
 		} catch (java.lang.NumberFormatException nufie)
 		{
 			Log.i(DEBUG_TAG, method+" NuFiE!");
@@ -1273,7 +1357,7 @@ public class GameReadingStonesActivity extends Activity
     	{
     		// what do we do if there is no file yet?
     		Toast.makeText(this, "Please set up cards brefore game play", Toast.LENGTH_LONG ).show();
-    		Log.i(DEBUG_TAG,"create new cards.xml file?");
+    		//Log.i(DEBUG_TAG,"create new cards.xml file?");
     	} else
     	{
     		 //parseCards();
@@ -1283,7 +1367,7 @@ public class GameReadingStonesActivity extends Activity
         	{
         		// what do we do if there is no file yet?
         		Toast.makeText(this, "No cards.  Please set up cards brefore game play", Toast.LENGTH_LONG ).show();
-        		Log.i(DEBUG_TAG,"no cards!");
+        		//Log.i(DEBUG_TAG,"no cards!");
         	}
     	}
     }
@@ -1357,10 +1441,10 @@ public class GameReadingStonesActivity extends Activity
 						sb.append("<text>"+card.getText()+"</text>");
 						sb.append("<definition>"+card.getDefinition()+"</definition>");
 					sb.append("</card>");
-					Log.i(DEBUG_TAG, " card.getCardId(): "+card.getCardId()+" word "+UtilityTo.getWord(card));
+					//Log.i(DEBUG_TAG, " card.getCardId(): "+card.getCardId()+" word "+UtilityTo.getWord(card));
 				}
 				sb.append("</cards>");
-				Log.i(DEBUG_TAG, method+" writing "+new String(sb));
+				//Log.i(DEBUG_TAG, method+" writing "+new String(sb));
 				fos.write(new String(sb).getBytes());
 				fos.close();
 				//Log.i(DEBUG_TAG, method+": done");
@@ -1387,23 +1471,23 @@ public class GameReadingStonesActivity extends Activity
     	String method = "loadPlayers";
     	Context context = getApplicationContext();
     	String file_path = context.getFilesDir().getAbsolutePath();//returns current directory.
-    	Log.i(DEBUG_TAG, method+": file_path - "+file_path);
+    	//Log.i(DEBUG_TAG, method+": file_path - "+file_path);
     	File players_file = new File(file_path, UtilityTo.PLAYERS_XML);
     	boolean exists = players_file.exists();
-    	Log.i(DEBUG_TAG, method+": exists? "+exists);
+    	//Log.i(DEBUG_TAG, method+": exists? "+exists);
     	if (exists)
     	{
-    		Log.i(DEBUG_TAG, method+": parse players.xml and merge with game players");
+    		//Log.i(DEBUG_TAG, method+": parse players.xml and merge with game players");
     		parsePlayers(UtilityTo.PLAYERS_XML);
-    		Log.i(DEBUG_TAG, method+": before merge");
-    		printPlayers();
+    		//Log.i(DEBUG_TAG, method+": before merge");
+    		//printPlayers();
     		mergeGamePlayersWithFilePlayers();
-    		Log.i(DEBUG_TAG, method+": after merge");
-    		printPlayers();
+    		//Log.i(DEBUG_TAG, method+": after merge");
+    		//printPlayers();
     		savePlayersFile();
     	} else
     	{
-    		Log.i(DEBUG_TAG, method+": create new players.xml and populate it from the inten.");
+    		//Log.i(DEBUG_TAG, method+": create new players.xml and populate it from the inten.");
     		createNewPlayersFile();
     		populatePlayersFromIntent();
     		savePlayersFile();
@@ -1416,6 +1500,7 @@ public class GameReadingStonesActivity extends Activity
      * but doesn't already have an object in the players hash.
      * This vould happen if the players haven't logged in, and someone else sets up the game
      * and they want to go ahead and play without logging in.
+     * We also initialize the score count for each player held in id_player_matches.
      */
     private void mergeGamePlayersWithFilePlayers()
     {
@@ -1423,16 +1508,17 @@ public class GameReadingStonesActivity extends Activity
     	for (int i = 0; i < player_ids.size(); i++)
     	{
     		String this_player_id = player_ids.get(i);
-    		Log.i(DEBUG_TAG, method+": this_player_id "+this_player_id);
+    		id_player_matches.put(this_player_id, 0);
+    		//Log.i(DEBUG_TAG, method+": this_player_id "+this_player_id);
     		if (!players.containsKey(this_player_id))
     		{
     			String player_name = id_player_names.get(this_player_id);
     			PlayerInfo player_info = new PlayerInfo(player_name, 0, this_player_id, "crab_228");
     			players.put(this_player_id, player_info);
-    			Log.i(DEBUG_TAG, method+": put "+this_player_id+" into players hash named "+player_name);
+    			//Log.i(DEBUG_TAG, method+": put "+this_player_id+" into players hash named "+player_name);
     		} else
     		{
-    			Log.i(DEBUG_TAG, method+": player "+this_player_id+" not in game");
+    			//Log.i(DEBUG_TAG, method+": player "+this_player_id+" not in game");
     		}
     	}
     }
@@ -1503,7 +1589,7 @@ public class GameReadingStonesActivity extends Activity
 				try 
 				{
 					fis = openFileInput(filename);
-					Log.i(DEBUG_TAG, method+": fis "+fis.available());
+					//Log.i(DEBUG_TAG, method+": fis "+fis.available());
 				} catch (FileNotFoundException e1) 
 				{
 					Log.i(DEBUG_TAG, method+": fnfe");
@@ -1533,7 +1619,7 @@ public class GameReadingStonesActivity extends Activity
                         			if (tag.equals("name"))
                         			{
                         				name = value;
-                        				Log.i(DEBUG_TAG, method+": name "+name);
+                        				//Log.i(DEBUG_TAG, method+": name "+name);
                         			} else if (tag.equals("score"))
                         			{
                         				score = Integer.parseInt(value);
@@ -1549,9 +1635,9 @@ public class GameReadingStonesActivity extends Activity
                         				if (!player_ids.contains(id))
                         				{
                         					player_ids.add(id);
-                        					Log.i(DEBUG_TAG, method+": added to players_ids");
+                        					//Log.i(DEBUG_TAG, method+": added to players_ids");
                         				}
-                        				Log.i(DEBUG_TAG, method+": name "+name+" id "+id+" icon "+value+" score "+score);
+                        				//Log.i(DEBUG_TAG, method+": name "+name+" id "+id+" icon "+value+" score "+score);
                         			}
                         		}
                         		tag = null;
@@ -1581,11 +1667,11 @@ public class GameReadingStonesActivity extends Activity
     public void savePlayersFile()
     {
     	String method = "savePlayersFile";
-        Log.i(DEBUG_TAG, method+": players.size() "+players.size());
+        //Log.i(DEBUG_TAG, method+": players.size() "+players.size());
     	try 
     	{
     		FileOutputStream fos = context.openFileOutput("players.xml", Context.MODE_PRIVATE);
-    		Log.i(DEBUG_TAG, method+": FD "+fos.getFD());
+    		//Log.i(DEBUG_TAG, method+": FD "+fos.getFD());
 	        try
 	        {
 	        	StringBuffer sb = new StringBuffer();
@@ -1601,13 +1687,13 @@ public class GameReadingStonesActivity extends Activity
 					sb.append("<id>"+info.getId()+"</id>");
 					sb.append("<icon>"+info.getIcon()+"</icon>");
 					sb.append("</player>");
-					Log.i(DEBUG_TAG, method+" added " + info.getName());
+					//Log.i(DEBUG_TAG, method+" added " + info.getName());
 				}
 				sb.append("</players>");
-				Log.i(DEBUG_TAG, "writing "+sb.toString());
+				//Log.i(DEBUG_TAG, "writing "+sb.toString());
 				fos.write(new String(sb).getBytes());
 				fos.close();
-				Log.i(DEBUG_TAG, method+": done");
+				//Log.i(DEBUG_TAG, method+": done");
 	        }catch(FileNotFoundException e)
 	        {
 	            Log.e(DEBUG_TAG, "FileNotFoundException");
@@ -1641,7 +1727,7 @@ public class GameReadingStonesActivity extends Activity
         	mfc_adapter.disableForegroundDispatch(this);
         } catch (java.lang.NullPointerException npe)
         {
-        	Log.i(DEBUG_TAG, "unable to disable Foreground Dispatch");
+        	//Log.i(DEBUG_TAG, "unable to disable Foreground Dispatch");
         	npe.printStackTrace();
         }
     }
@@ -1676,7 +1762,7 @@ public class GameReadingStonesActivity extends Activity
         	 mfc_adapter.enableForegroundDispatch(this, pending_intent, filters, tech_lists_array);
          } catch (java.lang.NullPointerException npe)
          {
-       	  	Log.i(DEBUG_TAG, "onResume:  npeee!");
+       	  	//Log.i(DEBUG_TAG, "onResume:  npeee!");
        	  	mfc_adapter = NfcAdapter.getDefaultAdapter(context);
        	  	//nfc_adapter.enableForegroundDispatch(this,pendingIntent,writeTagFilters,techListsArray);
          }
@@ -1688,8 +1774,8 @@ public class GameReadingStonesActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) 
     {
     	String method = "onOptionsItemSelected(MenuItem)";
-    	Log.i(DEBUG_TAG, method+": Change the icon when the item is selected.");
-    	Log.i(DEBUG_TAG, method+": selected "+item.toString());
+    	//Log.i(DEBUG_TAG, method+": Change the icon when the item is selected.");
+    	//Log.i(DEBUG_TAG, method+": selected "+item.toString());
     	getIntent();
     	if (item.getItemId() == right_card_id)
     	{
