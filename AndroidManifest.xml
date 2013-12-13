@@ -102,8 +102,8 @@
         </receiver>
 
         <activity
-            android:name="com.curchod.wherewithal.SnazzyFootworkActivity"
-            android:label="@string/title_activity_snazzy_footwork" >
+            android:name="com.curchod.wherewithal.GameSnazzyThumbworkActivity"
+            android:label="@string/title_activity_snazzy_thumbwork" >
         </activity>
         <activity
             android:name="com.curchod.wherewithal.GameReadingStonesInstructionsActivity"

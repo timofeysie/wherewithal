@@ -59,12 +59,16 @@
     <string name="title_activity_game_reading_stones">Reading Stones</string>
     <string name="title_activity_game_writing_stones">Writing Stones</string>
     <string name="action_settings">Settings</string>
+    
+    <!-- Game status strings -->
+    <string name="game_not_ready">Game Not Ready</string>
     <string name="game_ready">Game Ready</string>
     <string name="playing">Playing</string>
     <string name="final_round">Final Round</string>
     <string name="game_over">Game Over</string>
+    
     <string name="fake_tag">Fake Tag</string>
-    <string name="title_activity_snazzy_footwork">Snazzy Footwork</string>
+    <string name="title_activity_snazzy_thumbwork">Snazzy Thumbwork</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_game_reading_stones_instructions">How To Play Reading Stones</string>
     <string name="instructions_menu_item">Instructions</string>

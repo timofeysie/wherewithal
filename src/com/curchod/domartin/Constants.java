@@ -9,4 +9,6 @@ public class Constants
 	public static final String UASED = "used";
 	public static final String WRITING_STONES = "WritingStones";
 	
+	public static final String GAME_NOT_READY = "Game Not Ready";
+	
 }

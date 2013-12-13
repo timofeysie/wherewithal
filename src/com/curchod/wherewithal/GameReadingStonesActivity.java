@@ -52,6 +52,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.curchod.domartin.Card;
+import com.curchod.domartin.Constants;
 import com.curchod.domartin.Game;
 import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.PlayerInfo;
@@ -160,9 +161,9 @@ public class GameReadingStonesActivity extends Activity
     private boolean final_round;
     /** Used to change the game status from ready to underway to final_round.*/
     private TextView game_status;
-    boolean end_game;
+    private boolean end_game;
     /** We count the cards each time to calculate this.  If you have a better idea let us know.*/
-    int number_of_words = 0;
+    private int number_of_words;
     /** This will hold the number of matches a player has to find the winner*/
     private Hashtable <String, Integer> id_player_matches;
     
@@ -172,7 +173,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 167";
+		String build = "build 168g";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -688,7 +689,9 @@ public class GameReadingStonesActivity extends Activity
 	{
 		String method = "checkForChangeOfStatus";
 		int player_matches = id_player_matches.get(current_player_id);
-		if (player_matches>=(number_of_words/2))
+		int number_of_text_def_pairs = number_of_words/2;
+		Log.i(DEBUG_TAG, method+" if "+player_matches+" >= "+number_of_words+" / "+number_of_text_def_pairs);
+		if (player_matches>=(number_of_words/number_of_text_def_pairs))
 		{
 			String player_name = id_player_names.get(current_player_id);
 			Toast.makeText(this, player_name+" finished. Final round.", Toast.LENGTH_LONG ).show();
@@ -1365,8 +1368,11 @@ public class GameReadingStonesActivity extends Activity
             cardsVectorToHash(i_want_to.loadCardsFile());
     		if (cards.size() == 0)
         	{
-        		// what do we do if there is no file yet?
-        		Toast.makeText(this, "No cards.  Please set up cards brefore game play", Toast.LENGTH_LONG ).show();
+        		// game not ready
+    			game_status.setText(R.string.game_not_ready);
+    		    game_file.setTestStatus(Constants.GAME_NOT_READY);
+    		    createScoreboard();
+    			Toast.makeText(this, "No cards.  Please set up cards brefore game play", Toast.LENGTH_LONG ).show();
         		//Log.i(DEBUG_TAG,"no cards!");
         	}
     	}
@@ -1842,18 +1848,27 @@ public class GameReadingStonesActivity extends Activity
 	{
 		String method = "findMatchingCard";
 		Enumeration<String> e = cards.keys();
+		Log.i(DEBUG_TAG, method+" looking at "+cards.size()+" cards.");
 		while (e.hasMoreElements())
 		{
 			String this_card_id = e.nextElement();
 			Card this_card = cards.get(this_card_id);
-			Log.i(DEBUG_TAG, method+" card "+UtilityTo.getWord(this_card));
+			Log.i(DEBUG_TAG, method+" card "+UtilityTo.getWord(this_card)+" "+this_card_id);
 			if (this_card.getWordId() == card_to_match.getWordId())
 			{
+				Log.i(DEBUG_TAG, method+" id == card_to_match");
 				// make sure it's not the exact same card.
 				if (this_card.getWordType()!=card_to_match.getWordType())
 				{
+					Log.i(DEBUG_TAG, method+" id == card_to_match");
 					return this_card;
+				} else
+				{
+					Log.i(DEBUG_TAG, method+" "+this_card.getWordType()+" = "+card_to_match.getWordType());
 				}
+			} else
+			{
+				Log.i(DEBUG_TAG, method+" id == "+card_to_match.getWordId());
 			}
 					
 		}

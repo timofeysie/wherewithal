@@ -38,7 +38,7 @@
         android:layout_above="@+id/image_view_reading_game"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="26dp"
-        android:text="Snazzy Footwork" />
+        android:text="Snazzy Thumbwork" />
 
     <TextView
         android:id="@+id/TextView01"

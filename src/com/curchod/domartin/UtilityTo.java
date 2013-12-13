@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
+import com.curchod.dto.SingleWord;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -98,6 +100,13 @@ public class UtilityTo
 		return current+uniqueId;
 	}
 	
+	/**
+	 * Accepts a Card and decides what the question is.
+	 * Reading types return the text.
+	 * Writing types return the definition.
+	 * @param card
+	 * @return
+	 */
 	public static String getWord(Card card)
 	{
 		String word = null;
@@ -108,6 +117,27 @@ public class UtilityTo
 		} else if (type.equals(UtilityTo.WRITING))
 		{
 			word = card.getDefinition();
+		}
+		return word;
+	}
+	
+	/**
+	 * Accepts a SingleWord and decides what the question is.
+	 * Reading types return the text.
+	 * Writing types return the definition.
+	 * @param single_word
+	 * @return
+	 */
+	public static String getWord(SingleWord single_word)
+	{
+		String word = null;
+		String type = single_word.getTestType();
+		if (type.equals(UtilityTo.READING))
+		{
+			word = single_word.getText();
+		} else if (type.equals(UtilityTo.WRITING))
+		{
+			word = single_word.getDefinition();
 		}
 		return word;
 	}

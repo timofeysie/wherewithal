@@ -55,7 +55,7 @@ public class GamesActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         String method = "onCreate";
-        String build = "build 11";
+        String build = "build 13b";
         Log.i(DEBUG_TAG, method+": "+build);
         ImageButton image_button_reading_game = (ImageButton) findViewById(R.id.image_button_reading_game);
         image_button_reading_game.setOnClickListener(new OnClickListener()
@@ -73,7 +73,8 @@ public class GamesActivity extends Activity
             @Override
             public void onClick(View v)
             {
-            	loadGameFile("snazzy button");
+            	Intent intent = new Intent(GamesActivity.this, GameSnazzyThumbworkActivity.class);
+        		startActivity(intent);
             }
         });
         
@@ -341,7 +342,7 @@ public class GamesActivity extends Activity
 		Intent intent = new Intent(GamesActivity.this, GameReadingStonesActivity.class);
 		if (activity.equals("snazzy button"))
 		{
-			intent = new Intent(GamesActivity.this, SnazzyFootworkActivity.class);
+			intent = new Intent(GamesActivity.this, GameSnazzyThumbworkActivity.class);
 		} else if (activity.equals("writing button"))
 		{
 			intent = new Intent(GamesActivity.this, GameWritingStonesActivity.class);

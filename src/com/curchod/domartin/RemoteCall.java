@@ -1,5 +1,8 @@
 package com.curchod.domartin;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,9 +13,11 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.curchod.dto.SingleWord;
 import com.curchod.wherewithal.CardsActivity;
 import com.curchod.wherewithal.MainActivity;
 
@@ -23,9 +28,18 @@ public class RemoteCall
 	 * This is filled after savedTestsListAction is called.
 	 */
 	Vector <SavedTest> saved_tests = null;
+	private Context context;
 
 	private static final String DEBUG_TAG = "RemoteCall";
 	
+	public RemoteCall()
+	{
+	}
+	
+	public RemoteCall(Context _context)
+	{
+		context = _context;
+	}
 	/**
 	 * Call the SavedTestsListAction to parse a list of saved tests.
 	 * @param name
@@ -174,4 +188,135 @@ public class RemoteCall
 	{
 		return saved_tests;
 	}
+	
+	/**
+	 * Call http://211.220.31.50:8080/indoct/stingle_word_test.do?student_id=-5519451928541341468
+	 * and retrieve an AllWordsTest object, which we call SingleWord here in Wherewithal.
+	 * This is the formta:
+	 * <all_words_test>
+     *   <text>
+	 *   <definition>
+	 *   <category>
+	 *   <answer>
+	 *   <test_type>
+	 *   <level>
+	 *   <daily_test_index>
+	 *   <grand_test_index>
+	 *   <id>
+	 *   <all_words_test>
+	 * @param player_id
+	 * @return
+	 */
+	public SingleWord loadSingleWord(String player_id)
+    {
+    	String method = "loadSingleWord(";
+    	URL text = null; 
+        try 
+        {
+            text = new URL("http://211.220.31.50:8080/indoct/single_word_test.do?student_id="+player_id);
+        } catch (MalformedURLException e) 
+   		{
+   			e.printStackTrace();
+   		}
+    	return parseSingleWord(text);
+    }
+	
+	private SingleWord parseSingleWord(URL text)
+    {
+    	String method = "parseSingleWord";
+    	SingleWord single_word = new SingleWord();
+        Log.i(DEBUG_TAG, method+": Parse a list of saved tests.");
+    	Hashtable<String, String> test_words = new Hashtable<String, String>();
+    	String element = null;
+    	boolean start_capture = false;
+    	int number_of_words = 1;
+    	try 
+    	{
+			XmlPullParserFactory parser_creater = XmlPullParserFactory.newInstance();
+			XmlPullParser parser =  parser_creater.newPullParser();
+			parser.setInput(text.openStream(), null);
+			int parser_event = parser.getEventType();
+			while (parser_event != XmlPullParser.END_DOCUMENT)
+			{
+				switch(parser_event)
+				{
+					case XmlPullParser.TEXT:
+					String value = parser.getText();
+					if (start_capture == true)
+					{
+						if (element.equals("text"))
+						{
+							single_word.setText(UtilityTo.encodeThis(value));
+							Log.i(DEBUG_TAG, method+" text "+element+" value "+value);
+						}
+						if (element.equals("definition"))
+						{
+							single_word.setDefinition(value);
+							Log.i(DEBUG_TAG, method+" def "+element+" value "+value);
+						}
+						if (element.equals("category"))
+						{
+							single_word.setCategory(value);
+							Log.i(DEBUG_TAG, method+" cat "+element+" value "+value);
+						}
+						if (element.equals("answer"))
+						{
+							single_word.setAnswer(value);
+							Log.i(DEBUG_TAG, method+" ans "+element+" value "+value);
+						}
+						if (element.equals("test_type"))
+						{
+							single_word.setTestType(value);
+							Log.i(DEBUG_TAG, method+" type "+element+" value "+value);
+						}
+						if (element.equals("level"))
+						{
+							single_word.setLevel(value);
+							Log.i(DEBUG_TAG, method+" level "+element+" value "+value);
+						}
+						if (element.equals("daily_test_index"))
+						{
+							single_word.setDailyTestIndex(Integer.parseInt(value));
+							Log.i(DEBUG_TAG, method+" dti "+element+" value "+value);
+						}
+						if (element.equals("grand_test_index"))
+						{
+							single_word.setGrandTestIndex(Integer.parseInt(value));
+							Log.i(DEBUG_TAG, method+" gti "+element+" value "+value);
+						}
+						if (element.equals("id"))
+						{
+							single_word.setWordId(value);
+							Log.i(DEBUG_TAG, method+" id "+element+" value "+value);
+						}
+					}
+					//Log.i(DEBUG_TAG, "case.TEXT "+value+" capture_the_flag="+capture_the_flag);
+					case XmlPullParser.START_TAG:
+					String tag_name = parser.getName();
+					try
+					{
+						if (tag_name.equals("text"))
+						{
+							start_capture = true;
+						}
+						element = tag_name;
+					} catch (java.lang.NullPointerException nope)
+					{
+					}
+					//Log.i(DEBUG_TAG, "case.START_TAG "+tag_name+" capture_the_flag="+capture_the_flag);
+				}
+				parser_event = parser.next();
+			}
+			Log.i(DEBUG_TAG, method+" put number_of_words = "+(number_of_words-1)+"");
+			test_words.put("number_of_words", (number_of_words-1)+"");
+		} catch (XmlPullParserException e) 
+		{
+			e.printStackTrace();
+		} catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+    	return single_word;
+    }
+	
 }
