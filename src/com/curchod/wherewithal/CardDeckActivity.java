@@ -102,7 +102,7 @@ public class CardDeckActivity extends Activity
             public void onClick(View v)
             {
             	final String method = "button_add_reading.onClick";
-            	createNewCard(UtilityTo.READING);
+            	createNewCard(Constants.READING);
             	//Log.i(DEBUG_TAG, method+": Hi there reading!");
             }
         });
@@ -114,7 +114,7 @@ public class CardDeckActivity extends Activity
             {
             	final String method = "button_add_writing.onClick";
             	//Log.i(DEBUG_TAG, method+": Hi there writing!");
-            	createNewCard(UtilityTo.WRITING);
+            	createNewCard(Constants.WRITING);
             }
         });
 		createCardsList();
@@ -134,16 +134,16 @@ public class CardDeckActivity extends Activity
 		DeckCard new_card = new DeckCard();
 		String card_name = "R";
 		int card_index = 0;
-		if (type.equals(UtilityTo.READING))
+		if (type.equals(Constants.READING))
 		{
 			 card_name = "R";
 			 card_index = house_deck.getNumberOfReadingCards();
-			 new_card.setType(UtilityTo.READING);
-		} else if (type.equals(UtilityTo.WRITING))
+			 new_card.setType(Constants.READING);
+		} else if (type.equals(Constants.WRITING))
 		{
 			 card_name = "W";
 			 card_index = house_deck.getNumberOfWritingCards();
-			 new_card.setType(UtilityTo.WRITING);
+			 new_card.setType(Constants.WRITING);
 		}
 		card_index++;
 		String new_card_name = card_name+card_index;
@@ -202,7 +202,7 @@ public class CardDeckActivity extends Activity
 	{
 		String method = "createCardsList";
 		card_row_ids = new Hashtable <String,String> ();
-		Hashtable <String,DeckCard> reading_rows = sortCards(UtilityTo.READING);
+		Hashtable <String,DeckCard> reading_rows = sortCards(Constants.READING);
 		Enumeration<String> reading = reading_rows.keys();
 		while (reading.hasMoreElements())
 		{
@@ -217,7 +217,7 @@ public class CardDeckActivity extends Activity
 				npe.printStackTrace();
 			}
 		}
-		Hashtable <String,DeckCard> writing_rows = sortCards(UtilityTo.WRITING);
+		Hashtable <String,DeckCard> writing_rows = sortCards(Constants.WRITING);
 		Enumeration<String> writing = writing_rows.keys();
 		while (writing.hasMoreElements())
 		{

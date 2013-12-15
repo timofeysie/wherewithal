@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
+import com.curchod.domartin.Constants;
 import com.curchod.domartin.Filer;
 import com.curchod.domartin.PlayerInfo;
 import com.curchod.domartin.UtilityTo;
@@ -177,7 +178,7 @@ public class AddPlayerActivity extends Activity
     	String path_to_players_file = UtilityTo.pathToPlayersFile(context);
     	String file_path = context.getFilesDir().getAbsolutePath();
     	Log.i(DEBUG_TAG, "getPlayerIcon: file_path: "+file_path);
-    	File players_file = new File(file_path, UtilityTo.PLAYERS_XML);
+    	File players_file = new File(file_path, Constants.PLAYERS_XML);
     	Log.i(DEBUG_TAG, "getNewPlayerIcon: exists? "+players_file.exists());
     	if (!players_file.exists())
     	{
@@ -253,7 +254,7 @@ public class AddPlayerActivity extends Activity
             	FileInputStream fis = null;
 				try 
 				{
-					fis = openFileInput(UtilityTo.PLAYERS_XML);
+					fis = openFileInput(Constants.PLAYERS_XML);
 					Log.i(DEBUG_TAG, method+": fis "+fis.available());
 				} catch (FileNotFoundException e1) 
 				{

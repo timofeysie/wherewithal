@@ -100,7 +100,7 @@ public class CardPlayersListActivity extends ListActivity
 					String item = (String)adapter.getItem(pos);
 					try
 					{
-						if (player_name_status.get(item).equals(UtilityTo.READY))
+						if (player_name_status.get(item).equals(Constants.READY))
 						{
 							this_position = pos;
 							Log.i(DEBUG_TAG, pos+" Ready "+player_name_status.get(item));
@@ -418,7 +418,7 @@ public class CardPlayersListActivity extends ListActivity
 			{
 				String reading_deck_card_name = (String)test_words.get(i+"reading_deck_card_name");
 				String reading_deck_card_id = deck_card_name_ids.get(reading_deck_card_name);
-				Card reading_new_card = setupCardFromIntent(reading_deck_card_id, UtilityTo.READING, selected_player_id, 
+				Card reading_new_card = setupCardFromIntent(reading_deck_card_id, Constants.READING, selected_player_id, 
 					player_name, word_id, word_text, word_definition, i+"", category);
 				new_file_cards.add(reading_new_card);
 				deck_card_name_words.put(reading_deck_card_name, word_text);
@@ -426,7 +426,7 @@ public class CardPlayersListActivity extends ListActivity
 			}
 			String writing_deck_card_id = deck_card_name_ids.get(writing_deck_card_name);
 			deck_card_name_words.put(writing_deck_card_name, word_definition);
-			Card writing_new_card = setupCardFromIntent(writing_deck_card_id, UtilityTo.WRITING, selected_player_id, 
+			Card writing_new_card = setupCardFromIntent(writing_deck_card_id, Constants.WRITING, selected_player_id, 
 					player_name, word_id, word_text, word_definition, i+"", category);
 			new_file_cards.add(writing_new_card);
 		}
@@ -448,7 +448,7 @@ public class CardPlayersListActivity extends ListActivity
     {
     	Card card = new Card();
     	card.setCardId(card_id);
-    	card.setCardStatus(UtilityTo.YET_TO_BE_PLAYED);
+    	card.setCardStatus(Constants.YET_TO_BE_PLAYED);
     	card.setPlayerName(player_name);
     	card.setPlayerId(player_id);
     	card.setWordId(word_id); 

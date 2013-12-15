@@ -172,7 +172,7 @@ public class CardPlayerWordsActivity extends ListActivity
 		        try
 		        {
 		        	renderer = super.getView(position, convertView, parent); // used to be outside the try block but got an npe when coming back to this activity.
-		        	if (FINISHED_WORDS[position].equals(UtilityTo.SET))
+		        	if (FINISHED_WORDS[position].equals(Constants.SET))
 		        	{
 		        		//Log.i(DEBUG_TAG, "FINISHED_WORDS["+position+"] = set");
 		        		//Log.i(DEBUG_TAG, "FINISHED_WORDS_PLAYER_ID["+position+"] = "+player_id);
@@ -327,7 +327,7 @@ public class CardPlayerWordsActivity extends ListActivity
     	{
     		String status = FINISHED_WORDS[i];
     		//Log.i(DEBUG_TAG, method+"status equals "+Utilities.SET+"?");
-    		if (status.equals(UtilityTo.SET))
+    		if (status.equals(Constants.SET))
     		{
     			count++;
     			//Log.i(DEBUG_TAG, method+" count++ to "+count);
@@ -340,7 +340,7 @@ public class CardPlayerWordsActivity extends ListActivity
     	{
     		Log.i(DEBUG_TAG, "checkIfSetupComplete: file_cards.size() "+file_cards.size()+" "+number_of_words*2+" setup complete!");
     		Toast.makeText(context, context.getString(R.string.player_setup_complete) , Toast.LENGTH_LONG ).show();
-    		game_status = UtilityTo.READY;
+    		game_status = Constants.READY;
     		loadGameFileAndUpdateStatus();
     		file_cards = new Vector <Card> ();
     		//Log.i(DEBUG_TAG, method+" complete: game_status set to "+game_status);
@@ -482,7 +482,7 @@ public class CardPlayerWordsActivity extends ListActivity
         Log.i(DEBUG_TAG, method+": Using a string buffer, we create the initial players.xml file with a new entry for the first player with a default icon name.");
     	try 
     	{
-    		FileOutputStream fos = openFileOutput(UtilityTo.GAME_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = openFileOutput(Constants.GAME_XML, Context.MODE_PRIVATE);
     		//Log.i(DEBUG_TAG, method+": FD "+fos.getFD());
 	        try
 	        {
@@ -504,7 +504,7 @@ public class CardPlayerWordsActivity extends ListActivity
 					if (this_player_id.equals(player_id))
 					{
 						//Log.i(DEBUG_TAG, "Changed "+this_player_id+" player_status from "+status+" to ready");
-						status = UtilityTo.READY;
+						status = Constants.READY;
 					}
 					sb.append("<player_status id=\""+this_player_id+"\">"+status+"</player_status>");
 					//Log.i(DEBUG_TAG, "<player_status id="+this_player_id+">"+status+"</player_status>");
@@ -557,7 +557,7 @@ public class CardPlayerWordsActivity extends ListActivity
     	String method = "selectedItemForHighlighting";
     	Integer word_pos = word_position.get(selected_word);
     	//Log.i(DEBUG_TAG, "word pos "+word_pos.toString()+" added "+selected_word+" to selected_words");
-    	FINISHED_WORDS[selected] = UtilityTo.SET;
+    	FINISHED_WORDS[selected] = Constants.SET;
     	list_view = getListView();
     	ArrayAdapter<?> adapter = (ArrayAdapter<?>) list_view.getAdapter();
     	adapter.notifyDataSetChanged();
@@ -625,7 +625,7 @@ public class CardPlayerWordsActivity extends ListActivity
         //Log.i(DEBUG_TAG, method);
     	try 
     	{
-    		FileOutputStream fos = openFileOutput(UtilityTo.CARDS_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = openFileOutput(Constants.CARDS_XML, Context.MODE_PRIVATE);
     		//Log.i(DEBUG_TAG, method+": FD "+fos.getFD());
 	        try
 	        {
@@ -680,7 +680,7 @@ public class CardPlayerWordsActivity extends ListActivity
     	Context context = getApplicationContext();
     	String file_path = context.getFilesDir().getAbsolutePath();//returns current directory.
     	//Log.i(DEBUG_TAG, method+": file_path - "+file_path);
-    	File file = new File(file_path, UtilityTo.CARDS_XML);
+    	File file = new File(file_path, Constants.CARDS_XML);
     	boolean exists = file.exists();
     	if (exists == false)
     	{
@@ -724,7 +724,7 @@ public class CardPlayerWordsActivity extends ListActivity
             	FileInputStream fis = null;
 				try 
 				{
-					fis = openFileInput(UtilityTo.CARDS_XML);
+					fis = openFileInput(Constants.CARDS_XML);
 					//Log.i(DEBUG_TAG, method+": fis "+fis.available());
 				} catch (FileNotFoundException e1) 
 				{
@@ -792,7 +792,7 @@ public class CardPlayerWordsActivity extends ListActivity
                         				file_cards.add(card);
                         				if (card.getPlayerId().equals(player_id))
                         				{
-                        					if (card.getWordType().equals(UtilityTo.READING))
+                        					if (card.getWordType().equals(Constants.READING))
                         					{
                         						previously_selected_words.add(card.getText());
                         						previously_written_words_ids.put(card.getText(), card.getPlayerId());
@@ -1126,7 +1126,7 @@ public class CardPlayerWordsActivity extends ListActivity
 			if (!selected_test_format.equals(Constants.WRITING_STONES))
 			{
 				// reading
-				card = setupCardFromIntent(i, UtilityTo.READING);
+				card = setupCardFromIntent(i, Constants.READING);
 				WORDS[text_def] = card.getText();
 				FINISHED_WORDS[text_def] = "";
 				try
@@ -1146,7 +1146,7 @@ public class CardPlayerWordsActivity extends ListActivity
 						// if a card has be written to file already.
 						if (previously_written_words_ids.get(card.getText()).equals(player_id))
 						{
-							FINISHED_WORDS[text_def]= UtilityTo.SET;
+							FINISHED_WORDS[text_def]= Constants.SET;
 							//FINISHED_WORDS_PLAYER_ID[text_def]=card.getPlayerId();
 						}
 						//Log.i(DEBUG_TAG, "set "+card.getText()+" Utilities.getWord "+Utilities.getWord(card));
@@ -1158,7 +1158,7 @@ public class CardPlayerWordsActivity extends ListActivity
 				text_def++;
 			}
 			// writing
-			card = setupCardFromIntent(i, UtilityTo.WRITING);
+			card = setupCardFromIntent(i, Constants.WRITING);
 			WORDS[text_def] = card.getDefinition();
 			FINISHED_WORDS[text_def] = "";
 			word_ids.put(card.getDefinition(), card.getWordId());
@@ -1173,7 +1173,7 @@ public class CardPlayerWordsActivity extends ListActivity
 					{
 						if (previously_written_words_ids.get(card.getText()).equals(player_id))
 						{
-							FINISHED_WORDS[text_def]= UtilityTo.SET;
+							FINISHED_WORDS[text_def]= Constants.SET;
 							//FINISHED_WORDS_PLAYER_ID[text_def]=card.getPlayerId();
 							//Log.i(DEBUG_TAG, "set card player_id"+card.getPlayerId()+" Utilities.getWord "+Utilities.getWord(card));
 						}
@@ -1229,7 +1229,7 @@ public class CardPlayerWordsActivity extends ListActivity
     {
     	Card card = new Card();
     	Intent sender = getIntent();
-    	card.setCardStatus(UtilityTo.YET_TO_BE_PLAYED);
+    	card.setCardStatus(Constants.YET_TO_BE_PLAYED);
     	card.setPlayerName(player_name);
     	card.setPlayerId(player_id);
     	card.setWordId(sender.getExtras().getString((i+1)+"id")); // starts at 1.
@@ -1429,7 +1429,7 @@ public class CardPlayerWordsActivity extends ListActivity
     			String associated_id = card_ids.get(number_of_cards);
     			number_of_cards++;
     			card.setCardId(associated_id);
-    			card.setWordType(UtilityTo.WRITING);
+    			card.setWordType(Constants.WRITING);
     			word_deck_card_associations.put(card.getCardId(), deck_cards_id_names.get(associated_id)); 
     			Log.i(DEBUG_TAG, method+" associated "+UtilityTo.getWord(card)+" with deck card "+card.getCardId()+" id "+associated_id+" name "+deck_cards_id_names.get(associated_id)+" id "+card.getPlayerId());
     			//dumpCard(card);
@@ -1544,7 +1544,7 @@ public class CardPlayerWordsActivity extends ListActivity
     	{
     		String key = (String)d.nextElement();
     		DeckCard deck_card = remaining_deck_cards.get(key);
-    		deck_card.setType(UtilityTo.WRITING);
+    		deck_card.setType(Constants.WRITING);
     		card_ids.add(deck_card.getCardId());
     		deck_cards_id_names.put(deck_card.getCardId(), deck_card.getCardName());
     		deck_card_name_types.put(deck_card.getCardName(), deck_card.getType());
@@ -1563,7 +1563,7 @@ public class CardPlayerWordsActivity extends ListActivity
     			String associated_id = remaining_deck_card_ids.get(i);
     			i++;
     			card.setCardId(associated_id);
-    			card.setWordType(UtilityTo.WRITING);
+    			card.setWordType(Constants.WRITING);
     			word_deck_card_associations.put(card.getCardId(), deck_cards_id_names.get(associated_id)); 
     			Log.i(DEBUG_TAG, "D-2: "+card.getCardId()+" "+deck_cards_id_names.get(associated_id));
     			deck_card_id_word_ids.put(card.getCardId(), card.getWordId());
@@ -1720,10 +1720,10 @@ public class CardPlayerWordsActivity extends ListActivity
     	{
     		String key = (String)d.nextElement();
     		DeckCard deck_card = deck_cards.get(key);
-    		if (deck_card.getType().equals(UtilityTo.READING))
+    		if (deck_card.getType().equals(Constants.READING))
     		{
     			reading_card_ids.add(deck_card.getCardId());
-    		} else if (deck_card.getType().equals(UtilityTo.WRITING))
+    		} else if (deck_card.getType().equals(Constants.WRITING))
     		{
     			writing_card_ids.add(deck_card.getCardId());
     		}
@@ -1743,14 +1743,14 @@ public class CardPlayerWordsActivity extends ListActivity
     		String type = card.getWordType();
     		Log.i(DEBUG_TAG, method+" type "+type+" - "+card.getDefinition());
     		String associated_id = null;
-    		if (type.equals(UtilityTo.READING))
+    		if (type.equals(Constants.READING))
     		{
     			if (number_of_reading_card<reading_card_ids.size())
     			{
     				associated_id = reading_card_ids.get(number_of_reading_card);
     				number_of_reading_card++;
     			}
-    		} else if (type.equals(UtilityTo.WRITING))
+    		} else if (type.equals(Constants.WRITING))
     		{
     			if (number_of_writing_card<writing_card_ids.size())
     			{
@@ -1832,14 +1832,14 @@ public class CardPlayerWordsActivity extends ListActivity
         	String type = deck_card_name_types.get(deck_card_name);
         	if (type == null)
         	{
-        		type = UtilityTo.WRITING; // this happens for the third test in a triptych.
+        		type = Constants.WRITING; // this happens for the third test in a triptych.
         	}
         	name_value_pairs.add(new BasicNameValuePair(i+"word_type", type));
-        	if (type.equals(UtilityTo.READING))
+        	if (type.equals(Constants.READING))
         	{
         		name_value_pairs.add(new BasicNameValuePair(i+"reading_deck_card_name", deck_card_name));
         		Log.i(DEBUG_TAG, method+" put "+i+"reading_deck_card_name - "+deck_card_name);
-        	} else if (type.equals(UtilityTo.WRITING))
+        	} else if (type.equals(Constants.WRITING))
         	{
         		name_value_pairs.add(new BasicNameValuePair(i+"writing_deck_card_name", deck_card_name));
         		Log.i(DEBUG_TAG, method+" put "+i+"writing_deck_card_name - "+deck_card_name);
@@ -1974,7 +1974,7 @@ public class CardPlayerWordsActivity extends ListActivity
         //Log.i(DEBUG_TAG, method+": ");
     	try 
     	{
-    		FileOutputStream fos = openFileOutput(UtilityTo.CARDS_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = openFileOutput(Constants.CARDS_XML, Context.MODE_PRIVATE);
 	        try
 	        {
 	        	StringBuffer sb = new StringBuffer();

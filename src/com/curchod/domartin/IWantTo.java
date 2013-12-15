@@ -42,7 +42,7 @@ public class IWantTo
         //Log.i(DEBUG_TAG, method+": ");
     	try 
     	{
-    		FileOutputStream fos = context.openFileOutput(UtilityTo.GAME_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = context.openFileOutput(Constants.GAME_XML, Context.MODE_PRIVATE);
     		//Log.i(DEBUG_TAG, method+": FD "+fos.getFD());
 	        try
 	        {
@@ -90,7 +90,7 @@ public class IWantTo
     	FileInputStream fis = null;
 		try 
 		{
-			fis = context.openFileInput(UtilityTo.GAME_XML);
+			fis = context.openFileInput(Constants.GAME_XML);
 		} catch (FileNotFoundException e1) 
 		{
 			Log.i(DEBUG_TAG, method+": fnfe");
@@ -598,7 +598,7 @@ public class IWantTo
     	Vector <Card> file_cards = new Vector<Card>();
     	String file_path = context.getFilesDir().getAbsolutePath();//returns current directory.
     	//Log.i(DEBUG_TAG, method+": file_path - "+file_path);
-    	File file = new File(file_path, UtilityTo.CARDS_XML);
+    	File file = new File(file_path, Constants.CARDS_XML);
     	boolean exists = file.exists();
     	if (exists == false)
     	{
@@ -618,7 +618,7 @@ public class IWantTo
     	FileInputStream fis = null;
 		try 
 		{
-			fis = context.openFileInput(UtilityTo.CARDS_XML);
+			fis = context.openFileInput(Constants.CARDS_XML);
 			//Log.i(DEBUG_TAG, method+": fis "+fis.available());
 		} catch (FileNotFoundException e1) 
 		{
@@ -714,7 +714,7 @@ public class IWantTo
         //Log.i(DEBUG_TAG, method+": ");
     	try 
     	{
-    		FileOutputStream fos = context.openFileOutput(UtilityTo.CARDS_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = context.openFileOutput(Constants.CARDS_XML, Context.MODE_PRIVATE);
 	        try
 	        {
 	        	StringBuffer sb = new StringBuffer();
@@ -759,7 +759,7 @@ public class IWantTo
         //Log.i(DEBUG_TAG, method);
     	try 
     	{
-    		FileOutputStream fos = context.openFileOutput(UtilityTo.CARDS_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = context.openFileOutput(Constants.CARDS_XML, Context.MODE_PRIVATE);
     		//Log.i(DEBUG_TAG, method+": FD "+fos.getFD());
 	        try
 	        {
