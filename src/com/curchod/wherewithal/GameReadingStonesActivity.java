@@ -173,7 +173,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 170a";
+		String build = "build 172";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -196,7 +196,10 @@ public class GameReadingStonesActivity extends Activity
         printGame(game_file, ": game file after setup.");
         loadCardsFile();
         loadPlayers();
-        number_of_words = cards.size()/players.size();
+        if (cards.size()!=0)
+        {
+        	number_of_words = cards.size()/players.size();
+        }
         Log.i(DEBUG_TAG, method+": number_of_words "+number_of_words);
         try
         {
@@ -290,8 +293,14 @@ public class GameReadingStonesActivity extends Activity
 			Log.i(DEBUG_TAG, method+" player_id "+this_player_id+" set score "+this_player_info.getScore());
 		}
 		players = temp_players;
-    	table.removeAllViews();
-    	createScoreboard();
+		try
+		{
+			table.removeAllViews();
+			createScoreboard();
+		} catch (java.lang.NullPointerException npe)
+		{
+			Log.i(DEBUG_TAG, method+" no players to put in the scoreboard");
+		}
     }
 	
 	/**
