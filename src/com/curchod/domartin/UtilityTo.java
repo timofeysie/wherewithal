@@ -125,6 +125,49 @@ public class UtilityTo
 		return word;
 	}
 	
+	/**
+	 * Accepts a SingleWord and decides what the question is.
+	 * Reading types return the text.
+	 * Writing types return the definition.
+	 * @param single_word
+	 * @return
+	 */
+	public static String getQuestion(SingleWord single_word)
+	{
+		String word = null;
+		String type = single_word.getTestType();
+		if (type.equals(Constants.READING))
+		{
+			word = single_word.getText();
+		} else if (type.equals(Constants.WRITING))
+		{
+			word = single_word.getDefinition();
+		}
+		return word;
+	}
+	
+	/**
+	 * The opposite of getWord().
+	 * Accepts a SingleWord and decides what the question is.
+	 * Reading types return the text.
+	 * Writing types return the definition.
+	 * @param single_word
+	 * @return
+	 */
+	public static String getAnswer(SingleWord single_word)
+	{
+		String word = null;
+		String type = single_word.getTestType();
+		if (type.equals(Constants.READING))
+		{
+			word = single_word.getDefinition();
+		} else if (type.equals(Constants.WRITING))
+		{
+			word = single_word.getText();
+		}
+		return word;
+	}
+	
 	public static void printBytes(byte[] data, String message)
     {
     	Log.i(DEBUG_TAG, "printBytes: "+message+"-----");

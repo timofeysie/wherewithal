@@ -165,7 +165,7 @@ public class GameReadingStonesActivity extends Activity
     /** We count the cards each time to calculate this.  If you have a better idea let us know.*/
     private int number_of_words;
     /** This will hold the number of matches a player has to find the winner*/
-    private Hashtable <String, Integer> id_player_matches;
+    private Hashtable <String, Double> id_player_matches;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -173,7 +173,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 170a";
+		String build = "build 171d";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -370,7 +370,7 @@ public class GameReadingStonesActivity extends Activity
         previously_played_card_id = "";
         mock_word_counter = 0;
         final_round = false;
-        id_player_matches = new Hashtable <String, Integer> ();
+        id_player_matches = new Hashtable <String, Double> ();
 	}
 	
 	/**
@@ -646,8 +646,9 @@ public class GameReadingStonesActivity extends Activity
 		turn_cards.add(game_card);
 		turn_card_ids.add(game_card.getCardId());
 		card_pairs.add(game_card);  // do we use this?  think not..
-		int current_player_matches = id_player_matches.get(current_player_id); 
-		id_player_matches.put(current_player_id, current_player_matches++); // increment this playrs matches.
+		double current_player_matches = id_player_matches.get(current_player_id); 
+		current_player_matches = current_player_matches + 1;
+		id_player_matches.put(current_player_id, current_player_matches); // increment this playrs matches.
     	if (list_adapter != null)
     	{
         	played_card_ids.add(game_card.getCardId());
@@ -664,7 +665,7 @@ public class GameReadingStonesActivity extends Activity
     			card = setCardStatus(this_id, game_card, card);
     			new_cards.put(this_id, card);
     		}
-    		Log.i(DEBUG_TAG, method+" number_of_words");
+    		Log.i(DEBUG_TAG, method+" number_of_words "+number_of_words);
     		cards = new_cards;
     		checkForChangeOfStatus();
     		showCards();
@@ -690,7 +691,7 @@ public class GameReadingStonesActivity extends Activity
 	private void checkForChangeOfStatus()
 	{
 		String method = "checkForChangeOfStatus";
-		int player_matches = id_player_matches.get(current_player_id);
+		double player_matches = id_player_matches.get(current_player_id);
 		int number_of_text_def_pairs = number_of_words/2;
 		Log.i(DEBUG_TAG, method+" if "+player_matches+" >= "+number_of_text_def_pairs);
 		if (player_matches>=number_of_text_def_pairs)
@@ -703,7 +704,7 @@ public class GameReadingStonesActivity extends Activity
 			Log.i(DEBUG_TAG, method+" start final_round.");
 		} else
 		{
-			Log.i(DEBUG_TAG, method+" number_of_words "+number_of_words+" player_matches "+player_matches);
+			Log.i(DEBUG_TAG, method+" number_of_text_def_pairs "+number_of_text_def_pairs+" player_matches "+player_matches);
 			String game_status = game_file.getTestStatus();
 			if (game_status.equals(Constants.GAME_READY))
 			{
@@ -1003,7 +1004,7 @@ public class GameReadingStonesActivity extends Activity
     private void resetAndSavePlayers()
     {
     	String method = "resetPlayers";
-    	id_player_matches = new Hashtable <String, Integer> ();
+    	id_player_matches = new Hashtable <String, Double> ();
     	Hashtable <String,PlayerInfo> temp_players = new Hashtable<String,PlayerInfo>();
     	Enumeration<String> e = players.keys();
     	//Log.i(DEBUG_TAG, method+" players size "+players.size());
@@ -1011,7 +1012,7 @@ public class GameReadingStonesActivity extends Activity
 		{
 			String key = e.nextElement();
 			PlayerInfo this_player_info = players.get(key);
-			id_player_matches.put(key, 0);
+			id_player_matches.put(key, (double)0);
 			this_player_info.setScore(0);
 			temp_players.put(this_player_info.getId(), this_player_info);
 		}
@@ -1381,20 +1382,20 @@ public class GameReadingStonesActivity extends Activity
     
     private void cardsVectorToHash(Vector <Card> cards_vector)
     {
-    	boolean game_over = true;
     	for (int i = 0; i < cards_vector.size(); i++)
     	{
     		Card card = cards_vector.get(i);
     		cards.put(card.getCardId(), card);
     		if (card.getCardStatus().equals(Constants.PLAYED))
     		{
-    			game_file.setTestStatus(Constants.PLAYING);
+    			double matches = id_player_matches.get(card.getPlayerId());
+    			matches = matches + .5;
+    			id_player_matches.put(card.getPlayerId(), matches);
     		} else if (card.getCardStatus().equals(Constants.YET_TO_BE_PLAYED))
     		{
-    			game_over = false;
     		}
     	}
-    	if (game_over)
+    	if (end_game)
     	{
     		game_status.setText(R.string.game_over);
         	game_file.setTestStatus(Constants.GAME_OVER);
@@ -1515,7 +1516,7 @@ public class GameReadingStonesActivity extends Activity
     	for (int i = 0; i < player_ids.size(); i++)
     	{
     		String this_player_id = player_ids.get(i);
-    		id_player_matches.put(this_player_id, 0);
+    		id_player_matches.put(this_player_id, (double)0);
     		//Log.i(DEBUG_TAG, method+": this_player_id "+this_player_id);
     		if (!players.containsKey(this_player_id))
     		{
