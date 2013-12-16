@@ -1,9 +1,12 @@
 package com.curchod.wherewithal;
 
+import java.util.Date;
+
 import com.curchod.domartin.RemoteCall;
 import com.curchod.domartin.Scoring;
 import com.curchod.domartin.UtilityTo;
 import com.curchod.dto.SingleWord;
+import com.curchod.dto.SingleWordTestResult;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,6 +33,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	private TextView text_question;
 	private EditText text_answer;
 	private SingleWord word;
+	long timer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -76,19 +80,42 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 		String method = "scoreResult";
 		String player_answer = text_answer.getText().toString();
 		String correct_answer = UtilityTo.getAnswer(word);
+		String grade = "fail";
 		if (Scoring.scoreAnswer(correct_answer, player_answer))
 		{
 			Log.i(DEBUG_TAG, method+" correct");
+			grade = "pass";
 			startSnazzyPass();
 		} else
 		{
 			Log.i(DEBUG_TAG, method+" incorrect");
 			startSnazzyFail();
 		}
+		scoreTest(grade);
+	}
+	
+	private void scoreTest(final String grade)
+	{
+		new Thread()
+        {
+            public void run()
+            {   
+            	RemoteCall remote = new RemoteCall(context);
+            	SingleWordTestResult swtr = remote.scoreSingleWordTest(player_id, grade, timer);
+            	((Activity) context).runOnUiThread(new Runnable() 
+        		{
+                    public void run() 
+                    {
+                    	text_question.setText(UtilityTo.getQuestion(word));
+                    }
+                });
+            }
+        }.start();
 	}
 	
 	private void getNextWord()
 	{
+		timer = new Date().getTime();
 		new Thread()
         {
             public void run()

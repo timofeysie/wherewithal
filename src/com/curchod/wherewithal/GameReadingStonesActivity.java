@@ -173,7 +173,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 172";
+		String build = "build 173";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();

@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.curchod.dto.SingleWord;
+import com.curchod.dto.SingleWordTestResult;
 import com.curchod.wherewithal.CardsActivity;
 import com.curchod.wherewithal.MainActivity;
 
@@ -315,5 +316,11 @@ public class RemoteCall
 		}
     	return single_word;
     }
+	
+	public SingleWordTestResult scoreSingleWordTest(String player_id, String grade, long time)
+	{
+		
+		return null;
+	}
 	
 }
