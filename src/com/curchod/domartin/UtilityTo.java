@@ -183,7 +183,7 @@ public class UtilityTo
 	public static void printArray(String array [], String message)
 	{
 		Log.i(DEBUG_TAG, "printArray: "+message+"*****");
-		for (int i = 0; i < array.length; i += 2) 
+		for (int i = 0; i < array.length; i++)
 	    {
 			Log.i(DEBUG_TAG, array[i]);
 	    }
