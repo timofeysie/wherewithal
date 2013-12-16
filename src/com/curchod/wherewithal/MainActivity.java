@@ -28,7 +28,7 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i(DEBUG_TAG, "onCreate: build 8");
+        Log.i(DEBUG_TAG, "onCreate: build 9");
         
         // Players Activity
         players_button = (Button) findViewById(R.id.players_button);

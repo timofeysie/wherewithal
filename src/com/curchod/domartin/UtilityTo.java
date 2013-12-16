@@ -16,26 +16,9 @@ import android.util.Log;
 
 public class UtilityTo 
 {
-	
+
 	private static final String DEBUG_TAG = "Utilities";
 	
-	public static final String PLAYERS = "players";
-	public static final String PLAYERS_XML = "players.xml";
-	public static final String GAME_XML = "game.xml";
-	public static final String CARDS_XML = "cards.xml";
-	public static final String PLAYERS_TAG = "<players/>";
-	public static final String READING = "reading";
-	public static final String WRITING = "writing";
-	public static final String READY = "ready";
-	public static final String SETUP = "setup";
-	public static final String SET = "set";
-	public static final String YET_TO_BE_PLAYED = "yet_to_be_played";
-	public static final String PLAYED = "played";
-	public static final String GAME_READY = "game_ready";
-	public static final String PLAYING = "playing";
-	public static final String FINAL_ROUND = "final_round";
-	public static final String GAME_OVER = "game_over";
-
 	/**
 	 * Create a path which would work out to:
 	 * path_to_files/users/
@@ -46,7 +29,7 @@ public class UtilityTo
 	public static String pathToPlayersFile(Context context)
 	{
     	File file_dir = context.getFilesDir();
-    	String path_to_players_file = file_dir.getAbsolutePath()+File.separator+UtilityTo.PLAYERS_XML;
+    	String path_to_players_file = file_dir.getAbsolutePath()+File.separator+Constants.PLAYERS_XML;
     	return path_to_players_file;
 	}
 	
@@ -111,10 +94,10 @@ public class UtilityTo
 	{
 		String word = null;
 		String type = card.getWordType();
-		if (type.equals(UtilityTo.READING))
+		if (type.equals(Constants.READING))
 		{
 			word = card.getText();
-		} else if (type.equals(UtilityTo.WRITING))
+		} else if (type.equals(Constants.WRITING))
 		{
 			word = card.getDefinition();
 		}
@@ -132,10 +115,10 @@ public class UtilityTo
 	{
 		String word = null;
 		String type = single_word.getTestType();
-		if (type.equals(UtilityTo.READING))
+		if (type.equals(Constants.READING))
 		{
 			word = single_word.getText();
-		} else if (type.equals(UtilityTo.WRITING))
+		} else if (type.equals(Constants.WRITING))
 		{
 			word = single_word.getDefinition();
 		}

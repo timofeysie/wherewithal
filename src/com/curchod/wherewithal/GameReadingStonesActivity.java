@@ -173,7 +173,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 168g";
+		String build = "build 170a";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -335,15 +335,15 @@ public class GameReadingStonesActivity extends Activity
 		{
 			game_status.setText(R.string.game_ready);
 			Log.i(DEBUG_TAG, method+" game ready");
-		} else if (status_string.equals(UtilityTo.GAME_OVER))
+		} else if (status_string.equals(Constants.GAME_OVER))
 		{
 			game_status.setText(R.string.game_over);
 			Log.i(DEBUG_TAG, method+" game over");
-		} else if (status_string.equals(UtilityTo.FINAL_ROUND))
+		} else if (status_string.equals(Constants.FINAL_ROUND))
 		{
 			game_status.setText(R.string.final_round);
 			Log.i(DEBUG_TAG, method+" final round");
-		} else if (status_string.equals(UtilityTo.PLAYING))
+		} else if (status_string.equals(Constants.PLAYING))
 		{
 			game_status.setText(R.string.playing);
 			Log.i(DEBUG_TAG, method+" playing");
@@ -646,6 +646,8 @@ public class GameReadingStonesActivity extends Activity
 		turn_cards.add(game_card);
 		turn_card_ids.add(game_card.getCardId());
 		card_pairs.add(game_card);  // do we use this?  think not..
+		int current_player_matches = id_player_matches.get(current_player_id); 
+		id_player_matches.put(current_player_id, current_player_matches++); // increment this playrs matches.
     	if (list_adapter != null)
     	{
         	played_card_ids.add(game_card.getCardId());
@@ -690,18 +692,23 @@ public class GameReadingStonesActivity extends Activity
 		String method = "checkForChangeOfStatus";
 		int player_matches = id_player_matches.get(current_player_id);
 		int number_of_text_def_pairs = number_of_words/2;
-		Log.i(DEBUG_TAG, method+" if "+player_matches+" >= "+number_of_words+" / "+number_of_text_def_pairs);
-		if (player_matches>=(number_of_words/number_of_text_def_pairs))
+		Log.i(DEBUG_TAG, method+" if "+player_matches+" >= "+number_of_text_def_pairs);
+		if (player_matches>=number_of_text_def_pairs)
 		{
 			String player_name = id_player_names.get(current_player_id);
 			Toast.makeText(this, player_name+" finished. Final round.", Toast.LENGTH_LONG ).show();
 			final_round = true;
 			game_status.setText(R.string.final_round);
-			game_file.setTestStatus(UtilityTo.FINAL_ROUND);
+			game_file.setTestStatus(Constants.FINAL_ROUND);
 			Log.i(DEBUG_TAG, method+" start final_round.");
 		} else
 		{
 			Log.i(DEBUG_TAG, method+" number_of_words "+number_of_words+" player_matches "+player_matches);
+			String game_status = game_file.getTestStatus();
+			if (game_status.equals(Constants.GAME_READY))
+			{
+				game_file.setTestStatus(Constants.PLAYING);
+			}
 		}
 	}
 	
@@ -714,22 +721,9 @@ public class GameReadingStonesActivity extends Activity
 	private void updatePlayerMatchesStatus(Card card)
 	{
 		String method = "updatePlayerMatchesStatus";
-		int current_player_matches = id_player_matches.get(current_player_id);
-		current_player_matches++;
-		id_player_matches.put(current_player_id, current_player_matches);
-		if (card.getCardStatus().equals(UtilityTo.YET_TO_BE_PLAYED))
+		if (card.getCardStatus().equals(Constants.YET_TO_BE_PLAYED))
 		{
 			end_game = false;
-			if (card.getPlayerId() == current_player_id)
-			{
-				number_of_words++;
-			}
-		} else
-		{
-			if (card.getPlayerId() == current_player_id)
-			{
-				number_of_words++;
-			}
 		}
 	}
 	
@@ -738,7 +732,7 @@ public class GameReadingStonesActivity extends Activity
 		String method = "setCardStatus";
 		if (this_id.equals(game_card.getCardId()) || this_id.equals(previously_played_card_id))
 		{
-			card.setCardStatus(UtilityTo.PLAYED);
+			card.setCardStatus(Constants.PLAYED);
 			Log.i(DEBUG_TAG, method+" card "+this_id+" played "+card.getCardStatus()+" end_game "+end_game);
 		} else
 		{
@@ -771,7 +765,7 @@ public class GameReadingStonesActivity extends Activity
 		}
 	    Toast.makeText(this, winner_name+" won!  Final round over.", Toast.LENGTH_LONG ).show();
 	    game_status.setText(R.string.game_over);
-	    game_file.setTestStatus(UtilityTo.GAME_OVER);
+	    game_file.setTestStatus(Constants.GAME_OVER);
 	}
 	
 	private void addScoreToPlayerInfo(int new_score, String scoring_player_id)
@@ -989,7 +983,7 @@ public class GameReadingStonesActivity extends Activity
 		IWantTo i_want_to = new IWantTo(context);
 		//printGame(game_file, "");
         setupGameObject();
-        game_file.setTestStatus(UtilityTo.READY);
+        game_file.setTestStatus(Constants.READY);
         i_want_to.saveTheGameFile(game_file, class_id);
         played_cards = new Hashtable <String,Card> ();
         turn_cards = new Vector <Card> ();
@@ -1038,7 +1032,7 @@ public class GameReadingStonesActivity extends Activity
 			String this_card_id = e.nextElement();
 			Card this_card = cards.get(this_card_id);
 			//Log.i(DEBUG_TAG, method+" set card "+this_card.getDefinition()+" from "+this_card.getCardStatus()+" to yet to be played");
-			this_card.setCardStatus(UtilityTo.YET_TO_BE_PLAYED);
+			this_card.setCardStatus(Constants.YET_TO_BE_PLAYED);
 			cards_copy.put(this_card_id, this_card);
 		}
 		cards = cards_copy;
@@ -1056,7 +1050,7 @@ public class GameReadingStonesActivity extends Activity
     	game_file.setTestFormat("reading_stones");
     	game_file.setTestId(test_id);
     	game_file.setTestName(test_name);
-    	game_file.setTestType(UtilityTo.READING);
+    	game_file.setTestType(Constants.READING);
     	setGameStatus();
     	Hashtable <String,String> player_id_status = new Hashtable<String,String>();
     	Enumeration<String> e = players.keys();
@@ -1080,13 +1074,13 @@ public class GameReadingStonesActivity extends Activity
     {
     	if (final_round)
     	{
-    		game_file.setTestStatus(UtilityTo.FINAL_ROUND);
+    		game_file.setTestStatus(Constants.FINAL_ROUND);
     	} else if (end_game)
     	{
-    		game_file.setTestStatus(UtilityTo.GAME_OVER);
-    	}
+    		game_file.setTestStatus(Constants.GAME_OVER);
+    	} else
     	{
-    		game_file.setTestStatus(UtilityTo.READING);
+    		game_file.setTestStatus(Constants.READY);
     	}
     }
     
@@ -1215,7 +1209,7 @@ public class GameReadingStonesActivity extends Activity
             	FileInputStream fis = null;
 				try 
 				{
-					fis = openFileInput(UtilityTo.CARDS_XML);
+					fis = openFileInput(Constants.CARDS_XML);
 					Log.i(DEBUG_TAG, method+": fis "+fis.available());
 				} catch (FileNotFoundException e1) 
 				{
@@ -1256,7 +1250,7 @@ public class GameReadingStonesActivity extends Activity
                         			} else if (tag.equals("card_status"))
                         			{
                         				card.setCardStatus(value);
-                        				if (value.equals(UtilityTo.PLAYED))
+                        				if (value.equals(Constants.PLAYED))
                         				{
                         					played_card_ids.add(card.getCardId());
                         					//Log.i(DEBUG_TAG, "card played");
@@ -1354,7 +1348,7 @@ public class GameReadingStonesActivity extends Activity
     	Context context = getApplicationContext();
     	String file_path = context.getFilesDir().getAbsolutePath();//returns current directory.
     	//Log.i(DEBUG_TAG, method+": file_path - "+file_path);
-    	File file = new File(file_path, UtilityTo.CARDS_XML);
+    	File file = new File(file_path, Constants.CARDS_XML);
     	boolean exists = file.exists();
     	if (exists == false)
     	{
@@ -1371,7 +1365,14 @@ public class GameReadingStonesActivity extends Activity
         		// game not ready
     			game_status.setText(R.string.game_not_ready);
     		    game_file.setTestStatus(Constants.GAME_NOT_READY);
-    		    createScoreboard();
+    		    try
+    		    {
+    		    	createScoreboard();
+    		    } catch (java.lang.NullPointerException npe)
+    		    {
+    		    	// game chose, no players yet, skip showing the scoreboard.
+    		    	updateGameStatus();
+    		    }
     			Toast.makeText(this, "No cards.  Please set up cards brefore game play", Toast.LENGTH_LONG ).show();
         		//Log.i(DEBUG_TAG,"no cards!");
         	}
@@ -1385,10 +1386,10 @@ public class GameReadingStonesActivity extends Activity
     	{
     		Card card = cards_vector.get(i);
     		cards.put(card.getCardId(), card);
-    		if (card.getCardStatus().equals(UtilityTo.PLAYED))
+    		if (card.getCardStatus().equals(Constants.PLAYED))
     		{
-    			game_file.setTestStatus(UtilityTo.PLAYING);
-    		} else if (card.getCardStatus().equals(UtilityTo.YET_TO_BE_PLAYED))
+    			game_file.setTestStatus(Constants.PLAYING);
+    		} else if (card.getCardStatus().equals(Constants.YET_TO_BE_PLAYED))
     		{
     			game_over = false;
     		}
@@ -1396,7 +1397,7 @@ public class GameReadingStonesActivity extends Activity
     	if (game_over)
     	{
     		game_status.setText(R.string.game_over);
-        	game_file.setTestStatus(UtilityTo.GAME_OVER);
+        	game_file.setTestStatus(Constants.GAME_OVER);
     	}
     }
     
@@ -1424,7 +1425,7 @@ public class GameReadingStonesActivity extends Activity
         //Log.i(DEBUG_TAG, method);
     	try 
     	{
-    		FileOutputStream fos = openFileOutput(UtilityTo.CARDS_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = openFileOutput(Constants.CARDS_XML, Context.MODE_PRIVATE);
     		//Log.i(DEBUG_TAG, method+": FD "+fos.getFD());
 	        try
 	        {
@@ -1478,13 +1479,13 @@ public class GameReadingStonesActivity extends Activity
     	Context context = getApplicationContext();
     	String file_path = context.getFilesDir().getAbsolutePath();//returns current directory.
     	//Log.i(DEBUG_TAG, method+": file_path - "+file_path);
-    	File players_file = new File(file_path, UtilityTo.PLAYERS_XML);
+    	File players_file = new File(file_path, Constants.PLAYERS_XML);
     	boolean exists = players_file.exists();
     	//Log.i(DEBUG_TAG, method+": exists? "+exists);
     	if (exists)
     	{
     		//Log.i(DEBUG_TAG, method+": parse players.xml and merge with game players");
-    		parsePlayers(UtilityTo.PLAYERS_XML);
+    		parsePlayers(Constants.PLAYERS_XML);
     		//Log.i(DEBUG_TAG, method+": before merge");
     		//printPlayers();
     		mergeGamePlayersWithFilePlayers();
@@ -1555,7 +1556,7 @@ public class GameReadingStonesActivity extends Activity
     	//Log.i(DEBUG_TAG, method+": Using a string buffer, we create the initial players.xml file with a new entry for the first player with a default icon name.");
     	try 
     	{
-    		FileOutputStream fos = openFileOutput(UtilityTo.CARDS_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = openFileOutput(Constants.CARDS_XML, Context.MODE_PRIVATE);
 	        try
 	        {
 	        	StringBuffer sb = new StringBuffer();
@@ -1826,10 +1827,10 @@ public class GameReadingStonesActivity extends Activity
 			Card card = cards.get(this_card_id);
 			String card_status = card.getCardStatus();
 			Log.i(DEBUG_TAG, method+" card "+card.getDefinition()+" status "+card_status);
-			if (!played_card_ids.contains(this_card_id)&&!card_status.equals(UtilityTo.PLAYED))
+			if (!played_card_ids.contains(this_card_id)&&!card_status.equals(Constants.PLAYED))
 			{				
 				Log.i(DEBUG_TAG, method+" using "+card.getDefinition());
-				card.setCardStatus(UtilityTo.PLAYED);
+				card.setCardStatus(Constants.PLAYED);
 				foundGameCard(card);
 				Card matching_card = findMatchingCard(card);
 				foundGameCard(matching_card);

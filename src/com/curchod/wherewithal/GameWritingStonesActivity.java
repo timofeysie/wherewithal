@@ -65,6 +65,7 @@ import android.widget.ToggleButton;
 
 import com.curchod.domartin.AsyncLoadGameFile;
 import com.curchod.domartin.Card;
+import com.curchod.domartin.Constants;
 import com.curchod.domartin.Game;
 import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.PlayerInfo;
@@ -1017,7 +1018,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     			String this_id = card.getCardId();
     			if (this_id.equals(game_card.getCardId()) || this_id.equals(previously_played_card_id))
     			{
-    				card.setCardStatus(UtilityTo.PLAYED);
+    				card.setCardStatus(Constants.PLAYED);
     				Log.i(DEBUG_TAG, method+" card "+this_id+" new status "+card.getCardStatus());
     			} else
     			{
@@ -1230,7 +1231,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 		IWantTo i_want_to = new IWantTo(context);
 		printGame(game_file, "");
         setupGameObject();
-        game_file.setTestStatus(UtilityTo.READY);
+        game_file.setTestStatus(Constants.READY);
         i_want_to.saveTheGameFile(game_file, class_id);
         played_cards = new Hashtable <String,Card> ();
         turn_cards = new Vector <Card> ();
@@ -1281,7 +1282,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 			String this_card_id = e.nextElement();
 			Card this_card = cards.get(this_card_id);
 			Log.i(DEBUG_TAG, method+" set card "+this_card.getDefinition()+" from "+this_card.getCardStatus()+" to yet to be played");
-			this_card.setCardStatus(UtilityTo.YET_TO_BE_PLAYED);
+			this_card.setCardStatus(Constants.YET_TO_BE_PLAYED);
 			cards_copy.put(this_card_id, this_card);
 		}
 		cards = cards_copy;
@@ -1296,7 +1297,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	game.setTestId(test_id);
     	game.setTestName(test_name);
     	game.setTestStatus("playing");
-    	game.setTestType(UtilityTo.READING);
+    	game.setTestType(Constants.READING);
     	Hashtable <String,String> player_id_status = new Hashtable<String,String>();
     	Enumeration<String> e = players.keys();
     	Log.i(DEBUG_TAG, method+" players size "+players.size());
@@ -1438,7 +1439,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
             	FileInputStream fis = null;
 				try 
 				{
-					fis = openFileInput(UtilityTo.CARDS_XML);
+					fis = openFileInput(Constants.CARDS_XML);
 					Log.i(DEBUG_TAG, method+": fis "+fis.available());
 				} catch (FileNotFoundException e1) 
 				{
@@ -1479,7 +1480,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
                         			} else if (tag.equals("card_status"))
                         			{
                         				card.setCardStatus(value);
-                        				if (value.equals(UtilityTo.PLAYED))
+                        				if (value.equals(Constants.PLAYED))
                         				{
                         					played_card_ids.add(card.getCardId());
                         					Log.i(DEBUG_TAG, "card played");
@@ -1577,7 +1578,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	Context context = getApplicationContext();
     	String file_path = context.getFilesDir().getAbsolutePath();//returns current directory.
     	Log.i(DEBUG_TAG, method+": file_path - "+file_path);
-    	File file = new File(file_path, UtilityTo.CARDS_XML);
+    	File file = new File(file_path, Constants.CARDS_XML);
     	boolean exists = file.exists();
     	if (exists == false)
     	{
@@ -1614,7 +1615,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
         //Log.i(DEBUG_TAG, method);
     	try 
     	{
-    		FileOutputStream fos = openFileOutput(UtilityTo.CARDS_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = openFileOutput(Constants.CARDS_XML, Context.MODE_PRIVATE);
     		//Log.i(DEBUG_TAG, method+": FD "+fos.getFD());
 	        try
 	        {
@@ -1668,13 +1669,13 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	Context context = getApplicationContext();
     	String file_path = context.getFilesDir().getAbsolutePath();//returns current directory.
     	Log.i(DEBUG_TAG, method+": file_path - "+file_path);
-    	File players_file = new File(file_path, UtilityTo.PLAYERS_XML);
+    	File players_file = new File(file_path, Constants.PLAYERS_XML);
     	boolean exists = players_file.exists();
     	Log.i(DEBUG_TAG, method+": exists? "+exists);
     	if (exists)
     	{
     		Log.i(DEBUG_TAG, method+": parse players.xml and merge with game players");
-    		parsePlayers(UtilityTo.PLAYERS_XML);
+    		parsePlayers(Constants.PLAYERS_XML);
     		Log.i(DEBUG_TAG, method+": before merge");
     		printPlayers();
     		mergeGamePlayersWithFilePlayers();
@@ -1743,7 +1744,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	//Log.i(DEBUG_TAG, method+": Using a string buffer, we create the initial players.xml file with a new entry for the first player with a default icon name.");
     	try 
     	{
-    		FileOutputStream fos = openFileOutput(UtilityTo.CARDS_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = openFileOutput(Constants.CARDS_XML, Context.MODE_PRIVATE);
 	        try
 	        {
 	        	StringBuffer sb = new StringBuffer();

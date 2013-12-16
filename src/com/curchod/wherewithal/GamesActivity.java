@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.curchod.domartin.Constants;
 import com.curchod.domartin.UtilityTo;
 
 /**
@@ -316,7 +317,7 @@ public class GamesActivity extends Activity
         {
 			String player_id = e.nextElement();
 			String status = id_status.get(player_id);
-			if (status.equals(UtilityTo.SETUP))
+			if (status.equals(Constants.SETUP))
 			{
 				ready = false;
 			}

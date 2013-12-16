@@ -3,7 +3,7 @@ package com.curchod.dto;
 /**
  * This object is based on the AllWordsTest object from Catechis.
  * The differences are:
- * id is called word_id.
+ * id is called word_id, and was changed to String from a long.
  * We add the grand_test_index, or total number of tests for the user.
  * @author user
  *

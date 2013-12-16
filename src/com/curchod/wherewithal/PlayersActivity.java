@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.curchod.domartin.Constants;
 import com.curchod.domartin.PlayerInfo;
 import com.curchod.domartin.UtilityTo;
 
@@ -357,9 +358,9 @@ public class PlayersActivity extends Activity
     	Context context = getApplicationContext();
     	String file_path = context.getFilesDir().getAbsolutePath();//returns current directory.
     	Log.i(DEBUG_TAG, method+": file_path - "+file_path);
-    	File players_file = new File(file_path, UtilityTo.PLAYERS_XML);
+    	File players_file = new File(file_path, Constants.PLAYERS_XML);
     	Log.i(DEBUG_TAG, method+": exists? "+players_file.exists());
-    	parsePlayers(UtilityTo.PLAYERS_XML, pa);
+    	parsePlayers(Constants.PLAYERS_XML, pa);
     	//return players;
     }
     

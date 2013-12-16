@@ -106,10 +106,10 @@ public class HouseDeck
 		{
 			 cards.put(index, _card);
 			 String type = _card.getType();
-			 if (type.equals(UtilityTo.READING))
+			 if (type.equals(Constants.READING))
 			 {
 				 number_of_reading_cards++;
-			 } else if (type.equals(UtilityTo.WRITING))
+			 } else if (type.equals(Constants.WRITING))
 			 {
 				 number_of_writing_cards++;
 			 }

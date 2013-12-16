@@ -36,6 +36,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.curchod.domartin.Constants;
 import com.curchod.domartin.HouseDeck;
 import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.UtilityTo;
@@ -237,7 +238,7 @@ public class CardsActivity extends ListActivity
         //Log.i(DEBUG_TAG, method+": Using a string buffer, we create the initial players.xml file with a new entry for the first player with a default icon name.");
     	try 
     	{
-    		FileOutputStream fos = openFileOutput(UtilityTo.CARDS_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = openFileOutput(Constants.CARDS_XML, Context.MODE_PRIVATE);
 	        try
 	        {
 	        	StringBuffer sb = new StringBuffer();
@@ -377,7 +378,7 @@ public class CardsActivity extends ListActivity
         //Log.i(DEBUG_TAG, method+": Using a string buffer, we create the initial players.xml file with a new entry for the first player with a default icon name.");
     	try 
     	{
-    		FileOutputStream fos = openFileOutput(UtilityTo.GAME_XML, Context.MODE_PRIVATE);
+    		FileOutputStream fos = openFileOutput(Constants.GAME_XML, Context.MODE_PRIVATE);
     		//Log.i(DEBUG_TAG, method+": FD "+fos.getFD());
 	        try
 	        {
@@ -484,7 +485,7 @@ public class CardsActivity extends ListActivity
 					} else if (element.equals("student_id"))
 					{
 						//saved_tests.put(number_of_tests+"player_status", id_status.get(value));
-						id_status.put(value, UtilityTo.SETUP);
+						id_status.put(value, Constants.SETUP);
 						//Log.i(DEBUG_TAG,  method+" put "+number_of_tests+"player_status, id_status.get(value) "+id_status.get(value));
 					} else if (element.equals("class_id"))
 					{
@@ -537,7 +538,7 @@ public class CardsActivity extends ListActivity
 	{
 		for (int i = 0; i < number_of_tests; i++)
 		{
-			saved_tests.put(number_of_tests+"player_status", UtilityTo.SETUP);
+			saved_tests.put(number_of_tests+"player_status", Constants.SETUP);
 		}
 	}
 	
@@ -646,7 +647,7 @@ public class CardsActivity extends ListActivity
                         }
                         parser_event = parser.next();
                     }
-                    if (test_status.equals(UtilityTo.READY))
+                    if (test_status.equals(Constants.READY))
             		{
                     	ready = true;
             		} else
@@ -677,7 +678,7 @@ public class CardsActivity extends ListActivity
         {
 			String player_id = e.nextElement();
 			String status = id_status.get(player_id);
-			if (status.equals(UtilityTo.SETUP))
+			if (status.equals(Constants.SETUP))
 			{
 				ready = false;
 			}
