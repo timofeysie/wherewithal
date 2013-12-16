@@ -1,10 +1,15 @@
 Activity Descriptions
 
+Main Activity
+The first screen shows the Stepping Stones picture and three buttons which lead to the three main activities of this app.  There are Cards, Players and Games.  CLicking on the Cards button takes the user to the CardsActivity, Players, to PlayersActivity and Game to the Games Activity.
+
 CardsActivity
+This second level screen shows a list of SavedTest objects from the server that represent games to be set up and played.
 When a user clicks on a test, the name and id are sent to getSavedClassTestsAndSaveGame  which then calls saveGameFile(selected_test_name, selected_test_id); which then calls remoteCall(text);
 In this method we capture the student_is¡¯s in remote_student_ids Vector, and then call saveGameFile.
 To setup for the next activity, when a user chooses a test, we retrieve the list of saved tests for players who are part of that test.
 The parse depends on knowing the last sub-element
+From the menu the user can also choose House Decks which will start the CardDecksActivity.
 
 CardPlayersListActivity
 Retrieve a list of players that are part of a saved test chosen in the previous CardAction and create a list of them for selection.  
@@ -27,13 +32,27 @@ Then, in the setUpPlayerNamesAndExtras(), we check if the word we are looking at
 If so, that position is set in the FINISHED_WORDS array.
 If the player chooses the menu item for "Use House Deck", then they are shown a dialog of house decks to choose from.  After this choice, the game cards will be associated with the deck cards.  If the game is a WritingStones type, the writing type cards from the previous game is used so that the player doesn't have to take out the writing cards from that game.
 
+CardDecksActivity
+This screen shows a list of house decks.  It also has a menu item that lets the user create a house deck by entering the deck's name.
+
+CardDeckActivity
+This activity shows a list of cards in the deck.  At first there are none, and the user must create the cards by pressing the "Reading Card" or "Writing Card" buttons.  A reading card represents a card with the word written in the language the student is studying.  A writing card represents a word in the students mother tongue, which they would have to write the answer in the language they are learning, hence the term 'writing'.
+Once the desired number of cards are created, the user must associate each card with an NFC card.  This is done by selecting the card from the list, and then placing their device on top of the card and wait while the card is read, and an id is written to the card and then the status of the card will change to "ready".
+There is also a menu option to reuse or set a new id, as well as options for saving and loading house decks from the server.
+
 GamesActivity
 This activity provides a list of games for the user to choose from.
 Once a user has chosen a game, the game file is loaded, including also possibly the players and the cards files, and needed information is sent to the approp[riate next activity.
 For example, if the user chooses the Reading Stones game, they are sent to GameReadingStonesActity.
 
 GameReadingStonesActivity
-This game lets players scan sets of cards for matches.  There is no limit as to how many sets they can scan, so this game can also be used for a solitary matching exercise.  Each match adds 1 point to the score, and successive matches adds an extra point, compunding the score.  If two cards don't match, the contemplation window is shown that will give the player the correct match for each card for about 15 seconds.
+This game lets players scan sets of cards for matches.  There is no limit as to how many sets they can scan, so this game can also be used for a solitary matching exercise.  Each match adds 1 point to the score, and successive matches adds an extra point, compounding the score.  If two cards don't match, the contemplation window is shown that will give the player the correct match for each card for about 15 seconds.
+If the player scans two card that do not match, the 'contemplation window' shows the correct meaning of both words for 15 seconds.  Once a player has scanned all their pairs, the game goes into a final round where the remaining players can match all their cards at once, receiving one point for each match.
+The menu lets the player reset the game, clearing the score and other data.  If a user has not chosen a test before coming to this activity, Toast will tell them to please set up a game.  The user must choose a game/saved_test created in the webapp as well as each player's words, which must be set up by scanning the cards for each word or using a house deck.
+
+GameWritingStonesActivity
+This game is similar to the Reading Stones game, except students must write the answer to each card they scan, either by input, or on a piece of paper.
+Currently this activity is under construction and has no status changes.
 
 The keystore for testing:
 C:\Documents and Settings\user\.android\debug.keystore
