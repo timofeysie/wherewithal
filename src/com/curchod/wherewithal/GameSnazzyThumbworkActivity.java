@@ -1,8 +1,12 @@
 package com.curchod.wherewithal;
 
+import java.util.Date;
+
 import com.curchod.domartin.RemoteCall;
+import com.curchod.domartin.Scoring;
 import com.curchod.domartin.UtilityTo;
 import com.curchod.dto.SingleWord;
+import com.curchod.dto.SingleWordTestResult;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,22 +30,24 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	private static final String DEBUG_TAG = "GameSnazzyThumbworkActivity";
 	private String player_id;
 	final Context context = this;
-	private TextView question;
-	private EditText answer;
+	private TextView text_question;
+	private EditText text_answer;
+	private SingleWord word;
+	long timer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		String method = "onCreate";
-		String build = "build 7d";
+		String build = "build 9";
 		Log.i(DEBUG_TAG, method+": "+build);
 		player_id = "-5519451928541341468";
 		setContentView(R.layout.activity_snazzy_thumbwork);
-		question = (TextView)findViewById(R.id.question);
-		answer = (EditText)findViewById(R.id.answer);
+		text_question = (TextView)findViewById(R.id.question);
+		text_answer = (EditText)findViewById(R.id.answer);
 		getNextWord();
-		answer.addTextChangedListener(new TextWatcher()
+		text_answer.addTextChangedListener(new TextWatcher()
 		{
 	        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 	        
@@ -56,7 +62,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	        		Log.i(DEBUG_TAG, i+" "+Character.getNumericValue(c));
 	        		if (Character.getNumericValue(c) == -1)
 	        		{
-	        			startSnaz();
+	        			scoreResult();
 	        		}
 	        	}
 	        }
@@ -69,29 +75,80 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	    });
 	}
 	
-	private void getNextWord()
+	/**
+	 * 
+	 */
+	private void scoreResult()
+	{
+		String method = "scoreResult";
+		String player_answer = text_answer.getText().toString();
+		String correct_answer = UtilityTo.getAnswer(word);
+		String grade = "fail";
+		if (Scoring.scoreAnswer(correct_answer, player_answer))
+		{
+			Log.i(DEBUG_TAG, method+" incorrect");
+			startSnazzyFail();
+			text_answer.setText(correct_answer);
+		} else
+		{	
+			Log.i(DEBUG_TAG, method+" correct");
+			grade = "pass";
+			startSnazzyPass();
+		}
+		sendResultToServer(grade);
+	}
+	
+	private void sendResultToServer(final String grade)
 	{
 		new Thread()
         {
             public void run()
             {   
             	RemoteCall remote = new RemoteCall(context);
-            	final SingleWord word = remote.loadSingleWord(player_id);
+            	SingleWordTestResult swtr = remote.scoreSingleWordTest(player_id, grade, timer);
+            	// what to do with the swtr?
             	((Activity) context).runOnUiThread(new Runnable() 
         		{
                     public void run() 
                     {
-                    	question.setText(UtilityTo.getWord(word));
+                    	getNextWord();
                     }
                 });
             }
         }.start();
 	}
 	
-	private void startSnaz()
+	private void getNextWord()
+	{
+		timer = new Date().getTime();
+		new Thread()
+        {
+            public void run()
+            {   
+            	RemoteCall remote = new RemoteCall(context);
+            	word = remote.loadSingleWord(player_id);
+            	((Activity) context).runOnUiThread(new Runnable() 
+        		{
+                    public void run() 
+                    {
+                    	text_question.setText(UtilityTo.getQuestion(word));
+                    }
+                });
+            }
+        }.start();
+	}
+	
+	private void startSnazzyPass()
 	{
 		LinearLayout layoutToAnimate = (LinearLayout)findViewById(R.id.LayoutRow);
-        Animation an =  AnimationUtils.loadAnimation(this, R.anim.snazzyintro);
+        Animation an =  AnimationUtils.loadAnimation(this, R.anim.snazzypass);
+        layoutToAnimate.startAnimation(an);
+	}
+	
+	private void startSnazzyFail()
+	{
+		LinearLayout layoutToAnimate = (LinearLayout)findViewById(R.id.LayoutRow);
+        Animation an =  AnimationUtils.loadAnimation(this, R.anim.snazzyfail);
         layoutToAnimate.startAnimation(an);
 	}
 

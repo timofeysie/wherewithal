@@ -2,8 +2,12 @@ package com.curchod.domartin;
 
 import java.util.Hashtable;
 
+import android.util.Log;
+
 public class Scoring 
 {
+	
+	private static final String DEBUG_TAG = "Scoring";
 	
 	public static String applyOptions(Hashtable <String,String>user_options, String text)
 	{
@@ -67,6 +71,22 @@ public class Scoring
 			first_part = text;
 		}
 		return first_part;
+	}
+	
+	public static boolean scoreAnswer(String question, String answer)
+	{
+		String method = "scoreAnswer";
+		answer = Scoring.applyOptions(null, answer);
+		answer = Scoring.applyOptions(null, answer);
+		Log.i(DEBUG_TAG, method+" answer  after apply options "+answer);
+		Log.i(DEBUG_TAG, method+" correct after apply options "+answer);
+		if (answer.equals(answer))
+		{ 
+			Log.i(DEBUG_TAG, method+" correct");
+			return true;
+		}
+		Log.i(DEBUG_TAG, method+" incorrect!");
+		return false;
 	}
 	
 	private static Hashtable<String,String> defaultOptions()
