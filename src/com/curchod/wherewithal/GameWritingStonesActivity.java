@@ -196,7 +196,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_writing_stones);
 		String method = "onCreate";
-		String build = "build 53f";
+		String build = "build 54";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -587,6 +587,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 		edit_text_params.leftMargin=20;
 		//edit_text.setInputType(InputType.TYPE_CLASS_TEXT);   // Setting the type of input that you want   
 		int max_length = 20;
+		row.setMinimumWidth(max_length);
 		edit_text_params.setMargins(edit_text_params.FILL_PARENT, edit_text_params.FILL_PARENT, edit_text_params.FILL_PARENT, edit_text_params.FILL_PARENT);
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(max_length);

@@ -317,10 +317,101 @@ public class RemoteCall
     	return single_word;
     }
 	
+	/**
+	 * Send the grade and start time to the server score_single_word_test.do
+	 * and return a single word test result which has things like the number of remaining tests
+	 * and the color representing the words performance.
+	 * @param player_id
+	 * @param grade
+	 * @param time
+	 * @return
+	 */
 	public SingleWordTestResult scoreSingleWordTest(String player_id, String grade, long time)
 	{
-		
+		String method = "SingleWordTestResult";
+    	URL text = null; 
+        try 
+        {
+            text = new URL("http://211.220.31.50:8080/indoct/score_single_word_test.do?student_id="
+            		+player_id+"&grade="+grade+"&time="+time);
+        } catch (MalformedURLException e) 
+   		{
+   			e.printStackTrace();
+   		}
+        parseSingleWordTestResult(text);
 		return null;
 	}
+	
+	/**
+	 * There are three things returned so far:
+	 * <number_of_waiting_reading_tests>
+	 * <number_of_waiting_writing_tests>
+	 * <color>
+	 * @param text
+	 * @return
+	 */
+	private SingleWordTestResult parseSingleWordTestResult(URL text)
+    {
+    	String method = "parseSingleWordTestResult";
+    	SingleWordTestResult single_word_test_result = new SingleWordTestResult();
+        Log.i(DEBUG_TAG, method+": Parse the re.");
+    	String element = null;
+    	boolean start_capture = false;
+    	try 
+    	{
+			XmlPullParserFactory parser_creater = XmlPullParserFactory.newInstance();
+			XmlPullParser parser =  parser_creater.newPullParser();
+			parser.setInput(text.openStream(), null);
+			int parser_event = parser.getEventType();
+			while (parser_event != XmlPullParser.END_DOCUMENT)
+			{
+				switch(parser_event)
+				{
+					case XmlPullParser.TEXT:
+					String value = parser.getText();
+					if (start_capture == true)
+					{
+						if (element.equals("number_of_waiting_reading_tests"))
+						{
+							single_word_test_result.setNumberOfWaitingReadingTests(Integer.parseInt(value));
+							Log.i(DEBUG_TAG, method+" reading "+element+" value "+value);
+						}
+						if (element.equals("number_of_waiting_writing_tests"))
+						{
+							single_word_test_result.setNumberOfWaitingWritingTests(Integer.parseInt(value));
+							Log.i(DEBUG_TAG, method+" writing "+element+" value "+value);
+						}
+						if (element.equals("color"))
+						{
+							single_word_test_result.setColor(value);
+							Log.i(DEBUG_TAG, method+" color "+element+" value "+value);
+						}
+					}
+					//Log.i(DEBUG_TAG, "case.TEXT "+value+" capture_the_flag="+capture_the_flag);
+					case XmlPullParser.START_TAG:
+					String tag_name = parser.getName();
+					try
+					{
+						if (tag_name.equals("remaining_reading_tests"))
+						{
+							start_capture = true;
+						}
+						element = tag_name;
+					} catch (java.lang.NullPointerException nope)
+					{
+					}
+					//Log.i(DEBUG_TAG, "case.START_TAG "+tag_name+" capture_the_flag="+capture_the_flag);
+				}
+				parser_event = parser.next();
+			}
+		} catch (XmlPullParserException e) 
+		{
+			e.printStackTrace();
+		} catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+    	return single_word_test_result;
+    }
 	
 }
