@@ -220,7 +220,7 @@ public class GameReadingStonesActivity extends Activity
 	 */
 	private class AsyncLoadGameFileTask extends AsyncTask <String, String, Game> 
 	{  
-		private String debug = "YourCustomAsyncTask";
+		//private String debug = "YourCustomAsyncTask";
         @Override  
         protected void onPreExecute() 
         {  
@@ -230,7 +230,7 @@ public class GameReadingStonesActivity extends Activity
         @Override  
         protected Game doInBackground(String ... String) 
         {
-        	String method = "doInBackground";
+        	//String method = "doInBackground";
         	//Log.i(DEBUG_TAG, method+" start");
         	IWantTo i_want_to = new IWantTo(context);
             Game result_game = i_want_to.loadTheGameFile();
@@ -241,7 +241,7 @@ public class GameReadingStonesActivity extends Activity
         @Override  
         protected void onPostExecute(Game result_game) 
         {  
-        	String method = "onPostExecute";
+        	//String method = "onPostExecute";
         	//Log.i(DEBUG_TAG, method+" finished");
         	updateScoreFromGame(result_game);
         }  

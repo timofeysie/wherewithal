@@ -40,7 +40,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	{
 		super.onCreate(savedInstanceState);
 		String method = "onCreate";
-		String build = "build 7d";
+		String build = "build 9";
 		Log.i(DEBUG_TAG, method+": "+build);
 		player_id = "-5519451928541341468";
 		setContentView(R.layout.activity_snazzy_thumbwork);
@@ -75,6 +75,9 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	    });
 	}
 	
+	/**
+	 * 
+	 */
 	private void scoreResult()
 	{
 		String method = "scoreResult";
@@ -83,18 +86,19 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 		String grade = "fail";
 		if (Scoring.scoreAnswer(correct_answer, player_answer))
 		{
+			Log.i(DEBUG_TAG, method+" incorrect");
+			startSnazzyFail();
+			text_answer.setText(correct_answer);
+		} else
+		{	
 			Log.i(DEBUG_TAG, method+" correct");
 			grade = "pass";
 			startSnazzyPass();
-		} else
-		{
-			Log.i(DEBUG_TAG, method+" incorrect");
-			startSnazzyFail();
 		}
-		scoreTest(grade);
+		sendResultToServer(grade);
 	}
 	
-	private void scoreTest(final String grade)
+	private void sendResultToServer(final String grade)
 	{
 		new Thread()
         {
@@ -102,11 +106,12 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
             {   
             	RemoteCall remote = new RemoteCall(context);
             	SingleWordTestResult swtr = remote.scoreSingleWordTest(player_id, grade, timer);
+            	// what to do with the swtr?
             	((Activity) context).runOnUiThread(new Runnable() 
         		{
                     public void run() 
                     {
-                    	text_question.setText(UtilityTo.getQuestion(word));
+                    	getNextWord();
                     }
                 });
             }
