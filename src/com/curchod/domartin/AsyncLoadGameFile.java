@@ -16,6 +16,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.curchod.dto.Game;
 import com.curchod.wherewithal.GameReadingStonesActivity;
 import com.curchod.wherewithal.R;
 

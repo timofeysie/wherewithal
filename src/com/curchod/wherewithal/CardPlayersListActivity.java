@@ -27,12 +27,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.curchod.domartin.Card;
 import com.curchod.domartin.Constants;
-import com.curchod.domartin.DeckCard;
 import com.curchod.domartin.HouseDeck;
 import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.UtilityTo;
+import com.curchod.dto.Card;
+import com.curchod.dto.DeckCard;
 
 /**
  * Display a list of players signed up for a game, as well as info about the game.

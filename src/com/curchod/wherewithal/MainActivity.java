@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.curchod.domartin.RemoteCall;
-import com.curchod.domartin.SavedTest;
+import com.curchod.dto.SavedTest;
 
 public class MainActivity extends Activity 
 {

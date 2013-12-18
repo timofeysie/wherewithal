@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
+import com.curchod.dto.Card;
 import com.curchod.dto.SingleWord;
 
 import android.content.Context;

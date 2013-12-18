@@ -2,6 +2,8 @@ package com.curchod.domartin;
 
 import java.util.Hashtable;
 
+import com.curchod.dto.DeckCard;
+
 /**
  * Modelling this xml info:
  *     <house_deck>

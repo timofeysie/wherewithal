@@ -1,4 +1,4 @@
-package com.curchod.domartin;
+package com.curchod.dto;
 
 import java.util.Hashtable;
 

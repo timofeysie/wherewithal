@@ -36,10 +36,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.curchod.domartin.DeckCard;
 import com.curchod.domartin.HouseDeck;
 import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.UtilityTo;
+import com.curchod.dto.DeckCard;
 
 /**
  * This method gets deck names and ids of the house decks from the intent.  The iteration starts at 1.

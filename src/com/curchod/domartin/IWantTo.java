@@ -16,6 +16,9 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.curchod.dto.Card;
+import com.curchod.dto.DeckCard;
+import com.curchod.dto.Game;
 import com.curchod.wherewithal.CardPlayerWordsActivity;
 import com.curchod.wherewithal.CardPlayersListActivity;
 import com.curchod.wherewithal.R;

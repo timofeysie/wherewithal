@@ -51,13 +51,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.curchod.domartin.Card;
 import com.curchod.domartin.Constants;
-import com.curchod.domartin.Game;
 import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.PlayerInfo;
 import com.curchod.domartin.TagDescription;
 import com.curchod.domartin.UtilityTo;
+import com.curchod.dto.Card;
+import com.curchod.dto.Game;
 
 /**
  * When the user clicks on the Reading Stones button, the onClick calls loadGameFile() 

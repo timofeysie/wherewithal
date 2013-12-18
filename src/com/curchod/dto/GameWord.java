@@ -1,4 +1,4 @@
-package com.curchod.domartin;
+package com.curchod.dto;
 
 /**
  * This class holds information similar to the catechis Word object, but with a test index, word type,

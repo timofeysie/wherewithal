@@ -1,4 +1,4 @@
-package com.curchod.domartin;
+package com.curchod.dto;
 
 /**
 * THis class is used to transfer data to and from the following xml format.
