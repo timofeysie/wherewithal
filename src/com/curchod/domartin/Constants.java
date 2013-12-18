@@ -2,7 +2,8 @@ package com.curchod.domartin;
 
 public class Constants 
 {
-	
+	public static final String SERVER_IP = "server_ip";
+	public static final String IP_XML = "ip.xml";
 	public static final String PLAYERS = "players";
 	public static final String PLAYERS_XML = "players.xml";
 	public static final String GAME_XML = "game.xml";

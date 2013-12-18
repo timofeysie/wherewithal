@@ -39,6 +39,138 @@ public class IWantTo
 		context = _context;
 	}
 
+	/**
+	 * Load the IP address from the ip.xml file.
+	 * If it doesn't exists, create a </ip> tag in the ip.xml file.
+	 * @return
+	 */
+	public String loadIPFile()
+	{
+		final String method = "loadIP"; 
+    	String file_path = context.getFilesDir().getAbsolutePath();
+    	File file = new File(file_path, Constants.IP_XML);
+    	boolean exists = file.exists();
+    	String ip = null;
+    	if (exists == false)
+    	{
+    		Log.i(DEBUG_TAG, method+": make new file");
+    		{
+    	    	try 
+    	    	{
+    	    		FileOutputStream fos = context.openFileOutput(Constants.IP_XML, Context.MODE_PRIVATE);
+    		        try
+    		        {
+    		        	StringBuffer sb = new StringBuffer();
+    					sb.append("<ip/>");
+    					fos.write(new String(sb).getBytes());
+    					fos.close();
+    		        } catch (FileNotFoundException e)
+    		        {
+    		            Log.e(DEBUG_TAG, "FileNotFoundException");
+    				} catch (IOException e1) 
+    				{
+    					Log.e(DEBUG_TAG, "IOException");
+    					e1.printStackTrace();
+    				}
+    			} catch (IOException e) 
+    			{
+    				e.printStackTrace();
+    			}
+    		}
+    	} else
+    	{
+    		Log.i(DEBUG_TAG, method+": parse file");
+    		ip = parseIPFile();
+    	}
+		return ip;
+	}
+	
+	/**
+	 * The formal of the ip.xml file is simple:
+	 * <ip><value>*.*.*.*</value></ip>
+	 * @return
+	 */
+	private String parseIPFile()
+    {
+    	String method = "parseIPFile";
+    	String ip = null;
+    	FileInputStream fis = null;
+		try 
+		{
+			fis = context.openFileInput(Constants.IP_XML);
+		} catch (FileNotFoundException e1) 
+		{
+			Log.i(DEBUG_TAG, method+": fnfe");
+			e1.printStackTrace();
+		}
+        try 
+        {
+        	String tag = "";
+            XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = parserCreator.newPullParser();
+            parser.setInput(fis, null);
+            int parser_event = parser.getEventType();
+            while (parser_event != XmlPullParser.END_DOCUMENT) 
+            {
+                switch (parser_event) 
+                {
+                case XmlPullParser.TEXT:
+                	if (true)
+                	{
+                		if (tag!=null)
+                		{
+                			String value = parser.getText();
+                			if (tag.equals("value"))
+                			{
+                				ip = value;
+                				Log.i(DEBUG_TAG, "parsed: "+tag+" "+value);
+                			}
+                		}
+                		tag = null;
+                	}
+                		
+                case XmlPullParser.START_TAG:
+                	tag = parser.getName();
+                }
+                parser_event = parser.next();
+            }
+        } catch (Exception e) 
+        {
+        	Log.i(DEBUG_TAG, method+": (not) exception(al)");
+        	e.printStackTrace();
+        }
+        return ip;
+    }
+	
+	public void saveIPFile(String ip)
+    {
+    	String method = "savedIPFile";
+    	try 
+    	{
+    		FileOutputStream fos = context.openFileOutput(Constants.IP_XML, Context.MODE_PRIVATE);
+	        try
+	        {
+	        	StringBuffer sb = new StringBuffer();
+				sb.append("<ip>");
+				sb.append("<value>"+ip+"</value>");
+				sb.append("</ip>");
+				Log.i(DEBUG_TAG, method+" writing "+new String(sb));
+				fos.write(new String(sb).getBytes());
+				fos.close();
+	         }catch (FileNotFoundException e)
+	        {
+	            Log.e(DEBUG_TAG, "FileNotFoundException");
+			} catch (IOException e1) 
+			{
+				Log.e(DEBUG_TAG, "IOException");
+				e1.printStackTrace();
+			}
+		} catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+    }
+	
 	public void saveTheGameFile(Game game, String class_id)
     {
     	String method = "saveTheGameFile";

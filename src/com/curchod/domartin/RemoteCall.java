@@ -224,11 +224,9 @@ public class RemoteCall
     {
     	String method = "parseSingleWord";
     	SingleWord single_word = new SingleWord();
-        Log.i(DEBUG_TAG, method+": Parse a list of saved tests.");
-    	Hashtable<String, String> test_words = new Hashtable<String, String>();
+        Log.i(DEBUG_TAG, method+": Parse the next word in line for a test.");
     	String element = null;
     	boolean start_capture = false;
-    	int number_of_words = 1;
     	try 
     	{
 			XmlPullParserFactory parser_creater = XmlPullParserFactory.newInstance();
@@ -306,8 +304,6 @@ public class RemoteCall
 				}
 				parser_event = parser.next();
 			}
-			Log.i(DEBUG_TAG, method+" put number_of_words = "+(number_of_words-1)+"");
-			test_words.put("number_of_words", (number_of_words-1)+"");
 		} catch (XmlPullParserException e) 
 		{
 			e.printStackTrace();

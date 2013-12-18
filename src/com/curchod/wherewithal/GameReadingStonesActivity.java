@@ -173,7 +173,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 173";
+		String build = "build 174";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -499,14 +499,6 @@ public class GameReadingStonesActivity extends Activity
 	private void foundGameCard(Card game_card)
 	{
 		String method = "foundGameCard";
-		//Log.i(DEBUG_TAG, method+": found");
-		try
-		{
-		printCard(game_card);
-		} catch (java.lang.NullPointerException npe)
-		{
-			Log.i(DEBUG_TAG, method+" can't print card");
-		}
 		current_player_id = game_card.getPlayerId();
 		Log.i(DEBUG_TAG, method+" previously_played_card_player_id "+previously_played_card_player_id);
 		Log.i(DEBUG_TAG, method+" current_player_id "+current_player_id);
@@ -641,7 +633,7 @@ public class GameReadingStonesActivity extends Activity
 	}
 	
 	/**
-	 * update card status
+	 * Update card and game status.
 	 * reset set previous_player_id and previous_card_id
 	 * increment matches.
 	 * Save the the game.xml file using the status element as the score.
@@ -680,7 +672,7 @@ public class GameReadingStonesActivity extends Activity
     		showCards();
     		saveCardsFile();
     		IWantTo i_want_to = new IWantTo(context);
-            setupGameObject();
+    		updateGameObject();
             i_want_to.saveTheGameFile(game_file, class_id);
             if (end_game)
             {
@@ -715,9 +707,11 @@ public class GameReadingStonesActivity extends Activity
 		{
 			Log.i(DEBUG_TAG, method+" number_of_text_def_pairs "+number_of_text_def_pairs+" player_matches "+player_matches);
 			String game_status = game_file.getTestStatus();
+			Log.i(DEBUG_TAG, method+" game_status: "+game_status);
 			if (game_status.equals(Constants.GAME_READY))
 			{
 				game_file.setTestStatus(Constants.PLAYING);
+				Log.i(DEBUG_TAG, method+" game_status: changed to "+game_status);
 			}
 		}
 	}
@@ -1050,7 +1044,7 @@ public class GameReadingStonesActivity extends Activity
     }
     
     /**
-     * This happens every time a match is made. 
+     * This happens the at the start when the activity is created, or the game is reset. 
      */
     private void setupGameObject()
     {
@@ -1077,6 +1071,29 @@ public class GameReadingStonesActivity extends Activity
     }
     
     /**
+     * This happens every time a match is made. 
+     */
+    private void updateGameObject()
+    {
+    	String method = "setupGameObject";
+    	printGame(game_file, method+" game_file before setup");
+    	setGameStatus();
+    	Hashtable <String,String> player_id_status = new Hashtable<String,String>();
+    	Enumeration<String> e = players.keys();
+    	//Log.i(DEBUG_TAG, method+" players size "+players.size());
+		while (e.hasMoreElements())
+		{
+			String key = e.nextElement();
+			PlayerInfo player_info = players.get(key);
+			player_id_status.put(player_info.getId(), player_info.getScore()+"");
+			Log.i(DEBUG_TAG, method+" setting up "+player_info.getId()+" player status "+player_info.getScore());
+		}
+		game_file.setPlayerStatus(player_id_status);
+		printGame(game_file, method+" game_file after setup");
+    }
+    
+    
+    /**
      * As soon as a match is made the status is changed to playing, 
      * unless the final_round or end_game flag is set.
      */
@@ -1090,7 +1107,7 @@ public class GameReadingStonesActivity extends Activity
     		game_file.setTestStatus(Constants.GAME_OVER);
     	} else
     	{
-    		game_file.setTestStatus(Constants.READY);
+    		// leave status the way it is.  It's either not ready, ready, or playing.
     	}
     }
     

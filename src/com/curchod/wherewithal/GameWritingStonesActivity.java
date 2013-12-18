@@ -196,7 +196,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_writing_stones);
 		String method = "onCreate";
-		String build = "build 54";
+		String build = "build 55c";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -719,6 +719,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	    	Log.i(DEBUG_TAG, method+" new score "+new_score+" for id "+this_card_id);
     		} else
     		{
+    			edit_text.setText(game_card.getText());
     			Log.i(DEBUG_TAG, method+" answer not correct for id "+this_card_id);
     		}
     	}
