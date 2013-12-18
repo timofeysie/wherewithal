@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,7 @@ import com.curchod.domartin.UtilityTo;
 public class GamesActivity extends Activity 
 {
 
+	final Context context = this;
 	private static final String DEBUG_TAG = "GameActivity"; 
 	private Vector <String> player_ids;
 	/**player_id-status.  The ids are the same as remote_player_ids.*/
@@ -56,7 +58,7 @@ public class GamesActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         String method = "onCreate";
-        String build = "build 13b";
+        String build = "build 14";
         Log.i(DEBUG_TAG, method+": "+build);
         ImageButton image_button_reading_game = (ImageButton) findViewById(R.id.image_button_reading_game);
         image_button_reading_game.setOnClickListener(new OnClickListener()
@@ -300,8 +302,14 @@ public class GamesActivity extends Activity
 		} catch (IOException e) 
 		{
 			e.printStackTrace();
-			String message = "Network is unreachable.";
-			Toast.makeText(this, message, Toast.LENGTH_LONG ).show();
+			final String message = "Network is unreachable.";
+			((Activity)context).runOnUiThread(new Runnable() 
+    		{
+                public void run() 
+                {
+                    Toast.makeText(context, message, Toast.LENGTH_LONG ).show();
+                }
+            });
 		}
 	}
 	

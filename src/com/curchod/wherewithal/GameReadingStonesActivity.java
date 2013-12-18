@@ -1408,18 +1408,28 @@ public class GameReadingStonesActivity extends Activity
     
     private void cardsVectorToHash(Vector <Card> cards_vector)
     {
+    	String method = "cardsVectorToHash";
     	for (int i = 0; i < cards_vector.size(); i++)
     	{
     		Card card = cards_vector.get(i);
     		cards.put(card.getCardId(), card);
     		if (card.getCardStatus().equals(Constants.PLAYED))
     		{
-    			double matches = id_player_matches.get(card.getPlayerId());
-    			matches = matches + .5;
-    			id_player_matches.put(card.getPlayerId(), matches);
+    			try
+        		{
+    				double matches = id_player_matches.get(card.getPlayerId());
+    				matches = matches + .5;
+    				id_player_matches.put(card.getPlayerId(), matches);
+        		} catch (java.lang.NullPointerException npe)
+        		{
+        			Log.i(DEBUG_TAG, method+" npe at "+i);
+        			id_player_matches.put(card.getPlayerId(), Double.parseDouble("0.0"));
+        		}	
     		} else if (card.getCardStatus().equals(Constants.YET_TO_BE_PLAYED))
     		{
+    				
     		}
+    		Log.i(DEBUG_TAG, method+" npe at "+i);
     	}
     	if (end_game)
     	{
