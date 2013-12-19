@@ -173,7 +173,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 174";
+		String build = "build 175";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -340,7 +340,10 @@ public class GameReadingStonesActivity extends Activity
 	{
 		String method = "updateGameStatus";
 		String status_string = game_file.getTestStatus();
-		if (status_string.equals("setup"))
+		if (status_string == null)
+		{
+			Log.i(DEBUG_TAG, method+" status is null");
+		} else if (status_string.equals("setup"))
 		{
 			game_status.setText(R.string.game_ready);
 			Log.i(DEBUG_TAG, method+" game ready");
