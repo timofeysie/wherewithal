@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -35,8 +36,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.curchod.domartin.Constants;
-import com.curchod.domartin.PlayerInfo;
 import com.curchod.domartin.UtilityTo;
+import com.curchod.dto.PlayerInfo;
 
 public class PlayersActivity extends Activity 
 {
@@ -159,9 +160,11 @@ public class PlayersActivity extends Activity
     {
     	String method = "Hashtable loginEnglishGluePlayer(name,pass)";
         Log.i(DEBUG_TAG, method+": Set up the url for the EnglishGlue service, sent the name and password, receive the raw xml and call remoteplayerLogin to parse the elements to fill the player_info hash table.");
+        SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+        String ip = shared_preferences.getString(Constants.SERVER_IP, "");
         try 
         {
-            text = new URL("http://211.220.31.50:8080/indoct/remote_login.do?name="+name+"&pass="+pass);
+            text = new URL("http://"+ip+":8080/indoct/remote_login.do?name="+name+"&pass="+pass);
         } catch (MalformedURLException e) 
    		{
    			e.printStackTrace();

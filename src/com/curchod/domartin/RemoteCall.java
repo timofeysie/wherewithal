@@ -10,8 +10,11 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import com.curchod.dto.SavedTest;
@@ -47,22 +50,24 @@ public class RemoteCall
 	 */
 	public void savedTestsListAction(final String name, final String pass, final MainActivity main)
     {
-    	String method = "Vector<SavedTest> savedTestsListAction(name,pass)";
-        Log.i(DEBUG_TAG, method+": Call the SavedTestsListAction to parse a list of saved tests.");
+    	final String method = "savedTestsListAction";
+        Log.i(DEBUG_TAG, method+" Call the SavedTestsListAction to parse a list of saved tests.");
         saved_tests = new Vector <SavedTest> ();
         new Thread()
         {
             public void run()
             {   
-     
+            	SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+                String ip = shared_preferences.getString(Constants.SERVER_IP, "");
             	URL text = null;
                 try 
                 {
-                    text = new URL("http://211.220.31.50:8080/indoct/saved_tests_list.do?name="+name+"&pass="+pass);
+                    text = new URL("http://"+ip+":8080/indoct/saved_tests_list.do?name="+name+"&pass="+pass);
                 } catch (MalformedURLException e) 
            		{
            			e.printStackTrace();
            		}
+                Log.i(DEBUG_TAG, method+" url "+text);
                 parseSavedTestsList(text);
                 Intent intent = new Intent(main, CardsActivity.class);
         		intent.putExtra("saved_tests", saved_tests.size()+"");

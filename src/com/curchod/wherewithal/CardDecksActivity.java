@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.LayoutParams;
 import android.telephony.TelephonyManager;
@@ -36,6 +37,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.curchod.domartin.Constants;
 import com.curchod.domartin.HouseDeck;
 import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.UtilityTo;
@@ -390,7 +392,9 @@ public class CardDecksActivity extends Activity
     private void saveHouseDecksOnServer(Hashtable <String,HouseDeck> loaded_decks)
     {
     	 DefaultHttpClient httpclient = new DefaultHttpClient();
-         HttpPost httppost = new HttpPost("http://211.220.31.50:8080/indoct/save_house_decks.do");     
+    	 SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+    	 String ip = shared_preferences.getString(Constants.SERVER_IP, "");
+         HttpPost httppost = new HttpPost("http://"+ip+":8080/indoct/save_house_decks.do");     
          httppost.addHeader("Accept", "text");
          httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
          List<NameValuePair> name_value_pairs = setupHouseDeckPairs(loaded_decks);

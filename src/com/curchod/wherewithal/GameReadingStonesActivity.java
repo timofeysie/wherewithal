@@ -53,11 +53,11 @@ import android.widget.Toast;
 
 import com.curchod.domartin.Constants;
 import com.curchod.domartin.IWantTo;
-import com.curchod.domartin.PlayerInfo;
 import com.curchod.domartin.TagDescription;
 import com.curchod.domartin.UtilityTo;
 import com.curchod.dto.Card;
 import com.curchod.dto.Game;
+import com.curchod.dto.PlayerInfo;
 
 /**
  * When the user clicks on the Reading Stones button, the onClick calls loadGameFile() 
@@ -173,7 +173,7 @@ public class GameReadingStonesActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_reading_stones);
 		String method = "onCreate";
-		String build = "build 175";
+		String build = "build 177";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -433,8 +433,12 @@ public class GameReadingStonesActivity extends Activity
 			}
 		} catch (java.lang.NullPointerException npe)
 		{
-			Log.i(DEBUG_TAG, method+" Problemo!");
+			Log.i(DEBUG_TAG, method+" NPE getting records");
 			npe.printStackTrace();
+		} catch (java.lang.ArrayIndexOutOfBoundsException aioobe)
+		{
+			Log.i(DEBUG_TAG, method+" AIOOBE getting records");
+			aioobe.printStackTrace();
 		}
 	}
 	
@@ -503,10 +507,15 @@ public class GameReadingStonesActivity extends Activity
 	{
 		String method = "foundGameCard";
 		current_player_id = game_card.getPlayerId();
+		updateGameStatus();
 		Log.i(DEBUG_TAG, method+" previously_played_card_player_id "+previously_played_card_player_id);
 		Log.i(DEBUG_TAG, method+" current_player_id "+current_player_id);
 		Log.i(DEBUG_TAG, method+" number_of_matches "+number_of_matches);
-		if (played_card_ids.contains(game_card.getCardId()))
+		if (end_game)
+		{
+			Log.i(DEBUG_TAG, method+" no more cards please.");
+			Toast.makeText(this, "Game Over.  Reset to play again.", Toast.LENGTH_LONG ).show();
+		} else if (played_card_ids.contains(game_card.getCardId()))
 		{
 			Toast.makeText(this, com.curchod.wherewithal.R.string.card_already_played, Toast.LENGTH_LONG ).show();
 		} else

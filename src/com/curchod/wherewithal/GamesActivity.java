@@ -16,6 +16,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -213,7 +214,7 @@ public class GamesActivity extends Activity
     }
 	
 	/**
-	 * http://211.220.31.50:8080/indoct/student_names.do?teacher_id=0000000000000000001&pass=teach&class_id=8549097398869562086
+	 * http://ip:8080/indoct/student_names.do?teacher_id=0000000000000000001&pass=teach&class_id=8549097398869562086
 	 * Parses 
 	 * <students>
 	 * 	<student>
@@ -231,7 +232,9 @@ public class GamesActivity extends Activity
     	URL text = null;
     	try 
         {
-            text = new URL("http://211.220.31.50:8080/indoct/student_names.do?teacher_id="+teacher_id
+    		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+    		String ip = shared_preferences.getString(Constants.SERVER_IP, "");
+            text = new URL("http://"+ip+":8080/indoct/student_names.do?teacher_id="+teacher_id
             		+"&class_id="+class_id);
         } catch (MalformedURLException e) 
    		{

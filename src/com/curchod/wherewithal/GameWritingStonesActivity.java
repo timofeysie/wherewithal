@@ -66,12 +66,12 @@ import android.widget.ToggleButton;
 import com.curchod.domartin.AsyncLoadGameFile;
 import com.curchod.domartin.Constants;
 import com.curchod.domartin.IWantTo;
-import com.curchod.domartin.PlayerInfo;
 import com.curchod.domartin.Scoring;
 import com.curchod.domartin.TagDescription;
 import com.curchod.domartin.UtilityTo;
 import com.curchod.dto.Card;
 import com.curchod.dto.Game;
+import com.curchod.dto.PlayerInfo;
 
 /**
  * This class is based on the GameReadingStonesActivity.

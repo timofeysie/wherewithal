@@ -9,6 +9,8 @@ import java.util.Vector;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.curchod.dto.PlayerInfo;
+
 import android.content.Context;
 import android.util.Log;
 

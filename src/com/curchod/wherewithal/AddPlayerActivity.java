@@ -20,14 +20,15 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
 import com.curchod.domartin.Constants;
 import com.curchod.domartin.Filer;
-import com.curchod.domartin.PlayerInfo;
 import com.curchod.domartin.UtilityTo;
+import com.curchod.dto.PlayerInfo;
 
 /**
  * This activity accepts a name and a password, as well as remember me on this phone and service input
@@ -42,7 +43,7 @@ public class AddPlayerActivity extends Activity
 {
 
 	private static final String DEBUG_TAG = "AddPlayerActivity";
-	
+	final Context context = this;
 	Vector<PlayerInfo> players = new Vector<PlayerInfo>();
 	
     /**
@@ -128,9 +129,11 @@ public class AddPlayerActivity extends Activity
         Log.i(DEBUG_TAG, method+": Set up the url for the EnglishGlue service, sent the name and password, receive the raw xml and call remoteUserLogin to parse the elements to fill the user_info hash table.");
         final String icon = "seahorse_228"; // default
         URL text = null;
+        SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+        String ip = shared_preferences.getString(Constants.SERVER_IP, "");
         try 
         {
-            text = new URL("http://211.220.31.50:8080/indoct/remote_login.do?name="+name+"&pass="+pass);
+            text = new URL("http://"+ip+":8080/indoct/remote_login.do?name="+name+"&pass="+pass);
         } catch (MalformedURLException e) 
    		{
    			e.printStackTrace();
@@ -454,9 +457,11 @@ public class AddPlayerActivity extends Activity
     private void loadPractice()
     {
     	//EditText edit_text = (EditText)findViewById(R.id.editText2);
+    	SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+    	String ip = shared_preferences.getString(Constants.SERVER_IP, "");
     	try
         {
-        	URL text = new URL("http://211.220.31.50:8080/indoct/remote_login.do?name=t&pass=t");
+        	URL text = new URL("http://"+ip+":8080/indoct/remote_login.do?name=t&pass=t");
         	HttpURLConnection http = (HttpURLConnection)text.openConnection();
         	Log.i(DEBUG_TAG, "length           = "+http.getContentLength());
         	Log.i(DEBUG_TAG, "reasponse code   = "+http.getResponseCode());

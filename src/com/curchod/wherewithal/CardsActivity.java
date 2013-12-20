@@ -15,11 +15,13 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.R;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
@@ -288,16 +290,18 @@ public class CardsActivity extends ListActivity
 	/**
 	 * Parse the remote call to GetSavedClassTestsAction, parse the results, put them in the intent
 	 * and start the CardPlayersListAction.
-	 * http://211.220.31.50:8080/indoct/get_saved_class_tests.do?teacher_id=0000000000000000001&pass=teach&test_id=-8834326842304090029
+	 * http://ip:8080/indoct/get_saved_class_tests.do?teacher_id=0000000000000000001&pass=teach&test_id=-8834326842304090029
 	 * @param selected_test_id
 	 */
 	private void getSavedClassTestsAndSaveGame(final String selected_test_id, final String selected_test_name, final boolean already_saved)
 	{
 		final String method = "getSavedClassTests";
         //Log.i(DEBUG_TAG, method+": ");
+		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+		String ip = shared_preferences.getString(Constants.SERVER_IP, "");
         try 
         {
-            text = new URL("http://211.220.31.50:8080/indoct/get_saved_class_tests.do?teacher_id="+teacher_id
+            text = new URL("http://"+ip+":8080/indoct/get_saved_class_tests.do?teacher_id="+teacher_id
             		+"&pass="+password
             		+"&test_id="+selected_test_id);
         } catch (MalformedURLException e) 
@@ -421,7 +425,7 @@ public class CardsActivity extends ListActivity
     }
 	
 	/**
-	 * Remote call with this url http://211.220.31.50:8080/indoct/get_saved_class_tests.do?teacher_id=0000000000000000001&pass=teach&test_id=-8834326842304090029
+	 * Remote call with this url http://ip:8080/indoct/get_saved_class_tests.do?teacher_id=0000000000000000001&pass=teach&test_id=-8834326842304090029
 	 * retrieves a list of saved tests for players who are part of that test.
 	 * This method depends on knowing the last sub-element
 	 * <saved_tests>

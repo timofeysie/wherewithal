@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	
+    <string name="change_server_ip">Change Server IP</string>
     <string name="app_name">Stepping Stones</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Stepping Stones</string>

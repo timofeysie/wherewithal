@@ -23,8 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.curchod.domartin.PlayerInfo;
 import com.curchod.domartin.UtilityTo;
+import com.curchod.dto.PlayerInfo;
 
 public class PlayerActivity extends Activity 
 {

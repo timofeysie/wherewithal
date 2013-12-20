@@ -24,6 +24,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -33,6 +34,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -1777,7 +1779,9 @@ public class CardPlayerWordsActivity extends ListActivity
     private void sendDeckCardAssociations(String selected_house_deck_name)
     {
     	 DefaultHttpClient httpclient = new DefaultHttpClient();
-         HttpPost httppost = new HttpPost("http://211.220.31.50:8080/indoct/word_deck_card_associations.do");     
+    	 SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+    	 String ip = shared_preferences.getString(Constants.SERVER_IP, "");
+         HttpPost httppost = new HttpPost("http://"+ip+":8080/indoct/word_deck_card_associations.do");     
          httppost.addHeader("Accept", "text");
          httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
          List<NameValuePair> name_value_pairs = setupDeckCardAssociationsPairs(selected_house_deck_name);

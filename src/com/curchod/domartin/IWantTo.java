@@ -23,8 +23,10 @@ import com.curchod.wherewithal.CardPlayerWordsActivity;
 import com.curchod.wherewithal.CardPlayersListActivity;
 import com.curchod.wherewithal.R;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -700,9 +702,11 @@ public class IWantTo
 	    	String method = "loadRemoteHouseDecks";
 	    	Log.i(DEBUG_TAG, method+" get_house_deck.do");
 	    	URL text = null;
+	    	SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+	    	String ip = shared_preferences.getString(Constants.SERVER_IP, "");
 	    	try 
 	        {
-	            text = new URL("http://211.220.31.50:8080/indoct/get_house_decks.do?teacher_id="+teacher_id
+	            text = new URL("http://"+ip+":8080/indoct/get_house_decks.do?teacher_id="+teacher_id
 	            		+"&device_id="+device_id);
 	            Log.i(DEBUG_TAG, text.getPath());
 	        } catch (MalformedURLException e) 
@@ -938,7 +942,7 @@ public class IWantTo
     
 	/**
 	 * Returns a hash with the student id-name as key value pairs.
-	 * http://211.220.31.50:8080/indoct/student_names.do?teacher_id=0000000000000000001&pass=teach&class_id=8549097398869562086
+	 * http://ip:8080/indoct/student_names.do?teacher_id=0000000000000000001&pass=teach&class_id=8549097398869562086
 	 * Parses 
 	 * <students>
 	 * 	<student>
@@ -955,9 +959,11 @@ public class IWantTo
     	String message = "OK";
     	Log.i(DEBUG_TAG, method+" student_names.do");
     	URL text = null;
+    	SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+    	String ip = shared_preferences.getString(Constants.SERVER_IP, "");
     	try 
         {
-            text = new URL("http://211.220.31.50:8080/indoct/student_names.do?teacher_id="+teacher_id
+            text = new URL("http://"+ip+":8080/indoct/student_names.do?teacher_id="+teacher_id
             		+"&class_id="+class_id);
         } catch (MalformedURLException e) 
    		{
@@ -1042,16 +1048,18 @@ public class IWantTo
 	/**
 	 * Parse the remote call to GetSavedClassTestsAction, parse the results, put them in the intent
 	 * and start the CardPlayersListAction.
-	 * http://211.220.31.50:8080/indoct/get_test_words.do?player_id=-5519451928541341468&test_id=-8834326842304090029   
+	 * http://ip:8080/indoct/get_test_words.do?player_id=-5519451928541341468&test_id=-8834326842304090029   
 	 * @param selected_test_id
 	 */
 	public Hashtable<String, String> getTestWords(final String selected_player_id, String selected_test_id, String number_of_words)
 	{
 		final String method = "getSavedClassTests";
+		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+		String ip = shared_preferences.getString(Constants.SERVER_IP, "");
 		URL text = null; 
         try 
         {
-            text = new URL("http://211.220.31.50:8080/indoct/get_test_words.do?player_id="+selected_player_id
+            text = new URL("http://"+ip+":8080/indoct/get_test_words.do?player_id="+selected_player_id
             		+"&test_id="+selected_test_id+"&number_of_words="+number_of_words);
         } catch (MalformedURLException e) 
    		{
