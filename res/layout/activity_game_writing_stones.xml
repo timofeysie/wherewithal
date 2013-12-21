@@ -19,13 +19,13 @@
 
     <TableLayout 
         android:id="@+id/TableLayout01" 
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content" 
-        android:stretchColumns="0" 
+        android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:stretchColumns="1"
         android:layout_below="@+id/text_view_game_status">
     	<TableRow 
     	    android:id="@+id/TableRow01" 
-    	    android:layout_width="wrap_content" 
+    	    android:layout_width="fill_parent" 
     	    android:layout_height="wrap_content">
     	</TableRow>
     </TableLayout>
