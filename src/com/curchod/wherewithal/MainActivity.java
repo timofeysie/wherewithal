@@ -42,7 +42,7 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String method = "onCreate";
-        Log.i(DEBUG_TAG, method+": build 23c");
+        Log.i(DEBUG_TAG, method+": build 23d");
         this.shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
         this.shared_editor = shared_preferences.edit();
         String ip = shared_preferences.getString(Constants.SERVER_IP, "");
