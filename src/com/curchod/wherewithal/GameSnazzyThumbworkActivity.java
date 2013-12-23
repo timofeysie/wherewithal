@@ -22,6 +22,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListener
@@ -34,18 +35,18 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	private EditText text_answer;
 	private SingleWord word;
 	long timer;
+	boolean answered;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		String method = "onCreate";
-		String build = "build 9";
+		String build = "build 11";
 		Log.i(DEBUG_TAG, method+": "+build);
 		player_id = "-5519451928541341468";
-		setContentView(R.layout.activity_snazzy_thumbwork);
-		text_question = (TextView)findViewById(R.id.question);
-		text_answer = (EditText)findViewById(R.id.answer);
+		setContentView(R.layout.activity_game_snazzy_thumbwork);
+		setup();
 		getNextWord();
 		text_answer.addTextChangedListener(new TextWatcher()
 		{
@@ -56,13 +57,17 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	         */
 	        public void onTextChanged(CharSequence s, int start, int before, int count) 
 	        {
-	        	for (int i = 0; i < s.length(); i++)
+	        	if (!answered)
 	        	{
-	        		char c = s.charAt(i);
-	        		Log.i(DEBUG_TAG, i+" "+Character.getNumericValue(c));
-	        		if (Character.getNumericValue(c) == -1)
+	        		for (int i = 0; i < s.length(); i++)
 	        		{
-	        			scoreResult();
+	        			char c = s.charAt(i);
+	        			Log.i(DEBUG_TAG, i+" "+Character.getNumericValue(c));
+	        			if (Character.getNumericValue(c) == -1)
+	        			{
+	        				answered = true;
+	        				scoreResult();
+	        			}
 	        		}
 	        	}
 	        }
@@ -73,6 +78,13 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 			}
 
 	    });
+	}
+	
+	private void setup()
+	{
+		answered = false;
+		text_question = (TextView)findViewById(R.id.question);
+		text_answer = (EditText)findViewById(R.id.answer);
 	}
 	
 	/**
@@ -96,6 +108,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 			startSnazzyPass();
 		}
 		sendResultToServer(grade);
+        getNextWord();
 	}
 	
 	private void sendResultToServer(final String grade)
@@ -107,13 +120,6 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
             	RemoteCall remote = new RemoteCall(context);
             	SingleWordTestResult swtr = remote.scoreSingleWordTest(player_id, grade, timer);
             	// what to do with the swtr?
-            	((Activity) context).runOnUiThread(new Runnable() 
-        		{
-                    public void run() 
-                    {
-                    	getNextWord();
-                    }
-                });
             }
         }.start();
 	}
@@ -132,6 +138,8 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
                     public void run() 
                     {
                     	text_question.setText(UtilityTo.getQuestion(word));
+                    	text_answer.setText("");
+                    	answered = false;
                     }
                 });
             }
@@ -140,14 +148,14 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	
 	private void startSnazzyPass()
 	{
-		LinearLayout layoutToAnimate = (LinearLayout)findViewById(R.id.LayoutRow);
+		RelativeLayout layoutToAnimate = (RelativeLayout)findViewById(R.id.anwer_layout);
         Animation an =  AnimationUtils.loadAnimation(this, R.anim.snazzypass);
         layoutToAnimate.startAnimation(an);
 	}
 	
 	private void startSnazzyFail()
 	{
-		LinearLayout layoutToAnimate = (LinearLayout)findViewById(R.id.LayoutRow);
+		RelativeLayout layoutToAnimate = (RelativeLayout)findViewById(R.id.anwer_layout);
         Animation an =  AnimationUtils.loadAnimation(this, R.anim.snazzyfail);
         layoutToAnimate.startAnimation(an);
 	}
