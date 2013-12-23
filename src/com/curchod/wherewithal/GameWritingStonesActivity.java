@@ -708,7 +708,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	{
     		EditText edit_text = (EditText)e.nextElement();
     		String this_card_id = edit_text_ids.get(edit_text);
-    		String answer = edit_text.getText().toString();
+    		String answer = UtilityTo.encodeThis(edit_text.getText().toString());
     		Log.i(DEBUG_TAG, method+" answer "+answer);
     		if (scoreAnswer(answer, game_card))
     		{
@@ -751,7 +751,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 	private boolean scoreAnswer(String answer, Card game_card)
 	{
 		String method = "scoreAnswer";
-		String correct_answer = game_card.getText();
+		String correct_answer = UtilityTo.encodeThis(game_card.getText());
 		correct_answer = Scoring.applyOptions(null, correct_answer);
 		answer = Scoring.applyOptions(null, answer);
 		Log.i(DEBUG_TAG, method+" answer  after apply options "+answer);

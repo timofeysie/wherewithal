@@ -705,9 +705,8 @@ public class GameReadingStonesActivity extends Activity
 	{
 		String method = "checkForChangeOfStatus";
 		double player_matches = id_player_matches.get(current_player_id);
-		int number_of_text_def_pairs = number_of_words/2;
-		Log.i(DEBUG_TAG, method+" if "+player_matches+" >= "+number_of_text_def_pairs);
-		if (player_matches>=number_of_text_def_pairs)
+		Log.i(DEBUG_TAG, method+" if "+player_matches+" >= "+number_of_words);
+		if (player_matches>=number_of_words)
 		{
 			String player_name = id_player_names.get(current_player_id);
 			Toast.makeText(this, player_name+" finished. Final round.", Toast.LENGTH_LONG ).show();
@@ -717,7 +716,7 @@ public class GameReadingStonesActivity extends Activity
 			Log.i(DEBUG_TAG, method+" start final_round.");
 		} else
 		{
-			Log.i(DEBUG_TAG, method+" number_of_text_def_pairs "+number_of_text_def_pairs+" player_matches "+player_matches);
+			Log.i(DEBUG_TAG, method+" number_of_words "+number_of_words+" player_matches "+player_matches);
 			String game_status = game_file.getTestStatus();
 			Log.i(DEBUG_TAG, method+" game_status: "+game_status);
 			if (game_status.equals(Constants.GAME_READY))
