@@ -14,6 +14,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,9 +25,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.curchod.domartin.Constants;
 import com.curchod.domartin.UtilityTo;
 import com.curchod.dto.PlayerInfo;
 
+/**
+ * This activity gets the player information from the intent and displays everything.
+ * The player can change their id from the menu and delete themselves if needed.
+ * The player id is set into the shared preferences as the CURRENT_PLAYER_ID which needs
+ * to be set to use the game Snazzy Thumbwork.
+ * @author user
+ *
+ */
 public class PlayerActivity extends Activity 
 {
 
@@ -46,13 +57,14 @@ public class PlayerActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         String method = "onCreate";
-        String build = "1";
+        String build = "2";
         Log.i(DEBUG_TAG, method+": "+build);
         Intent sender = getIntent();
         String player_name = sender.getExtras().getString("player_name");
         String player_id = sender.getExtras().getString("user_id");
         String old_id = sender.getExtras().getString("player_id");
         String id = sender.getExtras().getString("id");
+        setCurrentPlayerId(id);
         String icon = sender.getExtras().getString("icon");
         if (player_id == null)
         {
@@ -80,6 +92,16 @@ public class PlayerActivity extends Activity
     		String key_string = (String)i.next();
     		Log.i(DEBUG_TAG, "key: "+key_string);
     	}
+    }
+    
+    private void setCurrentPlayerId(String player_id)
+    {
+    	String method = "setPlayerId";
+    	SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+    	Editor shared_editor = shared_preferences.edit();
+    	shared_editor.putString(Constants.CURRENT_PLAYER_ID, player_id);
+		shared_editor.commit();
+	    Log.i(DEBUG_TAG, method+" set current player id "+player_id);
     }
     
     /**

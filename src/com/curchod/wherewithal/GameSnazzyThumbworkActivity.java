@@ -2,6 +2,7 @@ package com.curchod.wherewithal;
 
 import java.util.Date;
 
+import com.curchod.domartin.Constants;
 import com.curchod.domartin.RemoteCall;
 import com.curchod.domartin.Scoring;
 import com.curchod.domartin.UtilityTo;
@@ -12,24 +13,36 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+/**
+ * This activity is under construction.
+ * Currently it must get the next word to be tested from the server.
+ * It creates the appropriate question and creates a text field for the answer.
+ * The user must login so that we can get their words.
+ * 
+ * @author user
+ *
+ */
 public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListener
 {
 	
 	private static final String DEBUG_TAG = "GameSnazzyThumbworkActivity";
-	private String player_id;
+	private String current_player_id;
 	final Context context = this;
 	private TextView text_question;
 	private EditText text_answer;
@@ -42,42 +55,57 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	{
 		super.onCreate(savedInstanceState);
 		String method = "onCreate";
-		String build = "build 11";
+		String build = "build 13f";
 		Log.i(DEBUG_TAG, method+": "+build);
-		player_id = "-5519451928541341468";
-		setContentView(R.layout.activity_game_snazzy_thumbwork);
-		setup();
-		getNextWord();
-		text_answer.addTextChangedListener(new TextWatcher()
-		{
-	        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-	        
-	        /**
-	         * 13 || c == 10
-	         */
-	        public void onTextChanged(CharSequence s, int start, int before, int count) 
-	        {
-	        	if (!answered)
-	        	{
-	        		for (int i = 0; i < s.length(); i++)
-	        		{
-	        			char c = s.charAt(i);
-	        			Log.i(DEBUG_TAG, i+" "+Character.getNumericValue(c));
-	        			if (Character.getNumericValue(c) == -1)
-	        			{
-	        				answered = true;
-	        				scoreResult();
-	        			}
-	        		}
-	        	}
-	        }
-			@Override
-			public void afterTextChanged(Editable arg0) 
-			{
+		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+        current_player_id = shared_preferences.getString(Constants.CURRENT_PLAYER_ID, "");
+        setContentView(R.layout.activity_game_snazzy_thumbwork);
+        if (current_player_id == null || current_player_id.equals(""))
+        {
+        	text_question = (TextView)findViewById(R.id.question);
+    		text_answer = (EditText)findViewById(R.id.answer);
+    		text_question.setVisibility(View.GONE);
+    		text_answer.setVisibility(View.GONE);
+        	Toast.makeText(this, "Please log in to play this game.", Toast.LENGTH_LONG ).show();
+        } else
+        {
+        	getFirstWord();
+        }
+	}
 	
-			}
+	private void getFirstWord()
+	{
+		setup();
+    	getNextWord();
+    	text_answer.addTextChangedListener(new TextWatcher()
+    	{
+    		public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    		/**
+    		 * 13 || c == 10
+    		 */	
+    		public void onTextChanged(CharSequence s, int start, int before, int count) 
+    		{
+    			if (!answered)
+    			{
+    				for (int i = 0; i < s.length(); i++)
+    				{
+    					char c = s.charAt(i);
+    					Log.i(DEBUG_TAG, i+" "+Character.getNumericValue(c));
+    					if (Character.getNumericValue(c) == -1)
+    					{
+    						answered = true;
+    						scoreResult();
+    					}
+    				}
+    			}
+    		}
+    		@Override
+    		public void afterTextChanged(Editable arg0) 
+    		{
 
-	    });
+    		}
+
+    	});
 	}
 	
 	private void setup()
@@ -118,7 +146,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
             public void run()
             {   
             	RemoteCall remote = new RemoteCall(context);
-            	SingleWordTestResult swtr = remote.scoreSingleWordTest(player_id, grade, timer);
+            	SingleWordTestResult swtr = remote.scoreSingleWordTest(current_player_id, grade, timer);
             	// what to do with the swtr?
             }
         }.start();
@@ -132,7 +160,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
             public void run()
             {   
             	RemoteCall remote = new RemoteCall(context);
-            	word = remote.loadSingleWord(player_id);
+            	word = remote.loadSingleWord(current_player_id);
             	((Activity) context).runOnUiThread(new Runnable() 
         		{
                     public void run() 

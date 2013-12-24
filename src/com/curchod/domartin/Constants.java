@@ -4,6 +4,7 @@ public class Constants
 {
 	public static final String PREFERENCES = "preferences";
 	public static final String SERVER_IP = "server_ip";
+	public static final String CURRENT_PLAYER_ID = "current_player_id";
 	public static final String IP_XML = "ip.xml";
 	public static final String PLAYERS = "players";
 	public static final String PLAYERS_XML = "players.xml";
