@@ -57,19 +57,19 @@ public class PlayerActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         String method = "onCreate";
-        String build = "2";
+        String build = "4c";
         Log.i(DEBUG_TAG, method+": "+build);
         Intent sender = getIntent();
         String player_name = sender.getExtras().getString("player_name");
         String player_id = sender.getExtras().getString("user_id");
         String old_id = sender.getExtras().getString("player_id");
         String id = sender.getExtras().getString("id");
-        setCurrentPlayerId(id);
         String icon = sender.getExtras().getString("icon");
         if (player_id == null)
         {
         	player_id = old_id;
         }
+        setCurrentPlayerId(player_id);
         Log.i(DEBUG_TAG, method+": player_name "+player_name);
         Log.i(DEBUG_TAG, method+": player_id (user_id) "+player_id);
         Log.i(DEBUG_TAG, method+": old_id (player_id)"+old_id);

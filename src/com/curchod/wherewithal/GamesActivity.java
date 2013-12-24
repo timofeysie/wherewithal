@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -59,7 +60,7 @@ public class GamesActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         String method = "onCreate";
-        String build = "build 14";
+        String build = "build 15";
         Log.i(DEBUG_TAG, method+": "+build);
         ImageButton image_button_reading_game = (ImageButton) findViewById(R.id.image_button_reading_game);
         image_button_reading_game.setOnClickListener(new OnClickListener()
@@ -346,11 +347,14 @@ public class GamesActivity extends Activity
 	 * reading button
 	 * writing button
 	 * snazzy button (sample code, not implemented.
+	 * We also save the player id/name pairs in the shared preferences.
 	 * @param activity
 	 */
 	private void fillIntentAndStartNewActivity(String activity)
 	{
 		String method = "fillIntentAndStartNewActivity";
+		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+        Editor shared_editor = shared_preferences.edit();
 		Intent intent = new Intent(GamesActivity.this, GameReadingStonesActivity.class);
 		if (activity.equals("snazzy button"))
 		{
@@ -372,6 +376,8 @@ public class GamesActivity extends Activity
         	String player_id = (String)player_ids.get(i);
         	intent.putExtra(i+"player_id", player_id);
         	String player_name = (String)id_player_names.get(player_id);
+        	shared_editor.putString(player_id, player_name);
+    		shared_editor.commit();
         	intent.putExtra(i+"player_name", player_name);
         	Log.i(DEBUG_TAG, method+" put player "+player_id);
         }

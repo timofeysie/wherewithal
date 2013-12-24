@@ -45,6 +45,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	private String current_player_id;
 	final Context context = this;
 	private TextView text_question;
+	private TextView text_player_name;
 	private EditText text_answer;
 	private SingleWord word;
 	long timer;
@@ -55,10 +56,11 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	{
 		super.onCreate(savedInstanceState);
 		String method = "onCreate";
-		String build = "build 13f";
+		String build = "build 15c";
 		Log.i(DEBUG_TAG, method+": "+build);
 		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
         current_player_id = shared_preferences.getString(Constants.CURRENT_PLAYER_ID, "");
+        String current_player_name = shared_preferences.getString(current_player_id, "");
         setContentView(R.layout.activity_game_snazzy_thumbwork);
         if (current_player_id == null || current_player_id.equals(""))
         {
@@ -69,6 +71,8 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
         	Toast.makeText(this, "Please log in to play this game.", Toast.LENGTH_LONG ).show();
         } else
         {
+        	text_player_name = (TextView)findViewById(R.id.text_view_player_name);
+        	text_player_name.setText(current_player_name);
         	getFirstWord();
         }
 	}
