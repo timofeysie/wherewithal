@@ -194,7 +194,7 @@ public class RemoteCall
 	}
 	
 	/**
-	 * Call http://211.220.31.50:8080/indoct/stingle_word_test.do?student_id=-5519451928541341468
+	 * Call http://*ip*:8080/indoct/stingle_word_test.do?student_id=-5519451928541341468
 	 * and retrieve an AllWordsTest object, which we call SingleWord here in Wherewithal.
 	 * This is the formta:
 	 * <all_words_test>
@@ -214,10 +214,12 @@ public class RemoteCall
 	public SingleWord loadSingleWord(String player_id)
     {
     	String method = "loadSingleWord(";
+    	SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+        String ip = shared_preferences.getString(Constants.SERVER_IP, "");
     	URL text = null; 
         try 
         {
-            text = new URL("http://211.220.31.50:8080/indoct/single_word_test.do?student_id="+player_id);
+            text = new URL("http://"+ip+":8080/indoct/single_word_test.do?student_id="+player_id);
         } catch (MalformedURLException e) 
    		{
    			e.printStackTrace();
@@ -331,10 +333,12 @@ public class RemoteCall
 	public SingleWordTestResult scoreSingleWordTest(String player_id, String grade, long time)
 	{
 		String method = "SingleWordTestResult";
+		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
+        String ip = shared_preferences.getString(Constants.SERVER_IP, "");
     	URL text = null; 
         try 
         {
-            text = new URL("http://211.220.31.50:8080/indoct/score_single_word_test.do?student_id="
+            text = new URL("http://"+ip+":8080/indoct/score_single_word_test.do?student_id="
             		+player_id+"&grade="+grade+"&time="+time);
         } catch (MalformedURLException e) 
    		{

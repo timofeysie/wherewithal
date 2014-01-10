@@ -56,7 +56,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	{
 		super.onCreate(savedInstanceState);
 		String method = "onCreate";
-		String build = "build 15c";
+		String build = "build 16c";
 		Log.i(DEBUG_TAG, method+": "+build);
 		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
         current_player_id = shared_preferences.getString(Constants.CURRENT_PLAYER_ID, "");
@@ -79,6 +79,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	
 	private void getFirstWord()
 	{
+		final String method = "getFirstWord";
 		setup();
     	getNextWord();
     	text_answer.addTextChangedListener(new TextWatcher()
@@ -94,10 +95,11 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
     				for (int i = 0; i < s.length(); i++)
     				{
     					char c = s.charAt(i);
-    					Log.i(DEBUG_TAG, i+" "+Character.getNumericValue(c));
+    					//Log.i(DEBUG_TAG, i+" "+Character.getNumericValue(c));
     					if (Character.getNumericValue(c) == -1)
     					{
     						answered = true;
+    						Log.i(DEBUG_TAG, method+" returned pressed. ");
     						scoreResult();
     					}
     				}
@@ -145,12 +147,17 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	
 	private void sendResultToServer(final String grade)
 	{
+		final String method = "sendResultToServer";
 		new Thread()
         {
             public void run()
             {   
             	RemoteCall remote = new RemoteCall(context);
             	SingleWordTestResult swtr = remote.scoreSingleWordTest(current_player_id, grade, timer);
+            	Log.i(DEBUG_TAG, method+" SingleWordTestResult");
+            	Log.i(DEBUG_TAG, method+" color "+swtr.getColor());
+            	Log.i(DEBUG_TAG, method+" wrts"+swtr.getNumberOfWaitingReadingTests());
+            	Log.i(DEBUG_TAG, method+" wwts "+swtr.getNumberOfWaitingWritingTests());
             	// what to do with the swtr?
             }
         }.start();
@@ -158,6 +165,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	
 	private void getNextWord()
 	{
+		final String method = "getNextWord";
 		timer = new Date().getTime();
 		new Thread()
         {
@@ -165,6 +173,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
             {   
             	RemoteCall remote = new RemoteCall(context);
             	word = remote.loadSingleWord(current_player_id);
+            	Log.i(DEBUG_TAG, method+" next word "+UtilityTo.getQuestion(word));
             	((Activity) context).runOnUiThread(new Runnable() 
         		{
                     public void run() 
