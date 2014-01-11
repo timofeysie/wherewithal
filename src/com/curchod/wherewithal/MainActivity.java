@@ -24,6 +24,15 @@ import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.RemoteCall;
 import com.curchod.dto.SavedTest;
 
+/**
+ * The Main Activity for the Stepping Stones Android Application.
+ * This Activity shows the main page stepping stones image and displays three buttons that lead to
+ * cards, players and games.
+ * If this is a new installation, a dialog will be shown to allow the user to enter the server IP address.
+ * The user can change this with the single menu item after that.
+ * @author timothy
+ *
+ */
 public class MainActivity extends Activity 
 {
 	

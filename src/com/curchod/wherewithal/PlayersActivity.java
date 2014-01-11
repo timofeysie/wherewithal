@@ -39,6 +39,11 @@ import com.curchod.domartin.Constants;
 import com.curchod.domartin.UtilityTo;
 import com.curchod.dto.PlayerInfo;
 
+/**
+ * Show a list of players who have logged in and an add player button.
+ * @author timothy
+ *
+ */
 public class PlayersActivity extends Activity 
 {
 	Vector<PlayerInfo> players = new Vector<PlayerInfo>();
