@@ -332,14 +332,15 @@ public class RemoteCall
 	 */
 	public SingleWordTestResult scoreSingleWordTest(String player_id, String grade, long time)
 	{
-		String method = "SingleWordTestResult";
+		String method = "scoreSingleWordTest";
 		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
         String ip = shared_preferences.getString(Constants.SERVER_IP, "");
     	URL text = null; 
         try 
         {
-            text = new URL("http://"+ip+":8080/indoct/score_single_word_test.do?student_id="
+            text = new URL("http://"+ip+":8080/indoct/single_word_test_result.do?student_id="
             		+player_id+"&grade="+grade+"&time="+time);
+            Log.i(DEBUG_TAG, method+": text "+text.toString());
         } catch (MalformedURLException e) 
    		{
    			e.printStackTrace();
@@ -360,7 +361,7 @@ public class RemoteCall
     {
     	String method = "parseSingleWordTestResult";
     	SingleWordTestResult single_word_test_result = new SingleWordTestResult();
-        Log.i(DEBUG_TAG, method+": Parse the re.");
+        Log.i(DEBUG_TAG, method+": Parse the response");
     	String element = null;
     	boolean start_capture = false;
     	try 

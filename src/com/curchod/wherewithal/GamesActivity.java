@@ -32,7 +32,10 @@ import com.curchod.domartin.Constants;
 import com.curchod.domartin.UtilityTo;
 
 /**
- * 
+ * Display a list of games for the player to choose from.  Currently there are three games:
+ * Reading Stones
+ * Writing Stones
+ * Snazzy Thumbwork
  * @author Administrator
  *
  */

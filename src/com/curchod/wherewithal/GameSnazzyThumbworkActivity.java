@@ -56,7 +56,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	{
 		super.onCreate(savedInstanceState);
 		String method = "onCreate";
-		String build = "build 16c";
+		String build = "build 18";
 		Log.i(DEBUG_TAG, method+": "+build);
 		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
         current_player_id = shared_preferences.getString(Constants.CURRENT_PLAYER_ID, "");
