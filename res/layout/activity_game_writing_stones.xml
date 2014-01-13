@@ -36,9 +36,10 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text_view_start_game"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="63dp"
-        android:text="@string/guess_hint" 
-        android:textOn="Guess"
-		android:textOff="Hint"/>
+        android:text="@string/guess_hint"
+        android:textOff="Hint"
+        android:textOn="Guess" />
     
 </RelativeLayout>

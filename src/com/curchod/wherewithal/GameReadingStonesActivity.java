@@ -543,7 +543,7 @@ public class GameReadingStonesActivity extends Activity
 					} else
 					{
 						Log.i(DEBUG_TAG, method+" same player wrong word: contemplation");
-						showContempationPopup(game_card);
+						showContemplationPopup(game_card);
 						resetTurn();
 					}
 				} else
@@ -862,7 +862,7 @@ public class GameReadingStonesActivity extends Activity
      * Show a popup with the text and definition for both card pairs that do not match 
      * and let the user 'contemplate' their mistake for 20 seconds, then dismiss it.
      */
-    private void showContempationPopup(Card card2)
+    private void showContemplationPopup(Card card2)
     {
     	String method = "showContempationPopup";
     	if (list_adapter != null)

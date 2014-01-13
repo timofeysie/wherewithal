@@ -15,6 +15,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
+import android.graphics.Color;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -186,7 +188,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_writing_stones);
 		String method = "onCreate";
-		String build = "build 57i";
+		String build = "build 58c";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -742,7 +744,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	}
     	if (show_contemplation)
     	{
-    		showContempationPopup(contemplation_ids);
+    		showContemplationPopup(contemplation_ids);
     	}
 	}
 	
@@ -1118,7 +1120,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
      * contemplation_ids vector.  
      * Let the user 'contemplate' their mistake for 20 seconds, then dismiss it.
      */
-    private void showContempationPopup(Vector contemplation_ids)
+    private void showContemplationPopup(Vector contemplation_ids)
     {
     	String method = "showContempationPopup";
     	if (list_adapter != null)
@@ -1130,6 +1132,7 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	list_dialog.setTitle("Player "+player_name);
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = li.inflate(R.layout.game_reading_stones_popup, null, false);
+        v.setBackgroundColor(Color.WHITE);
         list_dialog.setContentView(v);
         list_dialog.setCancelable(true);
         list_dialog.setOnDismissListener(new OnDismissListener()
