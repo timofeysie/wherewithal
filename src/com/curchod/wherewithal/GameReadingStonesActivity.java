@@ -859,8 +859,8 @@ public class GameReadingStonesActivity extends Activity
     }
     
     /**
-     * Show a popup with the text and deff for both card pairs that do not match 
-     * and let the user 'contemplate' thier mistake for 20 seconds, then dismiss it.
+     * Show a popup with the text and definition for both card pairs that do not match 
+     * and let the user 'contemplate' their mistake for 20 seconds, then dismiss it.
      */
     private void showContempationPopup(Card card2)
     {

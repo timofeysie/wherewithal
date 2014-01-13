@@ -9,15 +9,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -26,18 +23,15 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
-import android.graphics.drawable.ColorDrawable;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.MifareClassic;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.view.ViewPager.LayoutParams;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,7 +40,6 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
@@ -56,14 +49,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.curchod.domartin.AsyncLoadGameFile;
 import com.curchod.domartin.Constants;
 import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.Scoring;
@@ -189,14 +180,13 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     private Hashtable <CheckBox,String> checkbox_ids;
     private Hashtable <EditText,String> edit_text_ids;
     
-    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_writing_stones);
 		String method = "onCreate";
-		String build = "build 55c";
+		String build = "build 57i";
 		Log.i(DEBUG_TAG, method+": "+build);
 		setup();
 		getIntentInfo();
@@ -258,7 +248,6 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 	 */
 	private class AsyncLoadGameFileTask extends AsyncTask <String, String, Game> 
 	{  
-		private String debug = "YourCustomAsyncTask";
         @Override  
         protected void onPreExecute() 
         {  
@@ -700,10 +689,12 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
 	private void scoreInputs(Card game_card)
 	{
 		final String method = "button_add_reading.onClick.scoreInputs";
+		boolean show_contemplation = false;
+		Vector <String> contemplation_ids = new Vector<String>();
     	number_of_matches = 0;
     	int new_score = 0;
     	Log.i(DEBUG_TAG, method+": Hi there button_finish");
-    	Enumeration e = edit_text_ids.keys();
+    	Enumeration <EditText> e = edit_text_ids.keys();
     	while (e.hasMoreElements())
     	{
     		EditText edit_text = (EditText)e.nextElement();
@@ -719,6 +710,9 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	    	Log.i(DEBUG_TAG, method+" new score "+new_score+" for id "+this_card_id);
     		} else
     		{
+    			// setup contemplation window
+    			show_contemplation = true;
+    			contemplation_ids.add(this_card_id);
     			edit_text.setText(game_card.getText());
     			Log.i(DEBUG_TAG, method+" answer not correct for id "+this_card_id);
     		}
@@ -745,6 +739,10 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     	{
     		Log.i(DEBUG_TAG, method+" score remains the same");
     		resetAfterTurn();
+    	}
+    	if (show_contemplation)
+    	{
+    		showContempationPopup(contemplation_ids);
     	}
 	}
 	
@@ -1116,53 +1114,46 @@ public class GameWritingStonesActivity extends Activity implements View.OnClickL
     }
     
     /**
-     * Show a popup with the text and deff for both card pairs that do not match 
-     * and let the user 'contemplate' thier mistake for 20 seconds, then dismiss it.
+     * Show a popup with the text and definitions for all the card pairs in the
+     * contemplation_ids vector.  
+     * Let the user 'contemplate' their mistake for 20 seconds, then dismiss it.
      */
-    private void showContempationPopup(Card card2)
+    private void showContempationPopup(Vector contemplation_ids)
     {
     	String method = "showContempationPopup";
     	if (list_adapter != null)
     	{
 			list_dialog.dismiss();
 		}
-    	String text1 = previous_card.getText();
-    	String def1 = previous_card.getDefinition();
-    	String text2 = card2.getText();
-    	String def2 = card2.getDefinition();
-    	Log.i(DEBUG_TAG, method+" display "+def1+" and "+def1);
-    	LayoutInflater layout_inflater = LayoutInflater.from(context);
-    	ViewGroup group = (ViewGroup)findViewById(R.id.contemplation_linear_layoutB);
-    	final View popup_view = layout_inflater.inflate(R.layout.game_reading_contemplation_window, group);
-		final AlertDialog.Builder alert_dialog_builder = new AlertDialog.Builder(context);
-		alert_dialog_builder.setView(popup_view);
-		final TextView text_view_1 = (TextView) popup_view.findViewById(R.id.textA);
-		final TextView def_view_1 = (TextView) popup_view.findViewById(R.id.defA);
-		final TextView text_view_2 = (TextView) popup_view.findViewById(R.id.textB);
-		final TextView def_view_2 = (TextView) popup_view.findViewById(R.id.defB);
-		text_view_1.setText(text1);
-		def_view_1.setText(def1);
-		text_view_2.setText(text2);
-		def_view_2.setText(def2);
-		final AlertDialog alert_dialog = alert_dialog_builder.create();
-		alert_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        alert_dialog.show();
-        Handler handler = new Handler(); 
-        startSlideA(popup_view);
-        handler.postDelayed(new Runnable() 
-        { 
-             public void run() 
-             { 
-            	 startSlideB(popup_view);
-             } 
-        }, 5000); 
-        handler.postDelayed(new Runnable() 
-        { 
-             public void run() 
-             { 
-            	 alert_dialog.dismiss();
-             } 
-        }, 15000); 
+    	list_dialog = new Dialog(this);
+    	String player_name = id_player_names.get(current_player_id);
+    	list_dialog.setTitle("Player "+player_name);
+        LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = li.inflate(R.layout.game_reading_stones_popup, null, false);
+        list_dialog.setContentView(v);
+        list_dialog.setCancelable(true);
+        list_dialog.setOnDismissListener(new OnDismissListener()
+        {
+        	@Override
+            public void onDismiss(final DialogInterface arg0) 
+        	{
+        		//resetTurn();
+            }
+        });
+        //Log.i(DEBUG_TAG, method+" turn_cards "+turn_cards.size());
+        String[] val = new String [turn_cards.size()];
+    	for (int i = 0; i < contemplation_ids.size(); i++)
+    	{
+    		Card this_card = cards.get(contemplation_ids.get(i));
+    		String text = this_card.getText();
+    		String def = this_card.getDefinition();
+    		Log.i(DEBUG_TAG, method+" display "+text+" "+def);
+    		val [i] = text+" - "+def;
+    	}
+    	ListView list1 = (ListView) list_dialog.findViewById(R.id.popup_listview);
+        list_adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, val);
+        list1.setAdapter(list_adapter);
+        list_dialog.show();
     }
     
     private void startSlideA(View popup_view)
