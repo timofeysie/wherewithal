@@ -18,7 +18,7 @@
             android:id="@+id/question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Question"
+            android:text=""
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
          <RelativeLayout
@@ -45,6 +45,14 @@
     		    android:layout_alignParentLeft="true"
     		    android:text=""
     		    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    		<Button
+    		    android:id="@+id/next_button"
+    		    android:layout_width="wrap_content"
+    		    android:layout_height="wrap_content"
+    		    android:layout_alignParentBottom="true"
+    		    android:layout_centerHorizontal="true"
+    		    android:text="@string/next" />
 
     	</RelativeLayout>
     	
