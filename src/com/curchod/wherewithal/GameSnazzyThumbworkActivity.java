@@ -12,17 +12,21 @@ import com.curchod.dto.SingleWordTestResult;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,6 +51,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	private TextView text_question;
 	private TextView text_player_name;
 	private EditText text_answer;
+	private Button next_button;
 	private SingleWord word;
 	long timer;
 	boolean answered;
@@ -56,7 +61,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	{
 		super.onCreate(savedInstanceState);
 		String method = "onCreate";
-		String build = "build 18";
+		String build = "build 25";
 		Log.i(DEBUG_TAG, method+": "+build);
 		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
         current_player_id = shared_preferences.getString(Constants.CURRENT_PLAYER_ID, "");
@@ -81,13 +86,10 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 	{
 		final String method = "getFirstWord";
 		setup();
-    	getNextWord();
+    	getWord();
     	text_answer.addTextChangedListener(new TextWatcher()
     	{
     		public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-    		/**
-    		 * 13 || c == 10
-    		 */	
     		public void onTextChanged(CharSequence s, int start, int before, int count) 
     		{
     			if (!answered)
@@ -99,7 +101,7 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
     					if (Character.getNumericValue(c) == -1)
     					{
     						answered = true;
-    						Log.i(DEBUG_TAG, method+" returned pressed. ");
+    						Log.i(DEBUG_TAG, method+" returned pressed.");
     						scoreResult();
     					}
     				}
@@ -119,6 +121,8 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 		answered = false;
 		text_question = (TextView)findViewById(R.id.question);
 		text_answer = (EditText)findViewById(R.id.answer);
+		next_button = (Button)findViewById(R.id.next_button);
+		next_button.setVisibility(View.INVISIBLE); 
 	}
 	
 	/**
@@ -130,19 +134,43 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
 		String player_answer = text_answer.getText().toString();
 		String correct_answer = UtilityTo.getAnswer(word);
 		String grade = "fail";
+		Log.i(DEBUG_TAG, method+" correct_answer "+correct_answer);
+		Log.i(DEBUG_TAG, method+" player_answer "+player_answer);
 		if (Scoring.scoreAnswer(correct_answer, player_answer))
 		{
-			Log.i(DEBUG_TAG, method+" incorrect");
-			startSnazzyFail();
-			text_answer.setText(correct_answer);
-		} else
-		{	
 			Log.i(DEBUG_TAG, method+" correct");
 			grade = "pass";
 			startSnazzyPass();
+			startNextQuestion();
+		} else
+		{	
+			Log.i(DEBUG_TAG, method+" incorrect");
+			startSnazzyFail();
+			text_answer.setText(correct_answer);
+			startNextQuestion();
 		}
 		sendResultToServer(grade);
-        getNextWord();
+	}
+	
+	/**
+	 * Start a new thread to get the next word.
+	 * Then show the 'next' button.
+	 * When the player presses it, hide the button and 
+	 * set up for the next word.
+	 */
+	private void startNextQuestion()
+	{
+		getWord(); // start a new thread to get the next word.
+		next_button.setVisibility(View.VISIBLE); 
+		// show correct answer and wait for user to press next
+		next_button.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+            	next_button.setVisibility(View.INVISIBLE); 
+            }
+        });
 	}
 	
 	private void sendResultToServer(final String grade)
@@ -154,16 +182,22 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
             {   
             	RemoteCall remote = new RemoteCall(context);
             	SingleWordTestResult swtr = remote.scoreSingleWordTest(current_player_id, grade, timer);
-            	Log.i(DEBUG_TAG, method+" SingleWordTestResult");
-            	Log.i(DEBUG_TAG, method+" color "+swtr.getColor());
-            	Log.i(DEBUG_TAG, method+" wrts"+swtr.getNumberOfWaitingReadingTests());
-            	Log.i(DEBUG_TAG, method+" wwts "+swtr.getNumberOfWaitingWritingTests());
-            	// what to do with the swtr?
+            	if (swtr == null)
+            	{
+            		unableToGetResult();
+            		Log.i(DEBUG_TAG, method+" unable to get next word.");
+            	} else
+            	{
+            		Log.i(DEBUG_TAG, method+"SingleWordTestResult");
+            		Log.i(DEBUG_TAG, method+" color "+swtr.getColor());
+            		Log.i(DEBUG_TAG, method+" wrts"+swtr.getNumberOfWaitingReadingTests());
+            		Log.i(DEBUG_TAG, method+" wwts "+swtr.getNumberOfWaitingWritingTests());
+            	}
             }
         }.start();
 	}
 	
-	private void getNextWord()
+	private void getWord()
 	{
 		final String method = "getNextWord";
 		timer = new Date().getTime();
@@ -173,18 +207,61 @@ public class GameSnazzyThumbworkActivity extends Activity implements OnKeyListen
             {   
             	RemoteCall remote = new RemoteCall(context);
             	word = remote.loadSingleWord(current_player_id);
-            	Log.i(DEBUG_TAG, method+" next word "+UtilityTo.getQuestion(word));
-            	((Activity) context).runOnUiThread(new Runnable() 
-        		{
-                    public void run() 
-                    {
-                    	text_question.setText(UtilityTo.getQuestion(word));
-                    	text_answer.setText("");
-                    	answered = false;
-                    }
-                });
+            	if (word == null)
+            	{
+            		unableToGetResult();
+            	} else
+            	{
+            		Log.i(DEBUG_TAG, method+" next word "+UtilityTo.getQuestion(word));
+            		((Activity) context).runOnUiThread(new Runnable() 
+            		{
+            			public void run() 
+            			{
+            				text_question.setText(UtilityTo.getQuestion(word));
+            				text_answer.setText("");
+            				answered = false;
+            			}
+            		});
+            	}
             }
         }.start();
+	}
+	
+	private void getNextWord()
+	{
+		String method = "getNextWord";
+		RemoteCall remote = new RemoteCall(context);
+    	word = remote.loadSingleWord(current_player_id);
+    	if (word == null)
+    	{
+    		Log.i(DEBUG_TAG, method+" no result fromserver");
+    		unableToGetResult();
+    	} else
+    	{
+    		Log.i(DEBUG_TAG, method+" next word "+UtilityTo.getQuestion(word));
+    		((Activity) context).runOnUiThread(new Runnable() 
+    		{
+    			public void run() 
+    			{
+    				text_question.setText(UtilityTo.getQuestion(word));
+    				text_answer.setText("");
+    				answered = false;
+    			}
+    		});
+    	}
+	}
+	
+	private void unableToGetResult()
+	{
+		((Activity) context).runOnUiThread(new Runnable() 
+		{
+            public void run() 
+            {
+                Toast my_toast = Toast.makeText(context, "Unable to score result", Toast.LENGTH_LONG);
+                my_toast.setGravity(Gravity.CENTER, 0, 0);
+                my_toast.show();
+            }
+        });
 	}
 	
 	private void startSnazzyPass()
