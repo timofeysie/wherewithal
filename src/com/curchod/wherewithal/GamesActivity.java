@@ -218,7 +218,7 @@ public class GamesActivity extends Activity
     }
 	
 	/**
-	 * http://ip:8080/indoct/student_names.do?teacher_id=0000000000000000001&pass=teach&class_id=8549097398869562086
+	 * http://ip/indoct/student_names.do?teacher_id=0000000000000000001&pass=teach&class_id=8549097398869562086
 	 * Parses 
 	 * <students>
 	 * 	<student>
@@ -238,7 +238,7 @@ public class GamesActivity extends Activity
         {
     		SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
     		String ip = shared_preferences.getString(Constants.SERVER_IP, "");
-            text = new URL("http://"+ip+":8080/indoct/student_names.do?teacher_id="+teacher_id
+            text = new URL("http://"+ip+"/indoct/student_names.do?teacher_id="+teacher_id
             		+"&class_id="+class_id);
         } catch (MalformedURLException e) 
    		{

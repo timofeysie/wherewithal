@@ -169,7 +169,7 @@ public class PlayersActivity extends Activity
         String ip = shared_preferences.getString(Constants.SERVER_IP, "");
         try 
         {
-            text = new URL("http://"+ip+":8080/indoct/remote_login.do?name="+name+"&pass="+pass);
+            text = new URL("http://"+ip+"/indoct/remote_login.do?name="+name+"&pass="+pass);
         } catch (MalformedURLException e) 
    		{
    			e.printStackTrace();
@@ -178,7 +178,7 @@ public class PlayersActivity extends Activity
         {
             public void run()
             {   
-            	remotePlayerLogin(text); // login and retireve id and stats
+            	remotePlayerLogin(text); // login and retrieve id and stats
                 Enumeration<String> e = player_info.keys();
                 while (e.hasMoreElements())
                 {

@@ -394,7 +394,7 @@ public class CardDecksActivity extends Activity
     	 DefaultHttpClient httpclient = new DefaultHttpClient();
     	 SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
     	 String ip = shared_preferences.getString(Constants.SERVER_IP, "");
-         HttpPost httppost = new HttpPost("http://"+ip+":8080/indoct/save_house_decks.do");     
+         HttpPost httppost = new HttpPost("http://"+ip+"/indoct/save_house_decks.do");     
          httppost.addHeader("Accept", "text");
          httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
          List<NameValuePair> name_value_pairs = setupHouseDeckPairs(loaded_decks);

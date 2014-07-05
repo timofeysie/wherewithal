@@ -133,7 +133,7 @@ public class AddPlayerActivity extends Activity
         String ip = shared_preferences.getString(Constants.SERVER_IP, "");
         try 
         {
-            text = new URL("http://"+ip+":8080/indoct/remote_login.do?name="+name+"&pass="+pass);
+            text = new URL("http://"+ip+"/indoct/remote_login.do?name="+name+"&pass="+pass);
         } catch (MalformedURLException e) 
    		{
    			e.printStackTrace();
@@ -461,7 +461,7 @@ public class AddPlayerActivity extends Activity
     	String ip = shared_preferences.getString(Constants.SERVER_IP, "");
     	try
         {
-        	URL text = new URL("http://"+ip+":8080/indoct/remote_login.do?name=t&pass=t");
+        	URL text = new URL("http://"+ip+"/indoct/remote_login.do?name=t&pass=t");
         	HttpURLConnection http = (HttpURLConnection)text.openConnection();
         	Log.i(DEBUG_TAG, "length           = "+http.getContentLength());
         	Log.i(DEBUG_TAG, "reasponse code   = "+http.getResponseCode());

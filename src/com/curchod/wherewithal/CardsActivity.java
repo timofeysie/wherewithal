@@ -99,7 +99,7 @@ public class CardsActivity extends ListActivity
 	{
 		super.onCreate(savedInstanceState);
 		String method = "onCreate";
-		String build = "build 53";
+		String build = "build 54";
 		Log.i(DEBUG_TAG, method+" "+build);
 		test_name_ids = new Hashtable<String,String>();
 		ready = false;
@@ -290,7 +290,7 @@ public class CardsActivity extends ListActivity
 	/**
 	 * Parse the remote call to GetSavedClassTestsAction, parse the results, put them in the intent
 	 * and start the CardPlayersListAction.
-	 * http://ip:8080/indoct/get_saved_class_tests.do?teacher_id=0000000000000000001&pass=teach&test_id=-8834326842304090029
+	 * http://ip/indoct/get_saved_class_tests.do?teacher_id=0000000000000000001&pass=teach&test_id=-8834326842304090029
 	 * @param selected_test_id
 	 */
 	private void getSavedClassTestsAndSaveGame(final String selected_test_id, final String selected_test_name, final boolean already_saved)
@@ -301,7 +301,7 @@ public class CardsActivity extends ListActivity
 		String ip = shared_preferences.getString(Constants.SERVER_IP, "");
         try 
         {
-            text = new URL("http://"+ip+":8080/indoct/get_saved_class_tests.do?teacher_id="+teacher_id
+            text = new URL("http://"+ip+"/indoct/get_saved_class_tests.do?teacher_id="+teacher_id
             		+"&pass="+password
             		+"&test_id="+selected_test_id);
         } catch (MalformedURLException e) 
@@ -425,7 +425,7 @@ public class CardsActivity extends ListActivity
     }
 	
 	/**
-	 * Remote call with this url http://ip:8080/indoct/get_saved_class_tests.do?teacher_id=0000000000000000001&pass=teach&test_id=-8834326842304090029
+	 * Remote call with this url http://ip/indoct/get_saved_class_tests.do?teacher_id=0000000000000000001&pass=teach&test_id=-8834326842304090029
 	 * retrieves a list of saved tests for players who are part of that test.
 	 * This method depends on knowing the last sub-element
 	 * <saved_tests>

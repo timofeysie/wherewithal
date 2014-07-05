@@ -328,7 +328,7 @@ public class IWantTo
 *         <deck_id>
 *         <player_id/>
 *         <game_id>
-*         <name>¡±Player A¡±</name>
+*         <name>ï¿½ï¿½Player Aï¿½ï¿½</name>
 *             <deck_card>
 *                 <card_id/>
 *                 <card_name/>
@@ -469,7 +469,7 @@ public class IWantTo
 	*         <deck_id>
 	*         <player_id/>
 	*         <game_id>
-	*         <name>¡±Player A¡±</name>
+	*         <name>ï¿½ï¿½Player Aï¿½ï¿½</name>
 	*             <deck_card>
 	*                 <card_id/>
 	*                 <card_name/>
@@ -628,10 +628,10 @@ public class IWantTo
         <deck_id>
         <player_id>
         <game_id>
-        <deck_name>¡±Player A¡±</deck_name>
+        <deck_name>ï¿½ï¿½Player Aï¿½ï¿½</deck_name>
         <size>24</size>
-		<card index=¡±0¡±>91971116904032786</card>
-		<card index=¡±1¡±>-3056981135622170599</card>
+		<card index=ï¿½ï¿½0ï¿½ï¿½>91971116904032786</card>
+		<card index=ï¿½ï¿½1ï¿½ï¿½>-3056981135622170599</card>
 		...
     </house_deck>
 	 */
@@ -706,7 +706,7 @@ public class IWantTo
 	    	String ip = shared_preferences.getString(Constants.SERVER_IP, "");
 	    	try 
 	        {
-	            text = new URL("http://"+ip+":8080/indoct/get_house_decks.do?teacher_id="+teacher_id
+	            text = new URL("http://"+ip+"/indoct/get_house_decks.do?teacher_id="+teacher_id
 	            		+"&device_id="+device_id);
 	            Log.i(DEBUG_TAG, text.getPath());
 	        } catch (MalformedURLException e) 
@@ -942,7 +942,7 @@ public class IWantTo
     
 	/**
 	 * Returns a hash with the student id-name as key value pairs.
-	 * http://ip:8080/indoct/student_names.do?teacher_id=0000000000000000001&pass=teach&class_id=8549097398869562086
+	 * http://ip/indoct/student_names.do?teacher_id=0000000000000000001&pass=teach&class_id=8549097398869562086
 	 * Parses 
 	 * <students>
 	 * 	<student>
@@ -963,12 +963,14 @@ public class IWantTo
     	String ip = shared_preferences.getString(Constants.SERVER_IP, "");
     	try 
         {
-            text = new URL("http://"+ip+":8080/indoct/student_names.do?teacher_id="+teacher_id
+            text = new URL("http://"+ip+"/indoct/student_names.do?teacher_id="+teacher_id
             		+"&class_id="+class_id);
         } catch (MalformedURLException e) 
    		{
+        	Log.i(DEBUG_TAG, method+" murk! text "+text.toString());
    			e.printStackTrace();
    		}
+    	Log.i(DEBUG_TAG, method+" text "+text.toString());
     	Hashtable<String, String>id_player_names = new Hashtable<String, String>();
         String element = null;
         boolean capture_student = false;
@@ -1048,7 +1050,7 @@ public class IWantTo
 	/**
 	 * Parse the remote call to GetSavedClassTestsAction, parse the results, put them in the intent
 	 * and start the CardPlayersListAction.
-	 * http://ip:8080/indoct/get_test_words.do?player_id=-5519451928541341468&test_id=-8834326842304090029   
+	 * http://ip/indoct/get_test_words.do?player_id=-5519451928541341468&test_id=-8834326842304090029   
 	 * @param selected_test_id
 	 */
 	public Hashtable<String, String> getTestWords(final String selected_player_id, String selected_test_id, String number_of_words)
@@ -1059,7 +1061,7 @@ public class IWantTo
 		URL text = null; 
         try 
         {
-            text = new URL("http://"+ip+":8080/indoct/get_test_words.do?player_id="+selected_player_id
+            text = new URL("http://"+ip+"/indoct/get_test_words.do?player_id="+selected_player_id
             		+"&test_id="+selected_test_id+"&number_of_words="+number_of_words);
         } catch (MalformedURLException e) 
    		{
@@ -1094,7 +1096,7 @@ public class IWantTo
 	 * <test_words>
 	 * 		<test_word>
 	 * 			<id>-4011783267950267722</id>
-	 * 			<text>¸¸¾à</text>
+	 * 			<text>ï¿½ï¿½ï¿½ï¿½</text>
 	 *  		<definition>in case</definition>
 	 *  		<type>writing</type>
 	 *  		<category>2010 Fall Random.xml</category>

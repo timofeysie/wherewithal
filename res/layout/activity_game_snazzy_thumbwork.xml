@@ -32,7 +32,6 @@
         		android:layout_height="wrap_content"
         		android:layout_alignParentTop="true"
         		android:layout_marginLeft="40dp"
-        		android:layout_toRightOf="@+id/question"
         		android:ems="10" >
         		<requestFocus />
 	    	</EditText>

@@ -62,7 +62,7 @@ public class RemoteCall
             	URL text = null;
                 try 
                 {
-                    text = new URL("http://"+ip+":8080/indoct/saved_tests_list.do?name="+name+"&pass="+pass);
+                    text = new URL("http://"+ip+"/indoct/saved_tests_list.do?name="+name+"&pass="+pass);
                 } catch (MalformedURLException e) 
            		{
            			e.printStackTrace();
@@ -194,7 +194,7 @@ public class RemoteCall
 	}
 	
 	/**
-	 * Call http://*ip*:8080/indoct/stingle_word_test.do?student_id=-5519451928541341468
+	 * Call http://ip/indoct/stingle_word_test.do?student_id=-5519451928541341468
 	 * and retrieve an AllWordsTest object, which we call SingleWord here in Wherewithal.
 	 * This is the formta:
 	 * <all_words_test>
@@ -219,7 +219,7 @@ public class RemoteCall
     	URL text = null; 
         try 
         {
-            text = new URL("http://"+ip+":8080/indoct/single_word_test.do?student_id="+player_id);
+            text = new URL("http://"+ip+"/indoct/single_word_test.do?student_id="+player_id);
         } catch (MalformedURLException e) 
    		{
    			e.printStackTrace();
@@ -338,7 +338,7 @@ public class RemoteCall
     	URL text = null; 
         try 
         {
-            text = new URL("http://"+ip+":8080/indoct/single_word_test_result.do?student_id="
+            text = new URL("http://"+ip+"/indoct/single_word_test_result.do?student_id="
             		+player_id+"&grade="+grade+"&time="+time);
             Log.i(DEBUG_TAG, method+": text "+text.toString());
         } catch (MalformedURLException e) 

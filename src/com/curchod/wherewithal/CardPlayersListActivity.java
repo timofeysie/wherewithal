@@ -293,7 +293,7 @@ public class CardPlayersListActivity extends ListActivity
     /**
 	 * Parse the remote call to GetSavedClassTestsAction, parse the results, put them in the intent
 	 * and start the CardPlayersListAction.
-	 * http://ip:8080/indoct/get_test_words.do?player_id=-5519451928541341468&test_id=-8834326842304090029   
+	 * http://ip/indoct/get_test_words.do?player_id=-5519451928541341468&test_id=-8834326842304090029   
 	 * If the test words returned contain no house deck id, then we
 	 * send the test_words to the CardPlayerWordsActivity.
 	 * If the test words have house deck id then that deck has been 
