@@ -113,9 +113,9 @@ public class CardPlayerWordsActivity extends ListActivity
 	Tag card_tag;
 	int selected;
 	CardPlayerWordsActivity activity = this;
-	private Vector <Card> cards; 
+	//private Vector <Card> cards; 
 	private Vector <Card> file_cards; 
-	private String encoding = "euc-kr";
+	//private String encoding = "euc-kr";
 	boolean testing;
 	private String player_id;
 	private String player_name;
@@ -157,7 +157,7 @@ public class CardPlayerWordsActivity extends ListActivity
     {
         super.onCreate(savedInstanceState);
         String method = "onCreate";
-        String build = "build 172";
+        String build = "build 173";
         nfc_adapter = NfcAdapter.getDefaultAdapter(context);
         Log.i(DEBUG_TAG, method+": "+build);
         setUpPlayerNamesAndExtras();
@@ -676,7 +676,7 @@ public class CardPlayerWordsActivity extends ListActivity
      */
     private void loadCardsFile()
     {
-    	String method = "loadCards";
+    	//String method = "loadCards";
     	previously_selected_words = new Vector<String>();
     	previously_written_words_ids = new Hashtable <String,String>();
     	Context context = getApplicationContext();
@@ -1218,7 +1218,7 @@ public class CardPlayerWordsActivity extends ListActivity
      * 1index-0
      * number_of_words-3
      * selected_test_name-nue5-next_reading
-     * 1text-À¯¾Æ
+     * 1text-ï¿½ï¿½ï¿½ï¿½
      * 1type-reading
      * 1definition-infant
      * 1id-3428634204343159672
@@ -1781,7 +1781,7 @@ public class CardPlayerWordsActivity extends ListActivity
     	 DefaultHttpClient httpclient = new DefaultHttpClient();
     	 SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
     	 String ip = shared_preferences.getString(Constants.SERVER_IP, "");
-         HttpPost httppost = new HttpPost("http://"+ip+":8080/indoct/word_deck_card_associations.do");     
+         HttpPost httppost = new HttpPost("http://"+ip+":8081/indoct/word_deck_card_associations.do");     
          httppost.addHeader("Accept", "text");
          httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
          List<NameValuePair> name_value_pairs = setupDeckCardAssociationsPairs(selected_house_deck_name);

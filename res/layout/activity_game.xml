@@ -10,14 +10,13 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="52dp"
-        android:src="@drawable/ic_drawing_game" />
+        android:src="@drawable/ic_drawing_game" android:contentDescription="TODO"/>
 
     <TextView
         android:id="@+id/game_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/imageButton1"
         android:layout_marginTop="16dp"
         android:ems="12"
         android:lines="1"
@@ -38,7 +37,7 @@
         android:layout_above="@+id/image_view_reading_game"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="26dp"
-        android:text="Snazzy Thumbwork" />
+        android:text="@string/snazzy_thumbwork" />
 
     <TextView
         android:id="@+id/TextView01"

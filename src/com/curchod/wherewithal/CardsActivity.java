@@ -14,7 +14,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -267,7 +266,7 @@ public class CardsActivity extends ListActivity
 	private void higlightSavedGame()
 	{
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View row_view = inflater.inflate(R.layout.simple_list_item_1, this.getListView(), false);
+		View row_view = inflater.inflate(android.R.layout.simple_list_item_1, this.getListView(), false);
 		ListView list_view = getListView();
 		list_view.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		ArrayAdapter<?> adapter = (ArrayAdapter<?>) list_view.getAdapter();

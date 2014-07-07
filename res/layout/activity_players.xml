@@ -15,7 +15,6 @@
         android:id="@+id/players_list_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_add_players"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="110dp" >
     </ListView>
