@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.widget.TableLayout;
-import android.widget.TableLayout.LayoutParams;
+import android.widget.TableLayout.*;
 import android.widget.TableRow;
 import android.widget.TextView;
 

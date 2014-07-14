@@ -32,7 +32,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TableLayout;
-import android.widget.TableLayout.LayoutParams;
+import android.widget.TableLayout.*;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;

@@ -101,5 +101,6 @@
     <string name="next">Next</string>
     <string name="snazzy_thumbwork">Snazzy Thumbwork</string>
     <string name="title_activity_game_concentration">GameConcentrationActivity</string>
+    <string name="concentration_stones">Concentration Stones</string>
 
 </resources>

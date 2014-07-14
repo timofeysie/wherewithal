@@ -10,7 +10,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="52dp"
-        android:src="@drawable/ic_drawing_game" android:contentDescription="TODO"/>
+        android:contentDescription="TODO"
+        android:src="@drawable/ic_drawing_game" />
 
     <TextView
         android:id="@+id/game_text"
@@ -21,32 +22,52 @@
         android:ems="12"
         android:lines="1"
         android:text="@string/games_reading_stones" />
-    
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/image_view_reading_game"
+        android:layout_below="@+id/image_view_reading_game"
+        android:layout_marginTop="68dp"
+        android:src="@drawable/concentration_game_228" />
+
     <ImageView
         android:id="@+id/image_view_reading_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/image_button_reading_game"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="64dp"
         android:src="@drawable/reading_game_228" />
-
-    <Button
-        android:id="@+id/snazzy_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/image_view_reading_game"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="26dp"
-        android:text="@string/snazzy_thumbwork" />
 
     <TextView
         android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/image_view_reading_game"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/image_button_reading_game"
+        android:layout_marginTop="30dp"
         android:ems="12"
         android:lines="1"
         android:text="@string/title_activity_game_writing_stones" />
+
+    <Button
+        android:id="@+id/snazzy_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="44dp"
+        android:text="@string/snazzy_thumbwork" />
+
+    <TextView
+        android:id="@+id/text_view_concetration_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_view_reading_game"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:text="@string/concentration_stones" />
 
 </RelativeLayout>

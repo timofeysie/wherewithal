@@ -46,7 +46,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TableLayout;
-import android.widget.TableLayout.LayoutParams;
+import android.widget.TableLayout.*;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;

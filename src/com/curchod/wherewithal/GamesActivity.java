@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.TableLayout.*;
 
 import com.curchod.domartin.Constants;
 import com.curchod.domartin.UtilityTo;
@@ -94,6 +95,16 @@ public class GamesActivity extends Activity
         		loadGameFile("writing button");
         	}
         });
+        
+        ImageView iv_concentration = (ImageView)findViewById(R.id.text_view_concetration_game);
+        iv_concentration.setOnClickListener(new OnClickListener() 
+        {
+        	public void onClick(View v) 
+        	{
+        		loadGameFile("concentration button");
+        	}
+        });
+        
     }
     
     /**
@@ -365,6 +376,9 @@ public class GamesActivity extends Activity
 		} else if (activity.equals("writing button"))
 		{
 			intent = new Intent(GamesActivity.this, GameWritingStonesActivity.class);
+		} else if (activity.equals("concentration button"))
+		{
+			intent = new Intent(GamesActivity.this, GameConcentrationActivity.class);
 		}
         intent.putExtra("test_name", test_name);
         intent.putExtra("test_id", test_id);
