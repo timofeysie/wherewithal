@@ -1781,7 +1781,7 @@ public class CardPlayerWordsActivity extends ListActivity
     	 DefaultHttpClient httpclient = new DefaultHttpClient();
     	 SharedPreferences shared_preferences = context.getSharedPreferences(Constants.PREFERENCES, Activity.MODE_PRIVATE);
     	 String ip = shared_preferences.getString(Constants.SERVER_IP, "");
-         HttpPost httppost = new HttpPost("http://"+ip+":8081/indoct/word_deck_card_associations.do");     
+         HttpPost httppost = new HttpPost("http://"+ip+"/indoct/word_deck_card_associations.do");     
          httppost.addHeader("Accept", "text");
          httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
          List<NameValuePair> name_value_pairs = setupDeckCardAssociationsPairs(selected_house_deck_name);

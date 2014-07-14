@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	
+
     <string name="change_server_ip">Change Server IP</string>
     <string name="app_name">Stepping Stones</string>
     <string name="menu_settings">Settings</string>
@@ -60,14 +60,13 @@
     <string name="title_activity_game_reading_stones">Reading Stones</string>
     <string name="title_activity_game_writing_stones">Writing Stones</string>
     <string name="action_settings">Settings</string>
-    
+
     <!-- Game status strings -->
     <string name="game_not_ready">Game Not Ready</string>
     <string name="game_ready">Game Ready</string>
     <string name="playing">Playing</string>
     <string name="final_round">Final Round</string>
     <string name="game_over">Game Over</string>
-    
     <string name="fake_tag">Fake Tag</string>
     <string name="title_activity_snazzy_thumbwork">Snazzy Thumbwork</string>
     <string name="hello_world">Hello world!</string>
@@ -95,12 +94,12 @@
     <string name="use_house_deck">Use house deck</string>
     <string name="title_activity_card_player_house_deck">CardPlayerHouseDeckActivity</string>
     <string name="reuse_or_write_id">Reuse or Write ID</string>
-    
     <string name="checkbox_or_input_answers">Checkbox or Input answers</string>
-	<string name="checkbox">Checkbox</string>
-	<string name="input">Input</string>
-	<string name="guess_hint">Guess/Hint</string>
-	<string name="next">Next</string>
-	<string name="snazzy_thumbwork">Snazzy Thumbwork</string>
-    
+    <string name="checkbox">Checkbox</string>
+    <string name="input">Input</string>
+    <string name="guess_hint">Guess/Hint</string>
+    <string name="next">Next</string>
+    <string name="snazzy_thumbwork">Snazzy Thumbwork</string>
+    <string name="title_activity_game_concentration">GameConcentrationActivity</string>
+
 </resources>

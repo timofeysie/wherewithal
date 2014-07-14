@@ -5,12 +5,17 @@
     android:versionName="1.0" >
 
     <permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.NFC" />
-	<permission android:name="android.permission.READ_PHONE_STATE"/>
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.NFC" />
+
+    <permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-feature
         android:name="android.hardware.nfc"
@@ -23,12 +28,12 @@
         android:targetSdkVersion="10" />
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:allowBackup="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.curchod.wherewithal.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,43 +42,43 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.PlayersActivity"
+            android:name=".PlayersActivity"
             android:label="@string/title_activity_players" >
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.AddPlayerActivity"
+            android:name=".AddPlayerActivity"
             android:label="@string/title_activity_add_player"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.GamesActivity"
+            android:name=".GamesActivity"
             android:label="@string/title_activity_game" >
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.InstructionsActivity"
+            android:name=".InstructionsActivity"
             android:label="@string/title_activity_instructions" >
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.CardsActivity"
+            android:name=".CardsActivity"
             android:label="@string/title_activity_cards" >
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.PlayerActivity"
+            android:name=".PlayerActivity"
             android:label="@string/title_activity_player" >
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.CardPlayersListActivity"
+            android:name=".CardPlayersListActivity"
             android:label="@string/title_activity_card_players_list" >
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.CardPlayerWordsActivity"
+            android:name=".CardPlayerWordsActivity"
             android:label="@string/title_activity_card_player_words" >
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.GameReadingStonesActivity"
+            android:name=".GameReadingStonesActivity"
             android:label="@string/title_activity_game_reading_stones" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -83,9 +88,8 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.curchod.wherewithal.GameWritingStonesActivity"
+            android:name=".GameWritingStonesActivity"
             android:label="@string/title_activity_game_writing_stones" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -95,24 +99,23 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.curchod.wherewithal.GameSnazzyThumbworkActivity"
+            android:name=".GameSnazzyThumbworkActivity"
             android:label="@string/title_activity_snazzy_thumbwork" >
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.GameReadingStonesInstructionsActivity"
+            android:name=".GameReadingStonesInstructionsActivity"
             android:label="@string/title_activity_game_reading_stones_instructions" >
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.CardDecksActivity"
+            android:name=".CardDecksActivity"
             android:label="@string/title_activity_card_decks" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="android.app.ListActivity" />
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.CardDeckActivity"
+            android:name=".CardDeckActivity"
             android:label="@string/title_activity_card_deck" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -123,8 +126,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.curchod.wherewithal.CardPlayerHouseDeckActivity"
+            android:name=".CardPlayerHouseDeckActivity"
             android:label="@string/title_activity_card_player_house_deck" >
+        </activity>
+        <activity
+            android:name=".GameConcentrationActivity"
+            android:label="@string/title_activity_game_concentration" >
         </activity>
     </application>
 

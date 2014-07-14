@@ -10,9 +10,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.view.ViewPager.LayoutParams;
 import android.util.Log;
 import android.widget.TableLayout;
+import android.widget.TableLayout.LayoutParams;
 import android.widget.TableRow;
 import android.widget.TextView;
 
