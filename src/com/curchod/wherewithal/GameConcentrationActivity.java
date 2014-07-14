@@ -914,15 +914,15 @@ package com.curchod.wherewithal;
 	    private void startSlideA(View popup_view)
 		{
 			TextView def_view_1 = (TextView) popup_view.findViewById(R.id.defA);
-	        Animation def_1_an =  AnimationUtils.loadAnimation(this, R.anim.diagonal_slide);
-	        def_view_1.startAnimation(def_1_an);
+	        //Animation def_1_an =  AnimationUtils.loadAnimation(this, R.anim.diagonal_slide);
+	        //def_view_1.startAnimation(def_1_an);
 		}
 	    
 	    private void startSlideB(View popup_view)
 		{
 			TextView def_view_2 = (TextView) popup_view.findViewById(R.id.defB);
-	        Animation def_2_an =  AnimationUtils.loadAnimation(this, R.anim.diagonal_slide);
-	        def_view_2.startAnimation(def_2_an);
+	        //Animation def_2_an =  AnimationUtils.loadAnimation(this, R.anim.diagonal_slide);
+	        //def_view_2.startAnimation(def_2_an);
 		}
 	    
 	    /**
@@ -1157,6 +1157,8 @@ package com.curchod.wherewithal;
 	        for (int i = 0; i < turn_cards.size(); i++)
 	        {
 	        	Card card = turn_cards.get(i);
+	        	String card_name = card.getCardId();
+	        	String card_id = card.getIndex();
 	        	val [i] = UtilityTo.getWord(card);
 	        }
 	        ListView list1 = (ListView) list_dialog.findViewById(R.id.popup_listview);

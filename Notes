@@ -6,7 +6,7 @@ The first screen shows the Stepping Stones picture and three buttons which lead 
 CardsActivity
 This second level screen shows a list of SavedTest objects from the server that represent games to be set up and played.
 When a user clicks on a test, the name and id are sent to getSavedClassTestsAndSaveGame  which then calls saveGameFile(selected_test_name, selected_test_id); which then calls remoteCall(text);
-In this method we capture the student_is¡¯s in remote_student_ids Vector, and then call saveGameFile.
+In this method we capture the student_isï¿½ï¿½s in remote_student_ids Vector, and then call saveGameFile.
 To setup for the next activity, when a user chooses a test, we retrieve the list of saved tests for players who are part of that test.
 The parse depends on knowing the last sub-element
 From the menu the user can also choose House Decks which will start the CardDecksActivity.
@@ -18,8 +18,11 @@ If a player has chosen a house deck to associate their cards to previously in Ca
 
 CardPlayerWordsActivity
 Retrieve a list of words loaded in the previous activity from the intent and put them in a list.  
+If the player chooses the menu item for "Use House Deck", then they are shown a dialog of house decks to choose from.
+After this choice, the game cards will be associated with the deck cards.  If the game is a WritingStones type, the writing type cards from the previous game is used so that the player doesn't have to take out the writing cards from that game.
 The text-definition pairs are shown unconnected in a flat list.  
-When the user clicks on an item they will hold an nfc tag connected to that word up to thier phone to write the word, definition and category onto the tag.
+Previous to the house deck feature, the following features still supported.
+When the user clicks on an item they will hold an nfc tag connected to that word up to their phone to write the word, definition and category onto the tag.
 The highlighting is done in a few places.
 In itemSelected, we add a word like this: FINISHED_WORDS[selected] = "set";
 Then, in the onCreate method, the setListAdapter inner class, we check if (FINISHED_WORDS[position].equals("set"))
@@ -30,7 +33,9 @@ We also have to load the cards.xml file to see what words have already been high
 We fill a Vector with either the text or definition of the word depending on the word_type element stored in the file.
 Then, in the setUpPlayerNamesAndExtras(), we check if the word we are looking at is contained in that Vector.
 If so, that position is set in the FINISHED_WORDS array.
-If the player chooses the menu item for "Use House Deck", then they are shown a dialog of house decks to choose from.  After this choice, the game cards will be associated with the deck cards.  If the game is a WritingStones type, the writing type cards from the previous game is used so that the player doesn't have to take out the writing cards from that game.
+
+CardPlayerHouseDeckActivity
+This gets the deck_card_name_words from the intent and creates a list of card names and words.
 
 CardDecksActivity
 This screen shows a list of house decks.  It also has a menu item that lets the user create a house deck by entering the deck's name.
@@ -53,6 +58,19 @@ The menu lets the player reset the game, clearing the score and other data.  If 
 GameWritingStonesActivity
 This game is similar to the Reading Stones game, except students must write the answer to each card they scan, either by input, or on a piece of paper.
 Currently this activity is under construction and has no status changes.
+
+GameConcentrationActivity
+The game is based on the reading game.  It however translates the card names R1, R2,... with A, B, and W1, W2,... with 1, 2, ...
+This can be played with no card setup time needed.  If the user creates a test on the webapp, the player can choose that test/game in the Android app, and associate a deck card with it.
+Then, the cards are arranged in two columns of letter and number cards, organized into four rows of three, or something like that.
+The card names for matching cards will be displayed.
+There is a combo indicator instead of the players name.
+(under construction)
+
+GameMultipleStonesActivity
+(coming soon)
+
+
 
 The keystore for testing:
 C:\Documents and Settings\user\.android\debug.keystore

@@ -96,7 +96,7 @@ public class GamesActivity extends Activity
         	}
         });
         
-        ImageView iv_concentration = (ImageView)findViewById(R.id.text_view_concetration_game);
+        ImageView iv_concentration = (ImageView)findViewById(R.id.image_view_concentration_game);
         iv_concentration.setOnClickListener(new OnClickListener() 
         {
         	public void onClick(View v) 

@@ -24,7 +24,7 @@
         android:text="@string/games_reading_stones" />
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/image_view_concentration_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/image_view_reading_game"
@@ -50,16 +50,7 @@
         android:layout_marginTop="30dp"
         android:ems="12"
         android:lines="1"
-        android:text="@string/title_activity_game_writing_stones" />
-
-    <Button
-        android:id="@+id/snazzy_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="44dp"
-        android:text="@string/snazzy_thumbwork" />
+        android:text="@string/title_activity_game_writing_stones" />  
 
     <TextView
         android:id="@+id/text_view_concetration_game"
@@ -70,4 +61,13 @@
         android:layout_marginTop="39dp"
         android:text="@string/concentration_stones" />
 
+     <Button
+         android:id="@+id/snazzy_button"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/image_view_concentration_game"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="77dp"
+         android:text="@string/snazzy_thumbwork" />
+     
 </RelativeLayout>

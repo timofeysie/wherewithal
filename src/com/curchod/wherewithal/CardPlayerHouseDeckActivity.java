@@ -32,7 +32,7 @@ public class CardPlayerHouseDeckActivity extends Activity
 		setContentView(R.layout.activity_card_player_house_deck);
 		String method = "onCreate";
 		String build = "26";
-		Log.i(DEBUG_TAG, method+": build "+build+" (rock it baby rock it baby, tonight~)");
+		Log.i(DEBUG_TAG, method+": build "+build+".");
 		getIntentInfo();
 		createCardsList();
 	}
