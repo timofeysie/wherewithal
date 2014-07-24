@@ -30,6 +30,8 @@ import android.widget.Toast;
 import android.widget.TableLayout.*;
 
 import com.curchod.domartin.Constants;
+import com.curchod.domartin.HouseDeck;
+import com.curchod.domartin.IWantTo;
 import com.curchod.domartin.UtilityTo;
 
 /**
@@ -379,6 +381,7 @@ public class GamesActivity extends Activity
 		} else if (activity.equals("concentration button"))
 		{
 			intent = new Intent(GamesActivity.this, GameConcentrationActivity.class);
+			loadHouseDecksAndFillIntent(intent);
 		}
         intent.putExtra("test_name", test_name);
         intent.putExtra("test_id", test_id);
@@ -402,6 +405,35 @@ public class GamesActivity extends Activity
         Log.i(DEBUG_TAG, method+" put number_of_players "+size);
         startActivity(intent);
 	}
+	
+	/**
+     * Load all the house decks and return true if the player has previously used a house deck to
+     * associate their words with a deck.  This is done by comparing the player id in each house deck
+     * and the selected test id to the house deck game id.  If both match then the house_deck is captured
+     * to send to the next activity to show the associations.
+     * @param player_id
+     * @return
+     */
+    private void loadHouseDecksAndFillIntent(Intent intent)
+    {
+    	String method = "loadHouseDecks";
+    	boolean house_deck_already_setup = false;
+    	IWantTo i_want_to = new IWantTo(context);
+    	house_deck_names_decks =  new Hashtable <String, HouseDeck> ();
+    	house_decks = i_want_to.loadTheHouseDecks();
+    	Log.i(DEBUG_TAG, method+" house_decks after load "+house_decks.size());
+    	Enumeration <String> e = house_decks.keys();
+    	while (e.hasMoreElements())
+    	{
+    		String key = (String)e.nextElement();
+    		HouseDeck this_house_deck = house_decks.get(key);
+    		String house_deck_game_id = this_house_deck.getGameId();
+    		String house_deck_player_id = this_house_deck.getPlayerId();
+    		Log.i(DEBUG_TAG, method+" looked at "+this_house_deck.getDeckName()+" id "+this_house_deck.getDeckId()+" but no chosen");
+    	}
+    }
+    private Hashtable <String, HouseDeck> house_deck_names_decks;
+    private Hashtable <String,HouseDeck> house_decks;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) 

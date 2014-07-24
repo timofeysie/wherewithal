@@ -261,6 +261,14 @@ public class CardPlayersListActivity extends ListActivity
 		return id_file_cards;
     }
     
+    /**
+     * Load all the house decks and return true if the player has previously used a house deck to
+     * associate their words with a deck.  This is done by comparing the player id in each house deck
+     * and the selected test id to the house deck game id.  If both match then the house_deck is captured
+     * to send to the next activity to show the associations.
+     * @param player_id
+     * @return
+     */
     private boolean loadHouseDecks(final String player_id)
     {
     	String method = "loadHouseDecks";
